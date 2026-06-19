@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ff9f85a85b715e40b7af2eab419f54b, type: 3}
+  m_Name: Gacha_067
+  m_EditorClassIdentifier: Assembly-CSharp::GachaRewardData
+  rewardType: 0
+  rewardName: Opportunity 067
+  rewardSprite: {fileID: 0}
+  baseValue: 5
+  jackpotMultiplier: 5
+  baseWeightRandom: 10
+  description: add chance 067 by 5%
+  bonusDescription: Bonus x5

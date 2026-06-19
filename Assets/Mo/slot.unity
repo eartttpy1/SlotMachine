@@ -190,7 +190,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 7675826601332790545, guid: 82c300b13711372428daf522d1a2c580, type: 3}
+  m_Sprite: {fileID: 0}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -303,9 +303,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 5710e8b097691e043a8849650b1aaa8c, type: 2}
   - {fileID: 11400000, guid: 0896323257b911e44aad84da85f47147, type: 2}
   reelDisplays:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 1816221925}
+  - {fileID: 1090548618}
+  - {fileID: 299010587}
   isReelLocked: 000000
 --- !u!1 &1090548616
 GameObject:
@@ -378,7 +378,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 731806605160617493, guid: 7488c3c1ade755248a2dca08b1388fd3, type: 3}
+  m_Sprite: {fileID: 0}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1135,7 +1135,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -6360951540215640696, guid: cb864c5bc5c57084a8f86b9db5771a8a, type: 3}
+  m_Sprite: {fileID: 0}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

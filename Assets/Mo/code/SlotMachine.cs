@@ -15,6 +15,25 @@ public class SlotMachine : MonoBehaviour
     public bool[] isReelLocked = new bool[3]; // เก็บสถานะปุ่มกดล็อกรีล [รีล1, รีล2, รีล3]
     private SlotIconData[] finalResult = new SlotIconData[3]; // ผลลัพธ์สุดท้ายหลังหมุนเสร็จ
 
+    // ฟังก์ชัน Start สำหรับตั้งค่าเริ่มต้นและเชื่อมต่อข้อมูลระหว่าง SlotMachine กับ SlotDisplay
+    private void Start()
+    {
+        for (int i = 0; i < 3; i++)
+        {
+            // กำหนดค่าสัญลักษณ์เริ่มต้น หากมีสัญลักษณ์ให้เลือกใน availableSymbols
+            if (availableSymbols.Count > 0 && finalResult[i] == null)
+            {
+                finalResult[i] = availableSymbols[0];
+            }
+
+            // แสดงผลสัญลักษณ์เริ่มต้นบนจอ UI
+            if (reelDisplays[i] != null && finalResult[i] != null)
+            {
+                reelDisplays[i].SetupSlotDisplay(finalResult[i]);
+            }
+        }
+    }
+
     // ฟังก์ชันหลักที่ปุ่ม SPIN จะวิ่งมาเรียกใช้งาน
     public void SpinSlotMachine()
     {
@@ -39,8 +58,6 @@ public class SlotMachine : MonoBehaviour
         // คำนวณน้ำหนักรวม
         foreach (var symbol in availableSymbols)
         {
-            // ตรงนี้สามารถดึงบัฟจากกาชาช็อปมาเพิ่มค่าน้ำหนักเฉพาะช่องได้เลย!
-            // เช่น ถ้าช่อง 0 สุ่มได้บัฟเพิ่มเลข 0 ค่าน้ำหนักของเลข 0 ในรีลนั้นจะเพิ่มขึ้น
             totalWeight += symbol.baseWeightRandom;
         }
 
@@ -54,7 +71,7 @@ public class SlotMachine : MonoBehaviour
             }
             randomValue -= symbol.baseWeightRandom;
         }
-        return availableSymbols[0];
+        return availableSymbols.Count > 0 ? availableSymbols[0] : null;
     }
 
     private IEnumerator AnimateSlotsAndSendResult()
@@ -65,19 +82,24 @@ public class SlotMachine : MonoBehaviour
         yield return new WaitForSeconds(1.5f); 
         for (int i = 0; i < 3; i++)
         {
-            if (reelDisplays[i] != null)
+            if (reelDisplays[i] != null && finalResult[i] != null)
             {
                 // สั่งให้จอ UI ช่องนั้นดึงรูปใน ScriptableObject ที่สุ่มได้ไปโชว์หน้าบ้านทันที!
                 reelDisplays[i].SetupSlotDisplay(finalResult[i]); 
             }
         }
 
-        Debug.Log($"สล็อตหยุดหมุน! ผลลัพธ์คือ: [{finalResult[0].iconName}] [{finalResult[1].iconName}] [{finalResult[2].iconName}]");
+        string res0 = finalResult[0] != null ? finalResult[0].iconName : "None";
+        string res1 = finalResult[1] != null ? finalResult[1].iconName : "None";
+        string res2 = finalResult[2] != null ? finalResult[2].iconName : "None";
+        Debug.Log($"สล็อตหยุดหมุน! ผลลัพธ์คือ: [{res0}] [{res1}] [{res2}]");
 
         // 3. ปลดล็อกรีลที่ไม่ได้ตั้งใจล็อกทิ้งไว้เพื่อเริ่มเทิร์นถัดไป
         // (สามารถรีเซ็ตค่า Lock ตรงนี้ได้เลย)
 
         // ➔ ส่งต่อข้อมูลรางวัล (Array Size 3) ไปให้ Combat Manager ประมวลผลทำดาเมจทันที!
-    //     CombatManager.Instance.ProcessSlotResult(finalResult);
+        // if (CombatManager.Instance != null) {
+        //     CombatManager.Instance.ProcessSlotResult(finalResult);
+        // }
     }
 }

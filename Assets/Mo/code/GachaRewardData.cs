@@ -12,4 +12,5 @@ public class GachaRewardData : ScriptableObject
     public int jackpotMultiplier = 5;
     public int baseWeightRandom = 10; // สุ่มแยกตู้กาชาต่างหาก
     [TextArea] public string description;
+    [TextArea] public string bonusDescription;
 }
