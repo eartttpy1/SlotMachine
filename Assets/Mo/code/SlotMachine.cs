@@ -37,11 +37,11 @@ public class SlotMachine : MonoBehaviour
     // ฟังก์ชันหลักที่ปุ่ม SPIN จะวิ่งมาเรียกใช้งาน
     public void SpinSlotMachine()
     {
-        // เพิ่ม % 067 ของ player เมื่อหมุนสล็อต (ค่าเริ่มต้นเพิ่มครั้งละ 1% หรือสามารถปรับเปลี่ยนได้ตามสะดวก)
-        if (PlayerStats.Instance != null)
-        {
-            PlayerStats.Instance.AddChance067(1.0f);
-        }
+        // เพิ่ม % 067 ของ player เมื่อหมุนสล็อต (ค่าเริ่มต้นเพิ่มครั้งละ 1% หรือสามารถปรับเปลี่ยนได้ตามสะดวก) เก็บไว้ก่อนไม่พอค่อยใช้ เพราะได้ประมาณ 50 up ก้โผล่ 067
+        // if (PlayerStats.Instance != null)
+        // {
+        //     PlayerStats.Instance.AddChance067(1.0f);
+        // }
 
         // 1. วนลูปสุ่มหลังบ้านให้เสร็จก่อนแบบถ่วงน้ำหนักแยกอิสระทีละรีล
         for (int i = 0; i < 3; i++)

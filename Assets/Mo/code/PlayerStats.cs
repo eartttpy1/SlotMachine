@@ -1,4 +1,5 @@
 using UnityEngine;
+using TMPro;
 
 public class PlayerStats : MonoBehaviour
 {
@@ -7,6 +8,8 @@ public class PlayerStats : MonoBehaviour
     [Header("067 Jackpot Chance (%)")]
     [Range(0f, 100f)]
     public float chance067 = 1.0f; // Default 1%
+    public TextMeshProUGUI chanceText;
+
 
     private void Awake()
     {
@@ -18,6 +21,14 @@ public class PlayerStats : MonoBehaviour
         else
         {
             Destroy(gameObject);
+        }
+    }
+    public void Update()
+    {
+        chanceText.text = "067 : " + chance067.ToString("F1") + "%";
+        if(Input.GetKeyDown(KeyCode.Space))
+        {
+            AddChance067(1.0f);
         }
     }
 
