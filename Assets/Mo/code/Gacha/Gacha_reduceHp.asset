@@ -18,5 +18,5 @@ MonoBehaviour:
   baseValue: 20
   jackpotMultiplier: 5
   baseWeightRandom: 10
-  description: reduce Hp by 20%
-  bonusDescription: Bonus x5
+  rewardDescription: reduce Hp by 20%
+  rewardBonusDescription: Bonus x5

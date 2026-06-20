@@ -10,4 +10,6 @@ public class SimpleSymbolData : SlotSymbolData
     public override string SymbolName => symbolName;
     public override Sprite SymbolSprite => symbolSprite;
     public override int BaseWeight => baseWeightRandom;
+    public override string description => "";
+    public override string bonusDescription => "";
 }

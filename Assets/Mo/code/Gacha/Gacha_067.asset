@@ -18,5 +18,5 @@ MonoBehaviour:
   baseValue: 5
   jackpotMultiplier: 5
   baseWeightRandom: 10
-  description: add chance 067 by 5%
-  bonusDescription: Bonus x5
+  rewardDescription: add chance 067 by 5%
+  rewardBonusDescription: Bonus x5

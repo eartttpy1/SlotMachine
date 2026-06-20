@@ -18,5 +18,5 @@ MonoBehaviour:
   baseValue: 10
   jackpotMultiplier: 5
   baseWeightRandom: 10
-  description: gain 10 coins
-  bonusDescription: Bonus x5
+  rewardDescription: gain 10 coins
+  rewardBonusDescription: Bonus x5

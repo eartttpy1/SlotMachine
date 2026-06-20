@@ -16,7 +16,7 @@ MonoBehaviour:
   iconName: Healing Potion
   iconSprite: {fileID: 21300000, guid: 7488c3c1ade755248a2dca08b1388fd3, type: 3}
   skillDescription: Heal 20 HP
-  bonusDescription: Bonus x3
+  iconBonusDescription: Bonus x3
   baseValue: 1
   match3Multiplier: 3
   isMultipleTargets: 0

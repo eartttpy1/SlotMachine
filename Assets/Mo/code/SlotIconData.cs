@@ -9,7 +9,7 @@ public class SlotIconData : SlotSymbolData
     public string iconName;
     public Sprite iconSprite;
     [TextArea] public string skillDescription;
-    [TextArea] public string bonusDescription;
+    [TextArea] public string iconBonusDescription;
 
     [Header("Combat Values")]
     public int baseValue = 15;
@@ -21,6 +21,8 @@ public class SlotIconData : SlotSymbolData
     public override string SymbolName => iconName;
     public override Sprite SymbolSprite => iconSprite;
     public override int BaseWeight => baseWeightRandom;
+    public override string description => skillDescription;
+    public override string bonusDescription => iconBonusDescription;
 
     [Header("Shop Progression")]
     public int baseUpgradePrice = 10;

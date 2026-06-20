@@ -11,11 +11,13 @@ public class GachaRewardData : SlotSymbolData
     public int baseValue;
     public int jackpotMultiplier = 5;
     public int baseWeightRandom = 10; // สุ่มแยกตู้กาชาต่างหาก
-    [TextArea] public string description;
-    [TextArea] public string bonusDescription;
+    [TextArea] public string rewardDescription;
+    [TextArea] public string rewardBonusDescription;
 
     // Implement base properties of SlotSymbolData
     public override string SymbolName => rewardName;
     public override Sprite SymbolSprite => rewardSprite;
     public override int BaseWeight => baseWeightRandom;
+    public override string description => rewardDescription;
+    public override string bonusDescription => rewardBonusDescription;
 }
