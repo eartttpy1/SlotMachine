@@ -572,7 +572,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 451c48dd5fdda9341813d28230d12128, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SlotMachine
+  currentMode: 2
   availableSymbols:
+  - {fileID: 11400000, guid: 9a37868907173894fbf14807074a89fc, type: 2}
+  - {fileID: 11400000, guid: 185f7c860b1c27c46ba86ac8267fb217, type: 2}
+  - {fileID: 11400000, guid: 02878f6a11b3eeb46a03bf3b23e5513a, type: 2}
+  - {fileID: 11400000, guid: b029e47d072dbd94685d9a2d5f303a70, type: 2}
+  - {fileID: 11400000, guid: 9afd482bb2936f844b225b206c2e563d, type: 2}
+  - {fileID: 11400000, guid: 5ef9b11e5bb00c64bb343c792317f179, type: 2}
+  - {fileID: 11400000, guid: e803ad25e1b5955418e71ac3bc22c3b3, type: 2}
+  - {fileID: 11400000, guid: 985d921327d44f744855f1cd722801c2, type: 2}
+  slotIconList:
+  - {fileID: 11400000, guid: 7bc6aa44e7e0c1e44b956619dbddb60b, type: 2}
+  - {fileID: 11400000, guid: 609a20a4e80eb754eaccaac49399fea0, type: 2}
+  - {fileID: 11400000, guid: b33af38973ecd8f429619609ff9fe8d9, type: 2}
+  - {fileID: 11400000, guid: 5710e8b097691e043a8849650b1aaa8c, type: 2}
+  - {fileID: 11400000, guid: 0896323257b911e44aad84da85f47147, type: 2}
+  gachaRewardList:
+  - {fileID: 11400000, guid: eb4aaa7066dfb3e4eb6dca57e873e238, type: 2}
+  - {fileID: 11400000, guid: 354250c996a565e4d97725ab3a5e4e5d, type: 2}
+  - {fileID: 11400000, guid: 9b7878bac99681049987c3b161cd0856, type: 2}
+  - {fileID: 11400000, guid: ed4b6e5a67a36884ca94b8678fb4dd06, type: 2}
+  slotSymbolList:
   - {fileID: 11400000, guid: 9a37868907173894fbf14807074a89fc, type: 2}
   - {fileID: 11400000, guid: 185f7c860b1c27c46ba86ac8267fb217, type: 2}
   - {fileID: 11400000, guid: 02878f6a11b3eeb46a03bf3b23e5513a, type: 2}
@@ -585,7 +606,7 @@ MonoBehaviour:
   - {fileID: 1816221925}
   - {fileID: 1090548618}
   - {fileID: 299010587}
-  isReelLocked: 000100
+  isReelLocked: 000000
 --- !u!1 &756847375
 GameObject:
   m_ObjectHideFlags: 0
@@ -682,6 +703,7 @@ RectTransform:
   - {fileID: 920661852}
   - {fileID: 2081031100}
   - {fileID: 1036490449}
+  - {fileID: 835921646}
   m_Father: {fileID: 1809687303}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -762,11 +784,11 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1809687303}
+  m_Father: {fileID: 816011072}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 412, y: -460}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &835921647
@@ -2254,7 +2276,6 @@ RectTransform:
   m_Children:
   - {fileID: 1398764692}
   - {fileID: 756847376}
-  - {fileID: 835921646}
   - {fileID: 816011072}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

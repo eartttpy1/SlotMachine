@@ -4,9 +4,49 @@ using UnityEngine;
 
 public class SlotMachine : MonoBehaviour
 {
+    public enum SlotMachineMode { SlotIconData, GachaReward, SlotSymbolData }
+
     [Header("Reel Data Layout")]
-    // ลิสต์รายการสัญลักษณ์ทั้งหมดที่มีสิทธิ์สุ่มได้ในตู้นี้ (รองรับทั้ง SlotIconData และ GachaRewardData)
+    public SlotMachineMode currentMode; // เลือกโหมดใช้งานของตู้สล็อตนี้
+
+    // ลิสต์ที่จะสุ่มจริงในตู้ (ระบบจะดึงจากตัวแปรด้านล่างตามโหมดที่เลือก)
     public List<SlotSymbolData> availableSymbols = new List<SlotSymbolData>(); 
+
+    [Header("Data Lists")]
+    public List<SlotIconData> slotIconList = new List<SlotIconData>();
+    public List<GachaRewardData> gachaRewardList = new List<GachaRewardData>();
+    public List<SlotSymbolData> slotSymbolList = new List<SlotSymbolData>();
+
+    private void OnValidate()
+    {
+        PopulateAvailableSymbols();
+    }
+
+    public void PopulateAvailableSymbols()
+    {
+        availableSymbols.Clear();
+        if (currentMode == SlotMachineMode.SlotIconData)
+        {
+            foreach (var item in slotIconList)
+            {
+                if (item != null) availableSymbols.Add(item);
+            }
+        }
+        else if (currentMode == SlotMachineMode.GachaReward)
+        {
+            foreach (var item in gachaRewardList)
+            {
+                if (item != null) availableSymbols.Add(item);
+            }
+        }
+        else if (currentMode == SlotMachineMode.SlotSymbolData)
+        {
+            foreach (var item in slotSymbolList)
+            {
+                if (item != null) availableSymbols.Add(item);
+            }
+        }
+    } 
 
     [Header("UI Visual Link Connection")]
     public SlotDisplay[] reelDisplays = new SlotDisplay[3];
@@ -18,6 +58,8 @@ public class SlotMachine : MonoBehaviour
     // ฟังก์ชัน Start สำหรับตั้งค่าเริ่มต้นและเชื่อมต่อข้อมูลระหว่าง SlotMachine กับ SlotDisplay
     private void Start()
     {
+        PopulateAvailableSymbols();
+
         for (int i = 0; i < 3; i++)
         {
             // กำหนดค่าสัญลักษณ์เริ่มต้น หากมีสัญลักษณ์ให้เลือกใน availableSymbols
