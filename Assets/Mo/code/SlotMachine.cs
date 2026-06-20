@@ -5,15 +5,15 @@ using UnityEngine;
 public class SlotMachine : MonoBehaviour
 {
     [Header("Reel Data Layout")]
-    // ลิสต์รายการสัญลักษณ์ทั้งหมดที่มีสิทธิ์สุ่มได้ในตู้นี้
-    public List<SlotIconData> availableSymbols = new List<SlotIconData>(); 
+    // ลิสต์รายการสัญลักษณ์ทั้งหมดที่มีสิทธิ์สุ่มได้ในตู้นี้ (รองรับทั้ง SlotIconData และ GachaRewardData)
+    public List<SlotSymbolData> availableSymbols = new List<SlotSymbolData>(); 
 
     [Header("UI Visual Link Connection")]
     public SlotDisplay[] reelDisplays = new SlotDisplay[3];
 
     [Header("Reel Status")]
     public bool[] isReelLocked = new bool[3]; // เก็บสถานะปุ่มกดล็อกรีล [รีล1, รีล2, รีล3]
-    private SlotIconData[] finalResult = new SlotIconData[3]; // ผลลัพธ์สุดท้ายหลังหมุนเสร็จ
+    private SlotSymbolData[] finalResult = new SlotSymbolData[3]; // ผลลัพธ์สุดท้ายหลังหมุนเสร็จ
 
     // ฟังก์ชัน Start สำหรับตั้งค่าเริ่มต้นและเชื่อมต่อข้อมูลระหว่าง SlotMachine กับ SlotDisplay
     private void Start()
@@ -37,6 +37,12 @@ public class SlotMachine : MonoBehaviour
     // ฟังก์ชันหลักที่ปุ่ม SPIN จะวิ่งมาเรียกใช้งาน
     public void SpinSlotMachine()
     {
+        // เพิ่ม % 067 ของ player เมื่อหมุนสล็อต (ค่าเริ่มต้นเพิ่มครั้งละ 1% หรือสามารถปรับเปลี่ยนได้ตามสะดวก)
+        if (PlayerStats.Instance != null)
+        {
+            PlayerStats.Instance.AddChance067(1.0f);
+        }
+
         // 1. วนลูปสุ่มหลังบ้านให้เสร็จก่อนแบบถ่วงน้ำหนักแยกอิสระทีละรีล
         for (int i = 0; i < 3; i++)
         {
@@ -51,27 +57,49 @@ public class SlotMachine : MonoBehaviour
     }
 
     // 🎯 ระบบโกงดวง (Weighted Random) แยกช่องตามที่คุณต้องการ
-    private SlotIconData GetWeightedRandomSymbol(int reelIndex)
+    private SlotSymbolData GetWeightedRandomSymbol(int reelIndex)
     {
+        float chance067 = PlayerStats.Instance != null ? PlayerStats.Instance.chance067 : 1.0f;
         int totalWeight = 0;
         
-        // คำนวณน้ำหนักรวม
+        // คำนวณน้ำหนักรวมแบบไดนามิกตามตำแหน่งรีลและค่า % 067
         foreach (var symbol in availableSymbols)
         {
-            totalWeight += symbol.baseWeightRandom;
+            totalWeight += GetDynamicWeight(symbol, reelIndex, chance067);
         }
 
         int randomValue = Random.Range(0, totalWeight);
 
         foreach (var symbol in availableSymbols)
         {
-            if (randomValue < symbol.baseWeightRandom)
+            int currentWeight = GetDynamicWeight(symbol, reelIndex, chance067);
+            if (randomValue < currentWeight)
             {
                 return symbol;
             }
-            randomValue -= symbol.baseWeightRandom;
+            randomValue -= currentWeight;
         }
         return availableSymbols.Count > 0 ? availableSymbols[0] : null;
+    }
+
+    // คำนวณน้ำหนักของสัญลักษณ์ตามค่า % 067 ของรีลนั้นๆ
+    private int GetDynamicWeight(SlotSymbolData symbol, int reelIndex, float chance067)
+    {
+        int weight = symbol.BaseWeight;
+
+        // ตรวจสอบความถูกต้องของสัญลักษณ์เป้าหมายในแต่ละรีล (Reel 1 -> 0 / Reel 2 -> 6 / Reel 3 -> 7)
+        bool isTarget = false;
+        if (reelIndex == 0 && symbol.SymbolName == "0") isTarget = true;
+        else if (reelIndex == 1 && symbol.SymbolName == "6") isTarget = true;
+        else if (reelIndex == 2 && symbol.SymbolName == "7") isTarget = true;
+
+        if (isTarget)
+        {
+            // เพิ่มน้ำหนักขึ้นตามค่าสะสม % 067 (ตัวอย่าง: เพิ่มขึ้น 10 เท่าของเปอร์เซ็นต์สะสม)
+            weight += Mathf.RoundToInt(chance067 * 10f);
+        }
+
+        return weight;
     }
 
     private IEnumerator AnimateSlotsAndSendResult()
@@ -89,9 +117,9 @@ public class SlotMachine : MonoBehaviour
             }
         }
 
-        string res0 = finalResult[0] != null ? finalResult[0].iconName : "None";
-        string res1 = finalResult[1] != null ? finalResult[1].iconName : "None";
-        string res2 = finalResult[2] != null ? finalResult[2].iconName : "None";
+        string res0 = finalResult[0] != null ? finalResult[0].SymbolName : "None";
+        string res1 = finalResult[1] != null ? finalResult[1].SymbolName : "None";
+        string res2 = finalResult[2] != null ? finalResult[2].SymbolName : "None";
         Debug.Log($"สล็อตหยุดหมุน! ผลลัพธ์คือ: [{res0}] [{res1}] [{res2}]");
 
         // 3. ปลดล็อกรีลที่ไม่ได้ตั้งใจล็อกทิ้งไว้เพื่อเริ่มเทิร์นถัดไป

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GachaRewardData
   rewardType: 1
   rewardName: MaxHP
-  rewardSprite: {fileID: 0}
+  rewardSprite: {fileID: 21300000, guid: 1b519793abcf58043adc78e5755d6e2b, type: 3}
   baseValue: 20
   jackpotMultiplier: 5
   baseWeightRandom: 10

@@ -3,7 +3,7 @@ using UnityEngine;
 public enum SlotSymbol { GreatSword, Sword, HealingPotion, Shield, Coin }
 
 [CreateAssetMenu(fileName = "SlotIcon_", menuName = "SlotGame/SlotIconData")]
-public class SlotIconData : ScriptableObject
+public class SlotIconData : SlotSymbolData
 {
     public SlotSymbol symbolType;
     public string iconName;
@@ -16,6 +16,11 @@ public class SlotIconData : ScriptableObject
     public int match3Multiplier = 3;
     public bool isMultipleTargets = true;
     public int baseWeightRandom = 1; // ค่าน้ำหนักในการสุ่ม (Weighted Random)
+
+    // Implement base properties of SlotSymbolData
+    public override string SymbolName => iconName;
+    public override Sprite SymbolSprite => iconSprite;
+    public override int BaseWeight => baseWeightRandom;
 
     [Header("Shop Progression")]
     public int baseUpgradePrice = 10;
