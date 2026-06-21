@@ -24,4 +24,4 @@ MonoBehaviour:
   baseUpgradePrice: 9
   countUpgrade: 0
   upgradeMultiplier: 1.5
-  upgradeDescription: Upgrade, +50% coins
+  upgradeDescription: Upgrade, get +50% coins

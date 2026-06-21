@@ -10,6 +10,20 @@ public class PlayerStats : MonoBehaviour
     public float chance067 = 1.0f; // Default 1%
     public TextMeshProUGUI chanceText;
 
+    [Header("Player HP")]
+    public int currentHP = 50;
+    public int maxHP = 100;
+    public TextMeshProUGUI hpText;
+
+    [Header("Potion & Healing")]
+    public int countpotion = 0;
+    public bool isplayerturn = true;
+    public TextMeshProUGUI potionCountText;
+    public SlotIconData potionData;
+
+    [Header("Ticket 67")]
+    public int ticket67 = 5;
+    public TextMeshProUGUI ticket67Text;
 
     private void Awake()
     {
@@ -23,12 +37,56 @@ public class PlayerStats : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
+    private void Start()
+    {
+        UpdatePotionUI();
+    }
+
     public void Update()
     {
-        chanceText.text = "067 : " + chance067.ToString("F1") + "%";
+        if (chanceText != null)
+        {
+            chanceText.text = "067 : " + chance067.ToString("F1") + "%";
+        }
+        if (hpText != null)
+        {
+            hpText.text = "HP: " + currentHP + "/" + maxHP;
+        }
+        if (ticket67Text != null)
+        {
+            ticket67Text.text = ticket67.ToString();
+        }
         if(Input.GetKeyDown(KeyCode.Space))
         {
             AddChance067(1.0f);
+        }
+        UpdatePotionUI();
+    }
+
+    public void AddPotion(int amount)
+    {
+        countpotion += amount;
+        UpdatePotionUI();
+    }
+
+    public void Heal()
+    {
+        if (isplayerturn && countpotion > 0)
+        {
+            countpotion--;
+            int healAmount = potionData != null ? potionData.GetCurrentValue() : 15;
+            currentHP = Mathf.Min(currentHP + healAmount, maxHP);
+            Debug.Log($"Healed for {healAmount}! Potions left: {countpotion}, HP: {currentHP}/{maxHP}");
+            UpdatePotionUI();
+        }
+    }
+
+    public void UpdatePotionUI()
+    {
+        if (potionCountText != null)
+        {
+            potionCountText.text = countpotion.ToString();
         }
     }
 

@@ -17,11 +17,11 @@ MonoBehaviour:
   iconSprite: {fileID: 21300000, guid: 7488c3c1ade755248a2dca08b1388fd3, type: 3}
   skillDescription: Heal 20 HP
   iconBonusDescription: Bonus x3
-  baseValue: 1
+  baseValue: 10
   match3Multiplier: 3
   isMultipleTargets: 0
   baseWeightRandom: 1
   baseUpgradePrice: 10
   countUpgrade: 0
   upgradeMultiplier: 1.5
-  upgradeDescription: Upgrade, +50% potions
+  upgradeDescription: Upgrade, heal +50% potions

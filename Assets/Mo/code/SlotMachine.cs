@@ -79,6 +79,23 @@ public class SlotMachine : MonoBehaviour
     // ฟังก์ชันหลักที่ปุ่ม SPIN จะวิ่งมาเรียกใช้งาน
     public void SpinSlotMachine()
     {
+        if (currentMode == SlotMachineMode.SlotSymbolData)
+        {
+            if (PlayerStats.Instance != null)
+            {
+                if (PlayerStats.Instance.ticket67 > 0)
+                {
+                    PlayerStats.Instance.ticket67--;
+                    Debug.Log($"ใช้ตั๋ว 67 ไป 1 ใบ คงเหลือตั๋ว: {PlayerStats.Instance.ticket67} ใบ");
+                }
+                else
+                {
+                    Debug.LogWarning("ไม่มีตั๋ว ticket67 เหลืออยู่! ไม่สามารถหมุนสล็อตได้");
+                    return;
+                }
+            }
+        }
+
         // เพิ่ม % 067 ของ player เมื่อหมุนสล็อต (ค่าเริ่มต้นเพิ่มครั้งละ 1% หรือสามารถปรับเปลี่ยนได้ตามสะดวก) เก็บไว้ก่อนไม่พอค่อยใช้ เพราะได้ประมาณ 50 up ก้โผล่ 067
         // if (PlayerStats.Instance != null)
         // {
@@ -163,6 +180,24 @@ public class SlotMachine : MonoBehaviour
         string res1 = finalResult[1] != null ? finalResult[1].SymbolName : "None";
         string res2 = finalResult[2] != null ? finalResult[2].SymbolName : "None";
         Debug.Log($"สล็อตหยุดหมุน! ผลลัพธ์คือ: [{res0}] [{res1}] [{res2}]");
+
+        // เพิ่มจำนวน Potion ไปยัง PlayerStats หากได้สัญลักษณ์ Potion ในโหมด SlotIconData
+        if (currentMode == SlotMachineMode.SlotIconData && PlayerStats.Instance != null)
+        {
+            int potionsRolled = 0;
+            for (int i = 0; i < 3; i++)
+            {
+                if (finalResult[i] is SlotIconData iconData && iconData.symbolType == SlotSymbol.HealingPotion)
+                {
+                    potionsRolled++;
+                }
+            }
+            if (potionsRolled > 0)
+            {
+                PlayerStats.Instance.AddPotion(potionsRolled);
+                Debug.Log($"สุ่มได้ Potion {potionsRolled} ขวด! จำนวนโพชั่นสะสม: {PlayerStats.Instance.countpotion} ขวด");
+            }
+        }
 
         // 3. ปลดล็อกรีลที่ไม่ได้ตั้งใจล็อกทิ้งไว้เพื่อเริ่มเทิร์นถัดไป
         // (สามารถรีเซ็ตค่า Lock ตรงนี้ได้เลย)
