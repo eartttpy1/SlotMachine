@@ -48,6 +48,8 @@ public class SlotMachine : MonoBehaviour
     [Header("UI Visual Link Connection")]
     public SlotDisplay[] reelDisplays = new SlotDisplay[3];
     public TMPro.TextMeshProUGUI spinButtonText;
+    [Header("gacha")]
+    int useGachaCoin = 20;
 
     [Header("Reel Status")]
     public bool[] isReelLocked = new bool[3]; // เก็บสถานะปุ่มกดล็อกรีล [รีล1, รีล2, รีล3]
@@ -122,7 +124,6 @@ public class SlotMachine : MonoBehaviour
         {
             if (PlayerStats.Instance != null)
             {
-                int useGachaCoin = 20;
                 if (PlayerStats.Instance.coins >= useGachaCoin)
                 {
                     PlayerStats.Instance.coins -= useGachaCoin;
@@ -130,7 +131,7 @@ public class SlotMachine : MonoBehaviour
                 }
                 else
                 {
-                    Debug.LogWarning("จำนวน Coin ไม่เพียงพอสำหรับการสุ่มกาชา (ต้องใช้ 10 Coin)");
+                    Debug.LogWarning($"จำนวน Coin ไม่เพียงพอสำหรับการสุ่มกาชา (ต้องใช้ {useGachaCoin} Coin)");
                     return;
                 }
             }
