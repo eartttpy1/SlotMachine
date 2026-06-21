@@ -23,5 +23,5 @@ MonoBehaviour:
   baseWeightRandom: 1
   baseUpgradePrice: 10
   countUpgrade: 0
-  upgradeMultiplier: 1.2
+  upgradeMultiplier: 20
   upgradeDescription: Upgrade, +20% shield

@@ -35,6 +35,7 @@ public class PlayerStats : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
+            CacheAllInitialValues();
         }
         else
         {
@@ -120,5 +121,28 @@ public class PlayerStats : MonoBehaviour
     {
         float addedAmount = isBoss ? 5f : 2f;
         AddChance067(addedAmount);
+    }
+
+    private void CacheAllInitialValues()
+    {
+        SlotIconData[] icons = Resources.FindObjectsOfTypeAll<SlotIconData>();
+        foreach (var icon in icons)
+        {
+            icon.CacheInitialValue();
+        }
+    }
+
+    public void ResetAllScriptableObjects()
+    {
+        SlotIconData[] icons = Resources.FindObjectsOfTypeAll<SlotIconData>();
+        foreach (var icon in icons)
+        {
+            icon.ResetToDefault();
+        }
+    }
+
+    private void OnDestroy()
+    {
+        ResetAllScriptableObjects();
     }
 }

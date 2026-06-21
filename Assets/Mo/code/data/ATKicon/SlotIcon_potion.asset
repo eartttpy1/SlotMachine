@@ -23,5 +23,5 @@ MonoBehaviour:
   baseWeightRandom: 1
   baseUpgradePrice: 10
   countUpgrade: 0
-  upgradeMultiplier: 1.5
-  upgradeDescription: Upgrade, heal +50% potions
+  upgradeMultiplier: 20
+  upgradeDescription: Upgrade, heal +20% potions

@@ -3,11 +3,12 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class SlotItemDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class SlotItemDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
     [Header("UI Visuals")]
     public Image iconImage;
     public Image borderObject; // กรอบ Border ที่จะแสดงเมื่อชี้เมาส์
+    public TMPro.TextMeshProUGUI maxOverlayText; // ข้อความคำว่า MAX ซ้อนบนไอคอน (Optional)
 
     [Header("Active Data")]
     public SlotSymbolData symbolData; // ข้อมูลสัญลักษณ์ที่ถูกเลือกใช้งานในปัจจุบัน
@@ -46,6 +47,20 @@ public class SlotItemDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExit
         {
             iconImage.sprite = symbolData.SymbolSprite;
         }
+
+        if (maxOverlayText != null)
+        {
+            SlotIconData iconData = symbolData as SlotIconData;
+            if (isUpgradeShop && iconData != null && iconData.countUpgrade >= 3)
+            {
+                maxOverlayText.gameObject.SetActive(true);
+                maxOverlayText.text = "MAX";
+            }
+            else
+            {
+                maxOverlayText.gameObject.SetActive(false);
+            }
+        }
     }
 
     /// <summary>
@@ -71,10 +86,26 @@ public class SlotItemDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExit
             else if (isUpgradeShop)
             {
                 SlotIconData iconData = symbolData as SlotIconData;
+                TicketShopItemData ticketData = symbolData as TicketShopItemData;
+
                 if (iconData != null)
                 {
-                    desc = iconData.upgradeDescription;
-                    price = $"Price: {iconData.GetCurrentPrice()} Coins";
+                    if (iconData.countUpgrade >= 3)
+                    {
+                        name = $"[MAX] {iconData.SymbolName}";
+                        desc = iconData.upgradeDescription;
+                        price = "Price: MAX";
+                    }
+                    else
+                    {
+                        desc = $"{iconData.upgradeDescription}\nValue: {iconData.GetCurrentValue()} -> {iconData.GetCurrentValue() + iconData.GetUpgradeIncrement()}";
+                        price = $"Price: {iconData.GetCurrentPrice()} Coins";
+                    }
+                }
+                else if (ticketData != null)
+                {
+                    desc = ticketData.description;
+                    price = $"Price: {ticketData.price} Coins";
                 }
                 else
                 {
@@ -102,6 +133,67 @@ public class SlotItemDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExit
         if (DescriptionPanel.Instance != null)
         {
             DescriptionPanel.Instance.HideInfo();
+        }
+    }
+
+    /// <summary>
+    /// เมื่อคลิกที่ไอคอน
+    /// </summary>
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if (!isUpgradeShop) return;
+
+        if (PlayerStats.Instance == null) return;
+
+        SlotIconData iconData = symbolData as SlotIconData;
+        TicketShopItemData ticketData = symbolData as TicketShopItemData;
+
+        if (iconData != null)
+        {
+            if (iconData.countUpgrade < 3)
+            {
+                int price = iconData.GetCurrentPrice();
+                if (PlayerStats.Instance.coins >= price)
+                {
+                    PlayerStats.Instance.coins -= price;
+
+                    // เอา GetCurrentValue ไปบวกเพิ่มใน basevalue ของแต่ละชิ้นเลย เพื่อเป็นการอัพเดทค่าตามการ upgrade
+                    int increment = iconData.GetUpgradeIncrement();
+                    iconData.baseValue += increment;
+                    iconData.countUpgrade++;
+
+                    Debug.Log($"Upgraded {iconData.SymbolName}! New baseValue: {iconData.baseValue}, Level: {iconData.countUpgrade}");
+
+                    UpdateVisuals();
+                    // อัปเดตข้อมูลคำอธิบายและราคาทันทีหลังซื้อ
+                    OnPointerEnter(eventData);
+                }
+                else
+                {
+                    Debug.LogWarning("Coins ไม่เพียงพอสำหรับการอัปเกรด!");
+                }
+            }
+            else
+            {
+                Debug.LogWarning("สัญลักษณ์นี้อัปเกรดสูงสุดแล้ว!");
+            }
+        }
+        else if (ticketData != null)
+        {
+            if (PlayerStats.Instance.coins >= ticketData.price)
+            {
+                PlayerStats.Instance.coins -= ticketData.price;
+                PlayerStats.Instance.ticket67++;
+                Debug.Log($"ซื้อ Ticket 67 สำเร็จ! คงเหลือตั๋ว: {PlayerStats.Instance.ticket67} ใบ");
+
+                UpdateVisuals();
+                // อัปเดตข้อมูลคำอธิบายและราคาทันทีหลังซื้อ
+                OnPointerEnter(eventData);
+            }
+            else
+            {
+                Debug.LogWarning("Coins ไม่เพียงพอสำหรับการซื้อตั๋ว!");
+            }
         }
     }
 }

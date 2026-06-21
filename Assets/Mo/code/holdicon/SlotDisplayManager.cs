@@ -12,7 +12,7 @@ public class SlotDisplayManager : MonoBehaviour
 
     [Header("Data Lists")]
     public List<SlotSymbolData> startIconList = new List<SlotSymbolData>();
-    public List<SlotIconData> upgradeShopList = new List<SlotIconData>();
+    public List<SlotSymbolData> upgradeShopList = new List<SlotSymbolData>();
     public List<GachaRewardData> gachaShopList = new List<GachaRewardData>();
 
     private void Start()

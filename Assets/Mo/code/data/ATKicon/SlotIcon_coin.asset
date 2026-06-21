@@ -23,5 +23,5 @@ MonoBehaviour:
   baseWeightRandom: 1
   baseUpgradePrice: 9
   countUpgrade: 0
-  upgradeMultiplier: 1.5
+  upgradeMultiplier: 20
   upgradeDescription: Upgrade, get +50% coins

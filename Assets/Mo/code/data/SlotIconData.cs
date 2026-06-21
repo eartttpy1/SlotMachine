@@ -27,16 +27,42 @@ public class SlotIconData : SlotSymbolData
     [Header("Shop Progression")]
     public int baseUpgradePrice = 10;
     public int countUpgrade = 0;
-    public float upgradeMultiplier = 1.2f;
+    public int upgradeMultiplier = 20;
     [TextArea] public string upgradeDescription;
+
+    public int GetUpgradeIncrement() {
+        // upgradeMultiplier is 20, meaning 20%
+        float increment = baseValue * (upgradeMultiplier / 100f);
+        return Mathf.Max(1, Mathf.RoundToInt(increment)); // Ensure it increases by at least 1
+    }
 
     public int GetCurrentPrice() {
         return Mathf.CeilToInt(baseUpgradePrice * Mathf.Pow(1.5f, countUpgrade));
     }
 
     public int GetCurrentValue() {
-        // อัปเกรดบวกเพิ่มทีละ 20% และปัดเศษขึ้นตามสเปก (+0.5f แล้วแปลงเป็น int)
-        float upgradedValue = baseValue * Mathf.Pow(upgradeMultiplier, countUpgrade);
-        return Mathf.FloorToInt(upgradedValue + 0.5f);
+        return baseValue;
+    }
+
+    [System.NonSerialized] private int initialBaseValue;
+    [System.NonSerialized] private bool hasCached = false;
+
+    public void CacheInitialValue() {
+        if (!hasCached) {
+            initialBaseValue = baseValue;
+            hasCached = true;
+        }
+    }
+
+    public void ResetToDefault() {
+        if (hasCached) {
+            baseValue = initialBaseValue;
+            countUpgrade = 0;
+            hasCached = false;
+        }
+    }
+
+    private void OnDisable() {
+        ResetToDefault();
     }
 }
