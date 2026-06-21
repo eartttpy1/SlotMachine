@@ -258,6 +258,29 @@ public class SlotMachine : MonoBehaviour
                 PlayerStats.Instance.AddPotion(totalAdded);
                 Debug.Log($"สุ่มได้ Potion {potionsRolled} ช่อง! ได้รับโพชั่นทั้งหมด: {totalAdded} ขวด (สะสมทั้งหมด: {PlayerStats.Instance.countpotion} ขวด)");
             }
+
+            // เช็คสัญลักษณ์ Coin ในโหมด SlotIconData
+            int coinsRolled = 0;
+            SlotIconData coinIconData = null;
+            for (int i = 0; i < 3; i++)
+            {
+                if (finalResult[i] is SlotIconData iconData && iconData.symbolType == SlotSymbol.Coin)
+                {
+                    coinsRolled++;
+                    coinIconData = iconData;
+                }
+            }
+            if (coinsRolled > 0 && coinIconData != null)
+            {
+                int coinBaseValue = coinIconData.GetCurrentValue();
+                int totalCoinsAdded = coinsRolled * coinBaseValue;
+                if (coinsRolled == 3)
+                {
+                    totalCoinsAdded = coinBaseValue * coinIconData.match3Multiplier;
+                }
+                PlayerStats.Instance.coins += totalCoinsAdded;
+                Debug.Log($"สุ่มได้ Coin {coinsRolled} ช่อง! ได้รับเหรียญทั้งหมด: {totalCoinsAdded} Coins (สะสมทั้งหมด: {PlayerStats.Instance.coins} Coins)");
+            }
         }
 
         // ประเมินและแจกรางวัลในโหมด GachaReward
