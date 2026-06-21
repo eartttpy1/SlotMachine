@@ -25,6 +25,10 @@ public class PlayerStats : MonoBehaviour
     public int ticket67 = 5;
     public TextMeshProUGUI ticket67Text;
 
+    [Header("Gacha Currency")]
+    public int coins = 100;
+    public TextMeshProUGUI coinsText;
+
     private void Awake()
     {
         if (Instance == null)
@@ -56,6 +60,10 @@ public class PlayerStats : MonoBehaviour
         if (ticket67Text != null)
         {
             ticket67Text.text = ticket67.ToString();
+        }
+        if (coinsText != null)
+        {
+            coinsText.text = coins.ToString() + " $";
         }
         if(Input.GetKeyDown(KeyCode.Space))
         {

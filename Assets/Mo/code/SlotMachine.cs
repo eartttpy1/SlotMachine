@@ -17,10 +17,7 @@ public class SlotMachine : MonoBehaviour
     public List<GachaRewardData> gachaRewardList = new List<GachaRewardData>();
     public List<SlotSymbolData> slotSymbolList = new List<SlotSymbolData>();
 
-    private void OnValidate()
-    {
-        PopulateAvailableSymbols();
-    }
+
 
     public void PopulateAvailableSymbols()
     {
@@ -50,15 +47,23 @@ public class SlotMachine : MonoBehaviour
 
     [Header("UI Visual Link Connection")]
     public SlotDisplay[] reelDisplays = new SlotDisplay[3];
+    public TMPro.TextMeshProUGUI spinButtonText;
 
     [Header("Reel Status")]
     public bool[] isReelLocked = new bool[3]; // เก็บสถานะปุ่มกดล็อกรีล [รีล1, รีล2, รีล3]
     private SlotSymbolData[] finalResult = new SlotSymbolData[3]; // ผลลัพธ์สุดท้ายหลังหมุนเสร็จ
 
+    private void OnValidate()
+    {
+        PopulateAvailableSymbols();
+        UpdateSpinButtonText();
+    }
+
     // ฟังก์ชัน Start สำหรับตั้งค่าเริ่มต้นและเชื่อมต่อข้อมูลระหว่าง SlotMachine กับ SlotDisplay
     private void Start()
     {
         PopulateAvailableSymbols();
+        UpdateSpinButtonText();
 
         for (int i = 0; i < 3; i++)
         {
@@ -72,6 +77,21 @@ public class SlotMachine : MonoBehaviour
             if (reelDisplays[i] != null && finalResult[i] != null)
             {
                 reelDisplays[i].SetupSlotDisplay(finalResult[i]);
+            }
+        }
+    }
+
+    public void UpdateSpinButtonText()
+    {
+        if (spinButtonText != null)
+        {
+            if (currentMode == SlotMachineMode.GachaReward)
+            {
+                spinButtonText.text = "20 $";
+            }
+            else
+            {
+                spinButtonText.text = "Roll";
             }
         }
     }
@@ -94,6 +114,23 @@ public class SlotMachine : MonoBehaviour
                 else
                 {
                     Debug.LogWarning("ไม่มีตั๋ว ticket67 เหลืออยู่! ไม่สามารถหมุนสล็อตได้");
+                    return;
+                }
+            }
+        }
+        else if (currentMode == SlotMachineMode.GachaReward)
+        {
+            if (PlayerStats.Instance != null)
+            {
+                int useGachaCoin = 20;
+                if (PlayerStats.Instance.coins >= useGachaCoin)
+                {
+                    PlayerStats.Instance.coins -= useGachaCoin;
+                    Debug.Log($"ใช้ Coin ไป {useGachaCoin} เหรียญในการสุ่มกาชา คงเหลือ Coin: {PlayerStats.Instance.coins} เหรียญ");
+                }
+                else
+                {
+                    Debug.LogWarning("จำนวน Coin ไม่เพียงพอสำหรับการสุ่มกาชา (ต้องใช้ 10 Coin)");
                     return;
                 }
             }
@@ -215,10 +252,51 @@ public class SlotMachine : MonoBehaviour
                 int totalAdded = potionsRolled;
                 if (potionsRolled == 3 && potionIconData != null)
                 {
-                    totalAdded = 3 * potionIconData.match3Multiplier;
+                    totalAdded = 1 * potionIconData.match3Multiplier;
                 }
                 PlayerStats.Instance.AddPotion(totalAdded);
                 Debug.Log($"สุ่มได้ Potion {potionsRolled} ช่อง! ได้รับโพชั่นทั้งหมด: {totalAdded} ขวด (สะสมทั้งหมด: {PlayerStats.Instance.countpotion} ขวด)");
+            }
+        }
+
+        // ประเมินและแจกรางวัลในโหมด GachaReward
+        if (currentMode == SlotMachineMode.GachaReward && PlayerStats.Instance != null)
+        {
+            bool allGacha = true;
+            GachaRewardData[] gachaResults = new GachaRewardData[3];
+            for (int i = 0; i < 3; i++)
+            {
+                if (finalResult[i] is GachaRewardData rData)
+                {
+                    gachaResults[i] = rData;
+                }
+                else
+                {
+                    allGacha = false;
+                }
+            }
+
+            if (allGacha)
+            {
+                // ตรวจสอบความเหมือนกันของโหมด Jackpot (ทั้ง 3 สัญลักษณ์เป็นประเภทเดียวกัน)
+                bool isJackpot = (gachaResults[0].rewardType == gachaResults[1].rewardType) && 
+                                 (gachaResults[1].rewardType == gachaResults[2].rewardType);
+
+                if (isJackpot)
+                {
+                    GachaRewardData jackpotReward = gachaResults[0];
+                    int finalValue = jackpotReward.baseValue * jackpotReward.jackpotMultiplier;
+                    ApplyGachaReward(jackpotReward.rewardType, finalValue);
+                    Debug.Log($"[JACKPOT GACHA] สุ่มได้เหมือนกัน 3 ช่อง! ได้รับรางวัล {jackpotReward.rewardType} คูณเป็น {finalValue}");
+                }
+                else
+                {
+                    // คิดแยกทีละช่องตามปกติ
+                    for (int i = 0; i < 3; i++)
+                    {
+                        ApplyGachaReward(gachaResults[i].rewardType, gachaResults[i].baseValue);
+                    }
+                }
             }
         }
 
@@ -229,5 +307,31 @@ public class SlotMachine : MonoBehaviour
         // if (CombatManager.Instance != null) {
         //     CombatManager.Instance.ProcessSlotResult(finalResult);
         // }
+    }
+
+    private void ApplyGachaReward(GachaRewardType type, int value)
+    {
+        if (PlayerStats.Instance == null) return;
+
+        switch (type)
+        {
+            case GachaRewardType.Opportunity067:
+                PlayerStats.Instance.AddChance067(value);
+                break;
+            case GachaRewardType.Coin:
+                PlayerStats.Instance.coins += value;
+                Debug.Log($"ได้รับ {value} Coins! (เหรียญทั้งหมด: {PlayerStats.Instance.coins})");
+                break;
+            case GachaRewardType.MaxHP:
+                int addedMaxHP = Mathf.RoundToInt(PlayerStats.Instance.maxHP * (value / 100f));
+                PlayerStats.Instance.maxHP += addedMaxHP;
+                Debug.Log($"เพิ่ม MaxHP ขึ้น {value}% (+{addedMaxHP}) -> MaxHP ใหม่: {PlayerStats.Instance.maxHP}");
+                break;
+            case GachaRewardType.ReduceHP:
+                int reducedHP = Mathf.RoundToInt(PlayerStats.Instance.maxHP * (value / 100f));
+                PlayerStats.Instance.currentHP = Mathf.Max(0, PlayerStats.Instance.currentHP - reducedHP);
+                Debug.Log($"ลด HP ลง {value}% (-{reducedHP}) -> HP ปัจจุบัน: {PlayerStats.Instance.currentHP}");
+                break;
+        }
     }
 }

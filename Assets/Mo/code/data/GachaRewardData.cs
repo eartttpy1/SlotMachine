@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public enum GachaRewardType { Opportunity067, MaxHP, ReduceDamage, Coin }
+public enum GachaRewardType { Opportunity067, MaxHP, ReduceHP, Coin }
 
 [CreateAssetMenu(fileName = "Gacha_", menuName = "SlotGame/GachaRewardData")]
 public class GachaRewardData : SlotSymbolData
