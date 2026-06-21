@@ -18,7 +18,7 @@ MonoBehaviour:
   skillDescription: grants 20 shield
   iconBonusDescription: Bonus x3
   baseValue: 20
-  match3Multiplier: 3
+  match3Multiplier: 5
   isMultipleTargets: 0
   baseWeightRandom: 1
   baseUpgradePrice: 10

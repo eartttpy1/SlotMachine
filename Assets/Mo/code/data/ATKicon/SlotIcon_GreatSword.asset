@@ -18,7 +18,7 @@ MonoBehaviour:
   skillDescription: 15 damage to multiple targets
   iconBonusDescription: Bonus x3
   baseValue: 15
-  match3Multiplier: 3
+  match3Multiplier: 5
   isMultipleTargets: 1
   baseWeightRandom: 1
   baseUpgradePrice: 10

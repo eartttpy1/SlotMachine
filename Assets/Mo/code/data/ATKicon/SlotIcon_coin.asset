@@ -21,7 +21,7 @@ MonoBehaviour:
   match3Multiplier: 5
   isMultipleTargets: 0
   baseWeightRandom: 1
-  baseUpgradePrice: 9
+  baseUpgradePrice: 5
   countUpgrade: 0
   upgradeMultiplier: 20
   upgradeDescription: Upgrade, get +50% coins
