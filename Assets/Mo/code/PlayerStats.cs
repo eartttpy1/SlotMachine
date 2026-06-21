@@ -72,6 +72,12 @@ public class PlayerStats : MonoBehaviour
 
     public void Heal()
     {
+        if (currentHP >= maxHP)
+        {
+            Debug.Log("HP เต็มแล้ว ไม่สามารถใช้ Potion ได้");
+            return;
+        }
+
         if (isplayerturn && countpotion > 0)
         {
             countpotion--;

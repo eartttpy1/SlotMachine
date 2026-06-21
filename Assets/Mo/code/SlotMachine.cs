@@ -76,6 +76,9 @@ public class SlotMachine : MonoBehaviour
         }
     }
 
+    [Header("Debug Controls")]
+    public bool debugForceThreePotions = false; // เปิดเพื่อให้หมุนได้ Potion 3 ช่องเสมอเมื่อเทสต์
+
     // ฟังก์ชันหลักที่ปุ่ม SPIN จะวิ่งมาเรียกใช้งาน
     public void SpinSlotMachine()
     {
@@ -108,6 +111,19 @@ public class SlotMachine : MonoBehaviour
             if (!isReelLocked[i]) // ถ้ารีลนั้นไม่ได้โดนล็อกไว้ ให้สุ่มใหม่
             {
                 finalResult[i] = GetWeightedRandomSymbol(i);
+            }
+        }
+
+        // ถ้าเปิด debugForceThreePotions ไว้ จะทำการแทนค่าผลลัพธ์ทั้งหมดด้วย Potion
+        if (debugForceThreePotions)
+        {
+            SlotSymbolData potionSymbol = availableSymbols.Find(s => s is SlotIconData iconData && iconData.symbolType == SlotSymbol.HealingPotion);
+            if (potionSymbol != null)
+            {
+                for (int i = 0; i < 3; i++)
+                {
+                    finalResult[i] = potionSymbol;
+                }
             }
         }
 
@@ -185,17 +201,24 @@ public class SlotMachine : MonoBehaviour
         if (currentMode == SlotMachineMode.SlotIconData && PlayerStats.Instance != null)
         {
             int potionsRolled = 0;
+            SlotIconData potionIconData = null;
             for (int i = 0; i < 3; i++)
             {
                 if (finalResult[i] is SlotIconData iconData && iconData.symbolType == SlotSymbol.HealingPotion)
                 {
                     potionsRolled++;
+                    potionIconData = iconData;
                 }
             }
             if (potionsRolled > 0)
             {
-                PlayerStats.Instance.AddPotion(potionsRolled);
-                Debug.Log($"สุ่มได้ Potion {potionsRolled} ขวด! จำนวนโพชั่นสะสม: {PlayerStats.Instance.countpotion} ขวด");
+                int totalAdded = potionsRolled;
+                if (potionsRolled == 3 && potionIconData != null)
+                {
+                    totalAdded = 3 * potionIconData.match3Multiplier;
+                }
+                PlayerStats.Instance.AddPotion(totalAdded);
+                Debug.Log($"สุ่มได้ Potion {potionsRolled} ช่อง! ได้รับโพชั่นทั้งหมด: {totalAdded} ขวด (สะสมทั้งหมด: {PlayerStats.Instance.countpotion} ขวด)");
             }
         }
 

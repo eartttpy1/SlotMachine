@@ -709,16 +709,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 451c48dd5fdda9341813d28230d12128, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SlotMachine
-  currentMode: 2
+  currentMode: 0
   availableSymbols:
-  - {fileID: 11400000, guid: 9a37868907173894fbf14807074a89fc, type: 2}
-  - {fileID: 11400000, guid: 185f7c860b1c27c46ba86ac8267fb217, type: 2}
-  - {fileID: 11400000, guid: 02878f6a11b3eeb46a03bf3b23e5513a, type: 2}
-  - {fileID: 11400000, guid: b029e47d072dbd94685d9a2d5f303a70, type: 2}
-  - {fileID: 11400000, guid: 9afd482bb2936f844b225b206c2e563d, type: 2}
-  - {fileID: 11400000, guid: 5ef9b11e5bb00c64bb343c792317f179, type: 2}
-  - {fileID: 11400000, guid: e803ad25e1b5955418e71ac3bc22c3b3, type: 2}
-  - {fileID: 11400000, guid: 985d921327d44f744855f1cd722801c2, type: 2}
+  - {fileID: 11400000, guid: 7bc6aa44e7e0c1e44b956619dbddb60b, type: 2}
+  - {fileID: 11400000, guid: 609a20a4e80eb754eaccaac49399fea0, type: 2}
+  - {fileID: 11400000, guid: b33af38973ecd8f429619609ff9fe8d9, type: 2}
+  - {fileID: 11400000, guid: 5710e8b097691e043a8849650b1aaa8c, type: 2}
+  - {fileID: 11400000, guid: 0896323257b911e44aad84da85f47147, type: 2}
   slotIconList:
   - {fileID: 11400000, guid: 7bc6aa44e7e0c1e44b956619dbddb60b, type: 2}
   - {fileID: 11400000, guid: 609a20a4e80eb754eaccaac49399fea0, type: 2}
@@ -744,6 +741,7 @@ MonoBehaviour:
   - {fileID: 1090548618}
   - {fileID: 299010587}
   isReelLocked: 000000
+  debugForceThreePotions: 0
 --- !u!1 &756847375
 GameObject:
   m_ObjectHideFlags: 0
