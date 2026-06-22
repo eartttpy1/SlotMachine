@@ -328,9 +328,9 @@ public class SlotMachine : MonoBehaviour
         // (สามารถรีเซ็ตค่า Lock ตรงนี้ได้เลย)
 
         // ➔ ส่งต่อข้อมูลรางวัล (Array Size 3) ไปให้ Combat Manager ประมวลผลทำดาเมจทันที!
-        // if (CombatManager.Instance != null) {
-        //     CombatManager.Instance.ProcessSlotResult(finalResult);
-        // }
+        if (CombatManager.Instance != null) {
+            CombatManager.Instance.ProcessSlotResult(finalResult);
+        }
     }
 
     private void ApplyGachaReward(GachaRewardType type, int value)

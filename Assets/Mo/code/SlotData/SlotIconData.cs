@@ -1,0 +1,68 @@
+using UnityEngine;
+
+public enum SlotSymbol { GreatSword, Sword, HealingPotion, Shield, Coin }
+
+[CreateAssetMenu(fileName = "SlotIcon_", menuName = "SlotGame/SlotIconData")]
+public class SlotIconData : SlotSymbolData
+{
+    public SlotSymbol symbolType;
+    public string iconName;
+    public Sprite iconSprite;
+    [TextArea] public string skillDescription;
+    [TextArea] public string iconBonusDescription;
+
+    [Header("Combat Values")]
+    public int baseValue = 15;
+    public int match3Multiplier = 5;
+    public bool isMultipleTargets = true;
+    public int baseWeightRandom = 1; // ค่าน้ำหนักในการสุ่ม (Weighted Random)
+
+    // Implement base properties of SlotSymbolData
+    public override string SymbolName => iconName;
+    public override Sprite SymbolSprite => iconSprite;
+    public override int BaseWeight => baseWeightRandom;
+    public override string description => skillDescription;
+    public override string bonusDescription => iconBonusDescription;
+
+    [Header("Shop Progression")]
+    public int baseUpgradePrice = 10;
+    public int countUpgrade = 0;
+    public int upgradeMultiplier = 20;
+    [TextArea] public string upgradeDescription;
+
+    public int GetUpgradeIncrement() {
+        // upgradeMultiplier is 20, meaning 20%
+        float increment = baseValue * (upgradeMultiplier / 100f);
+        return Mathf.Max(1, Mathf.RoundToInt(increment)); // Ensure it increases by at least 1
+    }
+
+    public int GetCurrentPrice() {
+        return Mathf.CeilToInt(baseUpgradePrice * Mathf.Pow(1.5f, countUpgrade));
+    }
+
+    public int GetCurrentValue() {
+        return baseValue;
+    }
+
+    [System.NonSerialized] private int initialBaseValue;
+    [System.NonSerialized] private bool hasCached = false;
+
+    public void CacheInitialValue() {
+        if (!hasCached) {
+            initialBaseValue = baseValue;
+            hasCached = true;
+        }
+    }
+
+    public void ResetToDefault() {
+        if (hasCached) {
+            baseValue = initialBaseValue;
+            countUpgrade = 0;
+            hasCached = false;
+        }
+    }
+
+    private void OnDisable() {
+        ResetToDefault();
+    }
+}

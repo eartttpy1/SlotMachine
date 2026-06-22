@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 74d7e6e462c1aa0459b3bfecb5c1eb3d
+guid: b6165d553bd1b8c4488e6005a560404b
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 1130154983197573094
-    second: image 15_0
+      213: 558562059075266526
+    second: greatswoed_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: image 15_0
+      name: greatswoed_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 985
-        height: 181
+        x: 14
+        y: 14
+        width: 106
+        height: 108
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 6eff0aa28fd1faf00800000000000000
-      internalID: 1130154983197573094
+      spriteID: ed7213cbb3960c700800000000000000
+      internalID: 558562059075266526
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      image 15_0: 1130154983197573094
+      greatswoed_0: 558562059075266526
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

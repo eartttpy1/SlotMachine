@@ -21,6 +21,10 @@ public class PlayerStats : MonoBehaviour
     public TextMeshProUGUI potionCountText;
     public SlotIconData potionData;
 
+    [Header("Player Shield")]
+    public int currentShield = 0;
+    public TextMeshProUGUI shieldText;
+
     [Header("Ticket 67")]
     public int ticket67 = 5;
     public TextMeshProUGUI ticket67Text;
@@ -57,6 +61,10 @@ public class PlayerStats : MonoBehaviour
         if (hpText != null)
         {
             hpText.text = "HP: " + currentHP + "/" + maxHP;
+        }
+        if (shieldText != null)
+        {
+            shieldText.text = "Shield: " + currentShield;
         }
         if (ticket67Text != null)
         {
@@ -121,6 +129,29 @@ public class PlayerStats : MonoBehaviour
     {
         float addedAmount = isBoss ? 5f : 2f;
         AddChance067(addedAmount);
+    }
+
+    public void TakeDamage(int damage)
+    {
+        if (currentShield > 0)
+        {
+            if (currentShield >= damage)
+            {
+                currentShield -= damage;
+                damage = 0;
+            }
+            else
+            {
+                damage -= currentShield;
+                currentShield = 0;
+            }
+        }
+
+        if (damage > 0)
+        {
+            currentHP = Mathf.Max(0, currentHP - damage);
+        }
+        Debug.Log($"Player took damage! Shield: {currentShield}, HP: {currentHP}/{maxHP}");
     }
 
     private void CacheAllInitialValues()
