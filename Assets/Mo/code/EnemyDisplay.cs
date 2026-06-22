@@ -32,27 +32,20 @@ public class EnemyDisplay : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
 
         if (hpSlider != null)
         {
+            // Ensure maxValue is set first to prevent clamping issues
             hpSlider.maxValue = associatedEnemy.maxHP;
             hpSlider.value = associatedEnemy.currentHP;
         }
 
         if (hpText != null)
         {
-            hpText.text = $"{associatedEnemy.currentHP}/{associatedEnemy.maxHP}";
+            hpText.text = $"{associatedEnemy.currentHP}";
         }
 
-        // Highlight border if we are in TargetSelection state
+        // Default border state
         if (borderImage != null)
         {
-            if (CombatManager.Instance != null && CombatManager.Instance.currentState == CombatManager.CombatState.TargetSelection)
-            {
-                borderImage.color = Color.yellow;
-                borderImage.gameObject.SetActive(true);
-            }
-            else
-            {
-                borderImage.gameObject.SetActive(false);
-            }
+            borderImage.gameObject.SetActive(false);
         }
     }
 
@@ -66,24 +59,25 @@ public class EnemyDisplay : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (CombatManager.Instance != null && CombatManager.Instance.currentState == CombatManager.CombatState.TargetSelection)
+        if (borderImage != null)
         {
-            if (borderImage != null)
+            borderImage.gameObject.SetActive(true);
+            if (CombatManager.Instance != null && CombatManager.Instance.currentState == CombatManager.CombatState.TargetSelection)
             {
-                borderImage.gameObject.SetActive(true);
-                borderImage.color = Color.red; // Visual cue for hovering on target selection
+                borderImage.color = Color.red; // Target select highlight
+            }
+            else
+            {
+                borderImage.color = Color.white; // General hover border
             }
         }
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        if (CombatManager.Instance != null && CombatManager.Instance.currentState == CombatManager.CombatState.TargetSelection)
+        if (borderImage != null)
         {
-            if (borderImage != null)
-            {
-                borderImage.color = Color.yellow;
-            }
+            borderImage.gameObject.SetActive(false);
         }
     }
 }
