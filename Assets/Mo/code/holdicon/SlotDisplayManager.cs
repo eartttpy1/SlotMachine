@@ -62,8 +62,8 @@ public class SlotDisplayManager : MonoBehaviour
     {
         if (slotItemPrefab == null || containerParent == null || data == null) return;
 
-        // สั่ง Instantiate Prefab ออกมาใน Container ที่ต้องการ
-        GameObject newItem = Instantiate(slotItemPrefab, containerParent);
+        // สั่ง Instantiate Prefab ออกมาใน Container ที่ต้องการ โดยส่งค่า false เพื่อไม่ให้สเกลและพิกัด UI เพี้ยนบน Canvas
+        GameObject newItem = Instantiate(slotItemPrefab, containerParent, false);
         SlotItemDisplay display = newItem.GetComponent<SlotItemDisplay>();
 
         if (display != null)

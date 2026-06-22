@@ -87,7 +87,33 @@ public class SlotMachine : MonoBehaviour
     {
         if (spinButtonText != null)
         {
-            if (currentMode == SlotMachineMode.GachaReward)
+            bool isChestFree = false;
+            bool isShop = false;
+
+            if (MapManager.Instance != null && MapManager.Instance.currentLevelIndex >= 0 && MapManager.Instance.levels != null)
+            {
+                if (MapManager.Instance.currentLevelIndex < MapManager.Instance.levels.Length)
+                {
+                    ScriptableMap currentMap = MapManager.Instance.levels[MapManager.Instance.currentLevelIndex];
+                    if (currentMap != null)
+                    {
+                        if (currentMap.mapType == MapType.Chest && MapManager.Instance.isGachaRollFreeThisTurn)
+                        {
+                            isChestFree = true;
+                        }
+                        else if (currentMap.mapType == MapType.Shop)
+                        {
+                            isShop = true;
+                        }
+                    }
+                }
+            }
+
+            if (isChestFree)
+            {
+                spinButtonText.text = "Free Spin";
+            }
+            else if (isShop || currentMode == SlotMachineMode.GachaReward)
             {
                 spinButtonText.text = "20 $";
             }
@@ -104,6 +130,19 @@ public class SlotMachine : MonoBehaviour
     // ฟังก์ชันหลักที่ปุ่ม SPIN จะวิ่งมาเรียกใช้งาน
     public void SpinSlotMachine()
     {
+        // ป้องกันการหมุนซ้ำในด่าน Chest
+        if (MapManager.Instance != null && MapManager.Instance.currentLevelIndex >= 0 && MapManager.Instance.levels != null)
+        {
+            if (MapManager.Instance.currentLevelIndex < MapManager.Instance.levels.Length)
+            {
+                ScriptableMap currentMap = MapManager.Instance.levels[MapManager.Instance.currentLevelIndex];
+                if (currentMap != null && currentMap.mapType == MapType.Chest && !MapManager.Instance.isGachaRollFreeThisTurn)
+                {
+                    Debug.LogWarning("คุณได้ใช้สิทธิ์สุ่มฟรีในด่าน Chest ไปแล้ว! ไม่สามารถสุ่มเพิ่มได้");
+                    return;
+                }
+            }
+        }
         if (currentMode == SlotMachineMode.SlotSymbolData)
         {
             if (PlayerStats.Instance != null)
@@ -124,7 +163,12 @@ public class SlotMachine : MonoBehaviour
         {
             if (PlayerStats.Instance != null)
             {
-                if (PlayerStats.Instance.coins >= useGachaCoin)
+                bool isFree = MapManager.Instance != null && MapManager.Instance.isGachaRollFreeThisTurn;
+                if (isFree)
+                {
+                    Debug.Log("สุ่มกาชาฟรีสำหรับด่าน Chest!");
+                }
+                else if (PlayerStats.Instance.coins >= useGachaCoin)
                 {
                     PlayerStats.Instance.coins -= useGachaCoin;
                     Debug.Log($"ใช้ Coin ไป {useGachaCoin} เหรียญในการสุ่มกาชา คงเหลือ Coin: {PlayerStats.Instance.coins} เหรียญ");
@@ -328,8 +372,12 @@ public class SlotMachine : MonoBehaviour
         // (สามารถรีเซ็ตค่า Lock ตรงนี้ได้เลย)
 
         // ➔ ส่งต่อข้อมูลรางวัล (Array Size 3) ไปให้ Combat Manager ประมวลผลทำดาเมจทันที!
-        if (CombatManager.Instance != null) {
+        if (CombatManager.Instance != null && CombatManager.Instance.gameObject.activeInHierarchy) {
             CombatManager.Instance.ProcessSlotResult(finalResult);
+        }
+
+        if (MapManager.Instance != null) {
+            MapManager.Instance.OnSlotMachineSpinCompleted(finalResult);
         }
     }
 

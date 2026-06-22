@@ -58,8 +58,8 @@ public class CombatManager : MonoBehaviour
 
     private void Start()
     {
-        // For testing/initialization, start battle if templates are set
-        if (enemyTemplates.Count > 0)
+        // For testing/initialization, start battle if templates are set and MapManager is not present
+        if (MapManager.Instance == null && enemyTemplates.Count > 0)
         {
             StartCombat(enemyTemplates, currentLevel);
         }
@@ -297,6 +297,10 @@ public class CombatManager : MonoBehaviour
             nextlevel = true;
             RefreshEnemyDisplays();
             Debug.Log("Victory! All enemies defeated. nextlevel set to true.");
+            if (MapManager.Instance != null)
+            {
+                MapManager.Instance.OnAllEnemiesDefeated();
+            }
             return true;
         }
         return false;

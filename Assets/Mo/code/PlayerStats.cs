@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 public class PlayerStats : MonoBehaviour
@@ -14,6 +15,8 @@ public class PlayerStats : MonoBehaviour
     public int currentHP = 50;
     public int maxHP = 100;
     public TextMeshProUGUI hpText;
+    public TextMeshProUGUI maxHpText;
+    public Slider hpSlider;
 
     [Header("Potion & Healing")]
     public int countpotion = 0;
@@ -23,7 +26,10 @@ public class PlayerStats : MonoBehaviour
 
     [Header("Player Shield")]
     public int currentShield = 0;
+    public int maxShield = 100;
     public TextMeshProUGUI shieldText;
+    public TextMeshProUGUI maxShieldText;
+    public Slider shieldSlider;
 
     [Header("Ticket 67")]
     public int ticket67 = 5;
@@ -60,11 +66,29 @@ public class PlayerStats : MonoBehaviour
         }
         if (hpText != null)
         {
-            hpText.text = "HP: " + currentHP + "/" + maxHP;
+            hpText.text = currentHP.ToString();
+        }
+        if (maxHpText != null)
+        {
+            maxHpText.text = maxHP.ToString();
+        }
+        if (hpSlider != null)
+        {
+            hpSlider.maxValue = maxHP;
+            hpSlider.value = currentHP;
         }
         if (shieldText != null)
         {
-            shieldText.text = "Shield: " + currentShield;
+            shieldText.text = currentShield.ToString();
+        }
+        if (maxShieldText != null)
+        {
+            maxShieldText.text = maxShield.ToString();
+        }
+        if (shieldSlider != null)
+        {
+            shieldSlider.maxValue = maxShield;
+            shieldSlider.value = currentShield;
         }
         if (ticket67Text != null)
         {
@@ -152,6 +176,11 @@ public class PlayerStats : MonoBehaviour
             currentHP = Mathf.Max(0, currentHP - damage);
         }
         Debug.Log($"Player took damage! Shield: {currentShield}, HP: {currentHP}/{maxHP}");
+
+        if (currentHP <= 0 && MapManager.Instance != null)
+        {
+            MapManager.Instance.TriggerLose();
+        }
     }
 
     private void CacheAllInitialValues()
