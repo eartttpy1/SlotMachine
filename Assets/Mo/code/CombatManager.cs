@@ -211,6 +211,7 @@ public class CombatManager : MonoBehaviour
             else
             {
                 currentState = CombatState.TargetSelection;
+                UpdateAllDisplayVisuals();
                 Debug.Log($"Sword rolled! Pending {pendingSwordDamage} damage. Please click/select an enemy to target.");
             }
         }
@@ -308,6 +309,7 @@ public class CombatManager : MonoBehaviour
         {
             PlayerStats.Instance.isplayerturn = false;
         }
+        UpdateAllDisplayVisuals();
 
         yield return new WaitForSeconds(1f);
 
@@ -345,6 +347,7 @@ public class CombatManager : MonoBehaviour
         {
             currentState = CombatState.Defeat;
             upstat = true;
+            UpdateAllDisplayVisuals();
             Debug.Log("Player defeated! upstat set to true.");
         }
         else
@@ -355,6 +358,7 @@ public class CombatManager : MonoBehaviour
             {
                 PlayerStats.Instance.isplayerturn = true;
             }
+            UpdateAllDisplayVisuals();
             Debug.Log("Player turn starts! Roll slot 1 time.");
         }
     }
