@@ -49,6 +49,7 @@ public class MapManager : MonoBehaviour
     public bool isGachaRollFreeThisTurn = false;
     public int accumulatedPointsThisRun = 0;
     public int jackpotSpinCountThisRun = 0;
+    private bool isRunConcluded = false;
     [Header("Debug Controls")]
     public bool debugForceWin = false;
 
@@ -120,10 +121,12 @@ public class MapManager : MonoBehaviour
         currentLevelIndex = -1;
         accumulatedPointsThisRun = 0;
         jackpotSpinCountThisRun = 0;
+        isRunConcluded = false;
 
         // Reset player stats on play start if required
         if (PlayerStats.Instance != null)
         {
+            PlayerStats.Instance.ResetAllScriptableObjects();
             if (GameDataManager.Instance != null)
             {
                 PlayerStats.Instance.maxHP = GameDataManager.Instance.GetMaxHP();
@@ -287,17 +290,6 @@ public class MapManager : MonoBehaviour
 
     public void OnAllEnemiesDefeated()
     {
-        if (PlayerStats.Instance != null)
-        {
-            if (GameDataManager.Instance != null)
-            {
-                PlayerStats.Instance.maxHP = GameDataManager.Instance.GetMaxHP();
-            }
-            PlayerStats.Instance.currentHP = PlayerStats.Instance.maxHP;
-            PlayerStats.Instance.currentShield = 0;
-            Debug.Log("All enemies defeated. HP restored to max, Shield reset to 0.");
-        }
-
         bool isBossMap = false;
         if (currentLevelIndex >= 0 && currentLevelIndex < levels.Length && levels[currentLevelIndex] != null)
         {
@@ -341,6 +333,13 @@ public class MapManager : MonoBehaviour
         if (goNextLevelButton != null)
         {
             goNextLevelButton.gameObject.SetActive(!isBossMap);
+        }
+
+        if (PlayerStats.Instance != null)
+        {
+            PlayerStats.Instance.currentHP = PlayerStats.Instance.maxHP;
+            PlayerStats.Instance.currentShield = 0;
+            Debug.Log("All enemies defeated. HP restored to max, Shield reset to 0.");
         }
     }
 
@@ -407,11 +406,14 @@ public class MapManager : MonoBehaviour
 
     private void ConcludePoints(bool isWin)
     {
+        if (isRunConcluded) return;
+        isRunConcluded = true;
+
         int winBonus = isWin ? 100 : 0;
         int totalPointsEarned = accumulatedPointsThisRun + winBonus + (jackpotSpinCountThisRun * 2);
 
         // Load, add and save points to PlayerPrefs (matching MainMenuManager key)
-        int currentPoints = PlayerPrefs.GetInt("PlayerPoints", 500);
+        int currentPoints = PlayerPrefs.GetInt("PlayerPoints", 0);
         currentPoints += totalPointsEarned;
         PlayerPrefs.SetInt("PlayerPoints", currentPoints);
         PlayerPrefs.Save();
@@ -439,6 +441,7 @@ public class MapManager : MonoBehaviour
         ConcludePoints(true);
         if (canvasWin != null) canvasWin.SetActive(true);
         if (goNextLevelButton != null) goNextLevelButton.gameObject.SetActive(false);
+        if (PlayerStats.Instance != null) PlayerStats.Instance.ResetAllScriptableObjects();
         Debug.Log("WIN! 067 Jackpot reached!");
     }
 
@@ -447,6 +450,7 @@ public class MapManager : MonoBehaviour
         ConcludePoints(false);
         if (canvasLose != null) canvasLose.SetActive(true);
         if (goNextLevelButton != null) goNextLevelButton.gameObject.SetActive(false);
+        if (PlayerStats.Instance != null) PlayerStats.Instance.ResetAllScriptableObjects();
         Debug.Log("LOSE! Game Over.");
     }
 

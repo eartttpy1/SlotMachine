@@ -33,12 +33,16 @@ public class MainMenuManager : MonoBehaviour
     {
         mainMenuPanel.SetActive(true);
         upgradePanel.SetActive(false);
+        LoadData();
+        UpdateUI();
     }
 
     public void ShowUpgradeMenu()
     {
         mainMenuPanel.SetActive(false);
         upgradePanel.SetActive(true);
+        LoadData();
+        UpdateUI();
 
         PopulateUpgradeShop();
 
