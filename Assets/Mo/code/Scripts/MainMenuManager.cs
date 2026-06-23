@@ -33,6 +33,14 @@ public class MainMenuManager : MonoBehaviour
     {
         mainMenuPanel.SetActive(false);
         upgradePanel.SetActive(true);
+
+        if (MapManager.Instance != null)
+        {
+            if (MapManager.Instance.canvasWin != null) MapManager.Instance.canvasWin.SetActive(false);
+            if (MapManager.Instance.canvasLose != null) MapManager.Instance.canvasLose.SetActive(false);
+            if (MapManager.Instance.gameCanvas != null) MapManager.Instance.gameCanvas.SetActive(false);
+            if (MapManager.Instance.mainMenuCanvas != null) MapManager.Instance.mainMenuCanvas.SetActive(true);
+        }
     }
 
     private int GetCost(int currentLevel)

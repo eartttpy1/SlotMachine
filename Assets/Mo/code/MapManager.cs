@@ -33,6 +33,8 @@ public class MapManager : MonoBehaviour
 
     [Header("State")]
     public bool isGachaRollFreeThisTurn = false;
+    [Header("Debug Controls")]
+    public bool debugForceWin = false;
 
     private void Awake()
     {
@@ -43,6 +45,15 @@ public class MapManager : MonoBehaviour
         else
         {
             Destroy(gameObject);
+        }
+    }
+
+    private void Update()
+    {
+        if (debugForceWin)
+        {
+            debugForceWin = false;
+            TriggerWin();
         }
     }
 
