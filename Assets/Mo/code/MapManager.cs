@@ -2,6 +2,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+[System.Serializable]
+public struct MapSlotUI
+{
+    public Image iconImage;
+    public Image borderImage;
+    public TMPro.TextMeshProUGUI floorNumberText;
+}
+
 public class MapManager : MonoBehaviour
 {
     public static MapManager Instance { get; private set; }
@@ -9,6 +17,10 @@ public class MapManager : MonoBehaviour
     [Header("Levels (1 to 20)")]
     public ScriptableMap[] levels = new ScriptableMap[20];
     public int currentLevelIndex = -1;
+
+    [Header("Map UI Settings (5 Slots)")]
+    public List<MapSlotUI> mapSlots = new List<MapSlotUI>();
+    public TMPro.TextMeshProUGUI currentFloorProgressText;
 
     [Header("UI Canvases")]
     public GameObject starticon;
@@ -58,6 +70,17 @@ public class MapManager : MonoBehaviour
         {
             debugForceWin = false;
             TriggerWin();
+        }
+
+        if (slotMachine != null && slotMachine.currentMode == SlotMachine.SlotMachineMode.SlotSymbolData)
+        {
+            if (PlayerStats.Instance != null && PlayerStats.Instance.ticket67 <= 0)
+            {
+                if (goNextLevelButton != null && !goNextLevelButton.gameObject.activeSelf)
+                {
+                    goNextLevelButton.gameObject.SetActive(true);
+                }
+            }
         }
     }
 
@@ -118,6 +141,7 @@ public class MapManager : MonoBehaviour
             goNextLevelButton.gameObject.SetActive(true);
         }
 
+        UpdateMapUI();
         Debug.Log("Game started. Press Go Next Level to load Level 1.");
     }
 
@@ -178,6 +202,7 @@ public class MapManager : MonoBehaviour
 
         // 2. Increment level index
         currentLevelIndex++;
+        UpdateMapUI();
 
         // Deactivate starticon when starting Level 1 (index 0)
         if (currentLevelIndex == 0)
@@ -423,5 +448,65 @@ public class MapManager : MonoBehaviour
         if (canvasLose != null) canvasLose.SetActive(true);
         if (goNextLevelButton != null) goNextLevelButton.gameObject.SetActive(false);
         Debug.Log("LOSE! Game Over.");
+    }
+
+    public void UpdateMapUI()
+    {
+        if (mapSlots == null || mapSlots.Count < 5) return;
+
+        // Current floor number (1 to 20). If index is -1 (pre-game), floor number is 0.
+        int currentFloor = Mathf.Max(0, currentLevelIndex + 1);
+        if (currentFloorProgressText != null)
+        {
+            currentFloorProgressText.text = $"Floor : {currentFloor}";
+        }
+
+        // Determine scope:
+        // 1-5 (currentFloor <= 5) -> startFloor = 1
+        // 6-10 (currentFloor <= 10) -> startFloor = 6
+        // 11-15 (currentFloor <= 15) -> startFloor = 11
+        // 16-20 (currentFloor <= 20) -> startFloor = 16
+        // If currentFloor is 0 (pre-game), we show scope 1-5
+        int startFloor = 1;
+        if (currentFloor > 15) startFloor = 16;
+        else if (currentFloor > 10) startFloor = 11;
+        else if (currentFloor > 5) startFloor = 6;
+
+        for (int i = 0; i < 5; i++)
+        {
+            int floorIndex = startFloor - 1 + i; // 0-based index in levels array
+            MapSlotUI slot = mapSlots[i];
+
+            if (floorIndex < levels.Length && levels[floorIndex] != null)
+            {
+                ScriptableMap mapData = levels[floorIndex];
+                
+                // Show slot and assign sprite
+                if (slot.iconImage != null)
+                {
+                    slot.iconImage.gameObject.SetActive(true);
+                    slot.iconImage.sprite = mapData.mapSprite;
+                }
+
+                // Show border if this slot is the current floor
+                if (slot.borderImage != null)
+                {
+                    slot.borderImage.gameObject.SetActive(floorIndex == currentLevelIndex);
+                }
+
+                // Update text to tell floor number
+                if (slot.floorNumberText != null)
+                {
+                    slot.floorNumberText.text = (floorIndex + 1).ToString();
+                }
+            }
+            else
+            {
+                // Deactivate if out of range
+                if (slot.iconImage != null) slot.iconImage.gameObject.SetActive(false);
+                if (slot.borderImage != null) slot.borderImage.gameObject.SetActive(false);
+                if (slot.floorNumberText != null) slot.floorNumberText.text = "";
+            }
+        }
     }
 }
