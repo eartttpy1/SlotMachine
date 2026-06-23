@@ -16,4 +16,12 @@ public class SlotDisplay : MonoBehaviour
             Debug.Log($"เปลี่ยนรูปภาพบนหน้าจอ UI เป็น: {symbolData.SymbolName} เรียบร้อยแล้ว!");
         }
     }
+
+    public void ClearDisplay(Sprite defaultSprite = null)
+    {
+        if (uiImageDisplay != null)
+        {
+            uiImageDisplay.sprite = defaultSprite;
+        }
+    }
 }

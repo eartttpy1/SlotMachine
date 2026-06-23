@@ -47,6 +47,7 @@ public class SlotMachine : MonoBehaviour
 
     [Header("UI Visual Link Connection")]
     public SlotDisplay[] reelDisplays = new SlotDisplay[3];
+    public Sprite defaultSprite;
     public TMPro.TextMeshProUGUI spinButtonText;
     [Header("gacha")]
     int useGachaCoin = 20;
@@ -80,6 +81,21 @@ public class SlotMachine : MonoBehaviour
             {
                 reelDisplays[i].SetupSlotDisplay(finalResult[i]);
             }
+        }
+    }
+
+    public void ClearAllReels()
+    {
+        for (int i = 0; i < reelDisplays.Length; i++)
+        {
+            if (reelDisplays[i] != null)
+            {
+                reelDisplays[i].ClearDisplay(defaultSprite);
+            }
+        }
+        for (int i = 0; i < finalResult.Length; i++)
+        {
+            finalResult[i] = null;
         }
     }
 

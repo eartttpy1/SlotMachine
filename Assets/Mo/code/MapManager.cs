@@ -131,12 +131,16 @@ public class MapManager : MonoBehaviour
         // 1. Deactivate old map's objects
         DeactivateAllMapObjects();
 
-        // Unlock all slot reels for the new level
-        if (slotMachine != null && slotMachine.isReelLocked != null)
+        // Unlock all slot reels for the new level and clear display sprites
+        if (slotMachine != null)
         {
-            for (int i = 0; i < slotMachine.isReelLocked.Length; i++)
+            slotMachine.ClearAllReels();
+            if (slotMachine.isReelLocked != null)
             {
-                slotMachine.isReelLocked[i] = false;
+                for (int i = 0; i < slotMachine.isReelLocked.Length; i++)
+                {
+                    slotMachine.isReelLocked[i] = false;
+                }
             }
         }
 
