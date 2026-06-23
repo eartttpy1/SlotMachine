@@ -214,6 +214,10 @@ public class SlotMachine : MonoBehaviour
                 PlayerStats.Instance.ticket67--;
                 Debug.Log($"ใช้ตั๋ว 67 ไป 1 ใบ คงเหลือตั๋ว: {PlayerStats.Instance.ticket67} ใบ");
             }
+            if (MapManager.Instance != null)
+            {
+                MapManager.Instance.jackpotSpinCountThisRun++;
+            }
         }
         else if (currentMode == SlotMachineMode.GachaReward)
         {

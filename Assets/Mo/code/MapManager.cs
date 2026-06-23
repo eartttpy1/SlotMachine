@@ -17,6 +17,8 @@ public class MapManager : MonoBehaviour
     public GameObject canvasLose;
     public GameObject mainMenuCanvas;
     public GameObject afterEnemyDieObject;
+    public TMPro.TextMeshProUGUI concludePointTextWin;
+    public TMPro.TextMeshProUGUI concludePointTextLose;
 
     [Header("Buttons")]
     public Button playButton;
@@ -33,6 +35,8 @@ public class MapManager : MonoBehaviour
 
     [Header("State")]
     public bool isGachaRollFreeThisTurn = false;
+    public int accumulatedPointsThisRun = 0;
+    public int jackpotSpinCountThisRun = 0;
     [Header("Debug Controls")]
     public bool debugForceWin = false;
 
@@ -89,8 +93,10 @@ public class MapManager : MonoBehaviour
         // Deactivate all map UIs initially
         DeactivateAllMapObjects();
 
-        // Reset level index
+        // Reset level index and scoring variables
         currentLevelIndex = -1;
+        accumulatedPointsThisRun = 0;
+        jackpotSpinCountThisRun = 0;
 
         // Reset player stats on play start if required
         if (PlayerStats.Instance != null)
@@ -274,6 +280,7 @@ public class MapManager : MonoBehaviour
 
             if (currentMap.mapType == MapType.MonsterMap)
             {
+                accumulatedPointsThisRun += 10;
                 if (slotMachine != null && slotMachine.spinButton != null)
                 {
                     slotMachine.spinButton.SetActive(false);
@@ -282,6 +289,7 @@ public class MapManager : MonoBehaviour
 
             if (currentMap.mapType == MapType.Boss)
             {
+                accumulatedPointsThisRun += 30;
                 // Boss defeated -> Switch mode to SlotSymbolData to allow Jackpot spin
                 if (slotMachine != null)
                 {
@@ -364,8 +372,38 @@ public class MapManager : MonoBehaviour
         }
     }
 
+    private void ConcludePoints(bool isWin)
+    {
+        int winBonus = isWin ? 100 : 0;
+        int totalPointsEarned = accumulatedPointsThisRun + winBonus + (jackpotSpinCountThisRun * 2);
+
+        // Load, add and save points to PlayerPrefs (matching MainMenuManager key)
+        int currentPoints = PlayerPrefs.GetInt("PlayerPoints", 500);
+        currentPoints += totalPointsEarned;
+        PlayerPrefs.SetInt("PlayerPoints", currentPoints);
+        PlayerPrefs.Save();
+
+        // Update conclusion UI texts
+        if (isWin)
+        {
+            if (concludePointTextWin != null)
+            {
+                concludePointTextWin.text = "Points Earned: " + totalPointsEarned;
+            }
+        }
+        else
+        {
+            if (concludePointTextLose != null)
+            {
+                concludePointTextLose.text = "Points Earned: " + totalPointsEarned;
+            }
+        }
+        Debug.Log($"Concluded Run. Win: {isWin}, Points Earned: {totalPointsEarned}, Total Saved Points: {currentPoints}");
+    }
+
     public void TriggerWin()
     {
+        ConcludePoints(true);
         if (canvasWin != null) canvasWin.SetActive(true);
         if (goNextLevelButton != null) goNextLevelButton.gameObject.SetActive(false);
         Debug.Log("WIN! 067 Jackpot reached!");
@@ -373,6 +411,7 @@ public class MapManager : MonoBehaviour
 
     public void TriggerLose()
     {
+        ConcludePoints(false);
         if (canvasLose != null) canvasLose.SetActive(true);
         if (goNextLevelButton != null) goNextLevelButton.gameObject.SetActive(false);
         Debug.Log("LOSE! Game Over.");
