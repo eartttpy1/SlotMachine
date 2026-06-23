@@ -10,7 +10,7 @@ public class SlotMachine : MonoBehaviour
     public SlotMachineMode currentMode; // เลือกโหมดใช้งานของตู้สล็อตนี้
 
     // ลิสต์ที่จะสุ่มจริงในตู้ (ระบบจะดึงจากตัวแปรด้านล่างตามโหมดที่เลือก)
-    public List<SlotSymbolData> availableSymbols = new List<SlotSymbolData>(); 
+    public List<SlotSymbolData> availableSymbols = new List<SlotSymbolData>();
 
     [Header("Data Lists")]
     public List<SlotIconData> slotIconList = new List<SlotIconData>();
@@ -43,7 +43,7 @@ public class SlotMachine : MonoBehaviour
                 if (item != null) availableSymbols.Add(item);
             }
         }
-    } 
+    }
 
     [Header("UI Visual Link Connection")]
     public SlotDisplay[] reelDisplays = new SlotDisplay[3];
@@ -159,16 +159,22 @@ public class SlotMachine : MonoBehaviour
     {
         if (isSpinning) return;
 
+        bool isChestMap = false;
+
         // ป้องกันการหมุนซ้ำในด่าน Chest
         if (MapManager.Instance != null && MapManager.Instance.currentLevelIndex >= 0 && MapManager.Instance.levels != null)
         {
             if (MapManager.Instance.currentLevelIndex < MapManager.Instance.levels.Length)
             {
                 ScriptableMap currentMap = MapManager.Instance.levels[MapManager.Instance.currentLevelIndex];
-                if (currentMap != null && currentMap.mapType == MapType.Chest && !MapManager.Instance.isGachaRollFreeThisTurn)
+                if (currentMap != null && currentMap.mapType == MapType.Chest)
                 {
-                    Debug.LogWarning("คุณได้ใช้สิทธิ์สุ่มฟรีในด่าน Chest ไปแล้ว! ไม่สามารถสุ่มเพิ่มได้");
-                    return;
+                    isChestMap = true;
+                    if (!MapManager.Instance.isGachaRollFreeThisTurn)
+                    {
+                        Debug.LogWarning("คุณได้ใช้สิทธิ์สุ่มฟรีในด่าน Chest ไปแล้ว! ไม่สามารถสุ่มเพิ่มได้");
+                        return;
+                    }
                 }
             }
         }
@@ -206,6 +212,12 @@ public class SlotMachine : MonoBehaviour
             if (btn != null) btn.interactable = false;
         }
 
+        // เล่นเสียงเปิดกล่องสมบัติเมื่อกดสปินในด่าน Chest
+        if (isChestMap && AudioManager.Instance != null)
+        {
+            AudioManager.Instance.PlayOpenChestSound();
+        }
+
         // Consume resources
         if (currentMode == SlotMachineMode.SlotSymbolData)
         {
@@ -236,12 +248,6 @@ public class SlotMachine : MonoBehaviour
             }
         }
 
-        // เพิ่ม % 067 ของ player เมื่อหมุนสล็อต (ค่าเริ่มต้นเพิ่มครั้งละ 1% หรือสามารถปรับเปลี่ยนได้ตามสะดวก) เก็บไว้ก่อนไม่พอค่อยใช้ เพราะได้ประมาณ 50 up ก้โผล่ 067
-        // if (PlayerStats.Instance != null)
-        // {
-        //     PlayerStats.Instance.AddChance067(1.0f);
-        // }
-
         // 1. วนลูปสุ่มหลังบ้านให้เสร็จก่อนแบบถ่วงน้ำหนักแยกอิสระทีละรีล
         for (int i = 0; i < 3; i++)
         {
@@ -268,7 +274,7 @@ public class SlotMachine : MonoBehaviour
         StartCoroutine(AnimateSlotsAndSendResult());
     }
 
-    // 🎯 ระบบโกงดวง (Weighted Random) แยกช่องตามที่คุณต้องการ
+    // ระบบโกงดวง (Weighted Random) แยกช่องตามที่คุณต้องการ
     private SlotSymbolData GetWeightedRandomSymbol(int reelIndex)
     {
         float chance067 = PlayerStats.Instance != null ? PlayerStats.Instance.chance067 : 1.0f;
@@ -301,8 +307,6 @@ public class SlotMachine : MonoBehaviour
         if (targetSymbol != null && sumOthersWeight > 0)
         {
             // คำนวณหา targetWeight ที่ทำให้โอกาสสุ่มได้ targetSymbol เท่ากับ targetProbability พอดี
-            // จากสูตร: targetWeight / (targetWeight + sumOthersWeight) = targetProbability
-            // จะได้: targetWeight = (targetProbability * sumOthersWeight) / (1 - targetProbability)
             float calculatedTargetWeight = (targetProbability * sumOthersWeight) / (1f - targetProbability);
             int targetWeight = Mathf.RoundToInt(calculatedTargetWeight);
 
@@ -351,15 +355,13 @@ public class SlotMachine : MonoBehaviour
     private IEnumerator AnimateSlotsAndSendResult()
     {
         Debug.Log("ตู้สล็อตกำลังหมุนติ้ว ๆ...");
-        
-        // ในช่วง 1-2 วินาทิตรงนี้ สั่งให้ Artist ทำภาพหมุนวนหลอกตาไปก่อน
-        yield return new WaitForSeconds(1.5f); 
+
+        yield return new WaitForSeconds(1.5f);
         for (int i = 0; i < 3; i++)
         {
             if (reelDisplays[i] != null && finalResult[i] != null)
             {
-                // สั่งให้จอ UI ช่องนั้นดึงรูปใน ScriptableObject ที่สุ่มได้ไปโชว์หน้าบ้านทันที!
-                reelDisplays[i].SetupSlotDisplay(finalResult[i]); 
+                reelDisplays[i].SetupSlotDisplay(finalResult[i]);
             }
         }
 
@@ -368,19 +370,44 @@ public class SlotMachine : MonoBehaviour
         string res2 = finalResult[2] != null ? finalResult[2].SymbolName : "None";
         Debug.Log($"สล็อตหยุดหมุน! ผลลัพธ์คือ: [{res0}] [{res1}] [{res2}]");
 
-        // เพิ่มจำนวน Potion ไปยัง PlayerStats หากได้สัญลักษณ์ Potion ในโหมด SlotIconData
+        // ตรวจสอบรางวัลและเล่นเสียงเอฟเฟกต์
         if (currentMode == SlotMachineMode.SlotIconData && PlayerStats.Instance != null)
         {
             int potionsRolled = 0;
             SlotIconData potionIconData = null;
+            int swordsRolled = 0;
+            int greatSwordsRolled = 0;
+
             for (int i = 0; i < 3; i++)
             {
-                if (finalResult[i] is SlotIconData iconData && iconData.symbolType == SlotSymbol.HealingPotion)
+                if (finalResult[i] is SlotIconData iconData)
                 {
-                    potionsRolled++;
-                    potionIconData = iconData;
+                    if (iconData.symbolType == SlotSymbol.HealingPotion)
+                    {
+                        potionsRolled++;
+                        potionIconData = iconData;
+                    }
+                    else if (iconData.symbolType == SlotSymbol.Sword)
+                    {
+                        swordsRolled++;
+                    }
+                    else if (iconData.symbolType == SlotSymbol.GreatSword)
+                    {
+                        greatSwordsRolled++;
+                    }
                 }
             }
+
+            // เรียกเล่นเสียงดาบ
+            if (greatSwordsRolled > 0 && AudioManager.Instance != null)
+            {
+                AudioManager.Instance.PlayGreatSwordSound();
+            }
+            else if (swordsRolled > 0 && AudioManager.Instance != null)
+            {
+                AudioManager.Instance.PlaySwordSound();
+            }
+
             if (potionsRolled > 0)
             {
                 int totalAdded = potionsRolled;
@@ -435,8 +462,7 @@ public class SlotMachine : MonoBehaviour
 
             if (allGacha)
             {
-                // ตรวจสอบความเหมือนกันของโหมด Jackpot (ทั้ง 3 สัญลักษณ์เป็นประเภทเดียวกัน)
-                bool isJackpot = (gachaResults[0].rewardType == gachaResults[1].rewardType) && 
+                bool isJackpot = (gachaResults[0].rewardType == gachaResults[1].rewardType) &&
                                  (gachaResults[1].rewardType == gachaResults[2].rewardType);
 
                 if (isJackpot)
@@ -448,7 +474,6 @@ public class SlotMachine : MonoBehaviour
                 }
                 else
                 {
-                    // คิดแยกทีละช่องตามปกติ
                     for (int i = 0; i < 3; i++)
                     {
                         ApplyGachaReward(gachaResults[i].rewardType, gachaResults[i].baseValue);
@@ -457,15 +482,13 @@ public class SlotMachine : MonoBehaviour
             }
         }
 
-        // 3. ปลดล็อกรีลที่ไม่ได้ตั้งใจล็อกทิ้งไว้เพื่อเริ่มเทิร์นถัดไป
-        // (สามารถรีเซ็ตค่า Lock ตรงนี้ได้เลย)
-
-        // ➔ ส่งต่อข้อมูลรางวัล (Array Size 3) ไปให้ Combat Manager ประมวลผลทำดาเมจทันที!
-        if (CombatManager.Instance != null && CombatManager.Instance.gameObject.activeInHierarchy) {
+        if (CombatManager.Instance != null && CombatManager.Instance.gameObject.activeInHierarchy)
+        {
             CombatManager.Instance.ProcessSlotResult(finalResult);
         }
 
-        if (MapManager.Instance != null) {
+        if (MapManager.Instance != null)
+        {
             MapManager.Instance.OnSlotMachineSpinCompleted(finalResult);
         }
 

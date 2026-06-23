@@ -233,7 +233,7 @@ public class CombatManager : MonoBehaviour
             {
                 pendingSwordDamage = Mathf.RoundToInt(pendingSwordDamage * (1f + GameDataManager.Instance.GetDamageBonus()));
             }
-            
+
             // If only one enemy left, automatically target it
             if (activeEnemies.Count == 1)
             {
@@ -356,7 +356,7 @@ public class CombatManager : MonoBehaviour
         for (int i = 0; i < activeEnemies.Count; i++)
         {
             EnemyInstance enemy = activeEnemies[i];
-            
+
             // Check if player died before this enemy attacks
             if (PlayerStats.Instance != null && PlayerStats.Instance.currentHP <= 0)
             {
@@ -365,14 +365,30 @@ public class CombatManager : MonoBehaviour
 
             int dmgPerHit = Mathf.RoundToInt(enemy.data.GetBaseDMG(currentLevel) * enemy.damageMultiplier);
             int totalHits = enemy.data.countHit;
-            
+
             Debug.Log($"Enemy {enemy.data.enemyName} turn! Attacks {totalHits} times for {dmgPerHit} dmg each (Multiplier: {enemy.damageMultiplier:F2}).");
-            
+
             for (int hit = 0; hit < totalHits; hit++)
             {
                 if (PlayerStats.Instance != null)
                 {
+                    // เช็คว่าผู้เล่นมีเกราะ (Shield) เหลืออยู่หรือไม่ก่อนโดนโจมตี
+                    bool hasShield = PlayerStats.Instance.currentShield > 0;
+
                     PlayerStats.Instance.TakeDamage(dmgPerHit);
+
+                    // เล่นเสียงโดนโจมตีตามเงื่อนไขเกราะป้องกัน
+                    if (AudioManager.Instance != null)
+                    {
+                        if (hasShield)
+                        {
+                            AudioManager.Instance.PlayShieldHitSound();
+                        }
+                        else
+                        {
+                            AudioManager.Instance.PlayGetHitSound();
+                        }
+                    }
                 }
                 if (detailTurnText != null)
                 {
