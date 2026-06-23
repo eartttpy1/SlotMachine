@@ -17,7 +17,7 @@ MonoBehaviour:
   baseHP: 50
   hpIncreasePerLevel: 10
   baseDMG: 7
-  dmgIncreasePerLevel: 3
+  dmgIncreasePerLevel: 2
   countHit: 1
   coin: 5
   chance067: 2

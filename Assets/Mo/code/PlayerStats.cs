@@ -60,6 +60,11 @@ public class PlayerStats : MonoBehaviour
 
     public void Update()
     {
+        if (currentHP <= 0 && MapManager.Instance != null)
+        {
+            MapManager.Instance.TriggerLose();
+        }
+
         if (chanceText != null)
         {
             chanceText.text = "067 : " + chance067.ToString("F1") + "%";

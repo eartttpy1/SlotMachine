@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ScriptableBoss
   enemyName: boss1
   sprite: {fileID: 21300000, guid: 278345ec5c2a01a478a8c9c0c055df06, type: 3}
-  baseHP: 100
+  baseHP: 70
   hpIncreasePerLevel: 30
   baseDMG: 5
-  dmgIncreasePerLevel: 5
+  dmgIncreasePerLevel: 1
   countHit: 3
   coin: 10
   chance067: 5

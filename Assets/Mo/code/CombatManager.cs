@@ -15,6 +15,7 @@ public class CombatManager : MonoBehaviour
     public bool upstat = false;
     public bool nextlevel = false;
     public TextMeshProUGUI turnText;
+    public TextMeshProUGUI detailTurnText;
 
     [Header("Enemies")]
     public List<ScriptableEnemy> enemyTemplates = new List<ScriptableEnemy>();
@@ -75,7 +76,7 @@ public class CombatManager : MonoBehaviour
                     turnText.text = "Player Turn";
                     break;
                 case CombatState.TargetSelection:
-                    turnText.text = "Choose Target!";
+                    turnText.text = "Player Turn";
                     break;
                 case CombatState.EnemyTurn:
                     turnText.text = "Enemy Turn";
@@ -85,6 +86,28 @@ public class CombatManager : MonoBehaviour
                     break;
                 case CombatState.Defeat:
                     turnText.text = "Defeat!";
+                    break;
+            }
+        }
+
+        if (detailTurnText != null)
+        {
+            switch (currentState)
+            {
+                case CombatState.PlayerTurn:
+                    detailTurnText.text = "";
+                    break;
+                case CombatState.TargetSelection:
+                    detailTurnText.text = "Choose Target!";
+                    break;
+                case CombatState.Victory:
+                    detailTurnText.text = "";
+                    break;
+                case CombatState.Defeat:
+                    detailTurnText.text = "";
+                    break;
+                case CombatState.EnemyTurn:
+                    // Set dynamically in EnemyTurnRoutine to show dmg detail
                     break;
             }
         }
@@ -309,6 +332,10 @@ public class CombatManager : MonoBehaviour
     private IEnumerator EnemyTurnRoutine()
     {
         currentState = CombatState.EnemyTurn;
+        if (detailTurnText != null)
+        {
+            detailTurnText.text = "Preparing to attack...";
+        }
         if (PlayerStats.Instance != null)
         {
             PlayerStats.Instance.isplayerturn = false;
@@ -339,11 +366,15 @@ public class CombatManager : MonoBehaviour
                 {
                     PlayerStats.Instance.TakeDamage(dmgPerHit);
                 }
-                yield return new WaitForSeconds(0.3f);
+                if (detailTurnText != null)
+                {
+                    detailTurnText.text = $"{enemy.data.enemyName} Hit ({hit + 1}/{totalHits}): -{dmgPerHit} HP";
+                }
+                yield return new WaitForSeconds(0.4f); // Slightly longer delay to let player read
             }
 
-            // Damage multiplier * 1.5 each turn
-            enemy.damageMultiplier *= 1.5f;
+            // Damage multiplier * 1.2 each turn
+            enemy.damageMultiplier *= 1.2f;
         }
 
         // Check if player die -> upstat = true

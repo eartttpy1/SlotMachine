@@ -49,12 +49,14 @@ public class SlotMachine : MonoBehaviour
     public SlotDisplay[] reelDisplays = new SlotDisplay[3];
     public Sprite defaultSprite;
     public TMPro.TextMeshProUGUI spinButtonText;
+    public GameObject spinButton;
     [Header("gacha")]
     int useGachaCoin = 20;
 
     [Header("Reel Status")]
     public bool[] isReelLocked = new bool[3]; // เก็บสถานะปุ่มกดล็อกรีล [รีล1, รีล2, รีล3]
     private SlotSymbolData[] finalResult = new SlotSymbolData[3]; // ผลลัพธ์สุดท้ายหลังหมุนเสร็จ
+    private bool isSpinning = false;
 
     private void OnValidate()
     {
@@ -67,6 +69,11 @@ public class SlotMachine : MonoBehaviour
     {
         PopulateAvailableSymbols();
         UpdateSpinButtonText();
+
+        if (spinButton != null)
+        {
+            spinButton.SetActive(true);
+        }
 
         for (int i = 0; i < 3; i++)
         {
@@ -125,7 +132,11 @@ public class SlotMachine : MonoBehaviour
                 }
             }
 
-            if (isChestFree)
+            if (currentMode == SlotMachineMode.SlotSymbolData)
+            {
+                spinButtonText.text = "1 ticket67";
+            }
+            else if (isChestFree)
             {
                 spinButtonText.text = "Free Spin";
             }
@@ -146,6 +157,8 @@ public class SlotMachine : MonoBehaviour
     // ฟังก์ชันหลักที่ปุ่ม SPIN จะวิ่งมาเรียกใช้งาน
     public void SpinSlotMachine()
     {
+        if (isSpinning) return;
+
         // ป้องกันการหมุนซ้ำในด่าน Chest
         if (MapManager.Instance != null && MapManager.Instance.currentLevelIndex >= 0 && MapManager.Instance.levels != null)
         {
@@ -159,16 +172,13 @@ public class SlotMachine : MonoBehaviour
                 }
             }
         }
+
+        // Validate resources first
         if (currentMode == SlotMachineMode.SlotSymbolData)
         {
             if (PlayerStats.Instance != null)
             {
-                if (PlayerStats.Instance.ticket67 > 0)
-                {
-                    PlayerStats.Instance.ticket67--;
-                    Debug.Log($"ใช้ตั๋ว 67 ไป 1 ใบ คงเหลือตั๋ว: {PlayerStats.Instance.ticket67} ใบ");
-                }
-                else
+                if (PlayerStats.Instance.ticket67 <= 0)
                 {
                     Debug.LogWarning("ไม่มีตั๋ว ticket67 เหลืออยู่! ไม่สามารถหมุนสล็อตได้");
                     return;
@@ -180,19 +190,44 @@ public class SlotMachine : MonoBehaviour
             if (PlayerStats.Instance != null)
             {
                 bool isFree = MapManager.Instance != null && MapManager.Instance.isGachaRollFreeThisTurn;
+                if (!isFree && PlayerStats.Instance.coins < useGachaCoin)
+                {
+                    Debug.LogWarning($"จำนวน Coin ไม่เพียงพอสำหรับการสุ่มกาชา (ต้องใช้ {useGachaCoin} Coin)");
+                    return;
+                }
+            }
+        }
+
+        // Validation passed: Lock the spin button and start spinning
+        isSpinning = true;
+        if (spinButton != null)
+        {
+            var btn = spinButton.GetComponent<UnityEngine.UI.Button>();
+            if (btn != null) btn.interactable = false;
+        }
+
+        // Consume resources
+        if (currentMode == SlotMachineMode.SlotSymbolData)
+        {
+            if (PlayerStats.Instance != null)
+            {
+                PlayerStats.Instance.ticket67--;
+                Debug.Log($"ใช้ตั๋ว 67 ไป 1 ใบ คงเหลือตั๋ว: {PlayerStats.Instance.ticket67} ใบ");
+            }
+        }
+        else if (currentMode == SlotMachineMode.GachaReward)
+        {
+            if (PlayerStats.Instance != null)
+            {
+                bool isFree = MapManager.Instance != null && MapManager.Instance.isGachaRollFreeThisTurn;
                 if (isFree)
                 {
                     Debug.Log("สุ่มกาชาฟรีสำหรับด่าน Chest!");
                 }
-                else if (PlayerStats.Instance.coins >= useGachaCoin)
+                else
                 {
                     PlayerStats.Instance.coins -= useGachaCoin;
                     Debug.Log($"ใช้ Coin ไป {useGachaCoin} เหรียญในการสุ่มกาชา คงเหลือ Coin: {PlayerStats.Instance.coins} เหรียญ");
-                }
-                else
-                {
-                    Debug.LogWarning($"จำนวน Coin ไม่เพียงพอสำหรับการสุ่มกาชา (ต้องใช้ {useGachaCoin} Coin)");
-                    return;
                 }
             }
         }
@@ -233,46 +268,80 @@ public class SlotMachine : MonoBehaviour
     private SlotSymbolData GetWeightedRandomSymbol(int reelIndex)
     {
         float chance067 = PlayerStats.Instance != null ? PlayerStats.Instance.chance067 : 1.0f;
-        int totalWeight = 0;
-        
-        // คำนวณน้ำหนักรวมแบบไดนามิกตามตำแหน่งรีลและค่า % 067
+        // ปรับโอกาสให้อยู่ในช่วง 0-100% (จำกัดที่ 99.9% เพื่อป้องกันการหารด้วยศูนย์)
+        chance067 = Mathf.Clamp(chance067, 0f, 99.9f);
+        float targetProbability = chance067 / 100f;
+
+        SlotSymbolData targetSymbol = null;
+        int sumOthersWeight = 0;
+
+        // แยกน้ำหนักของเป้าหมายกับน้ำหนักของสัญลักษณ์อื่น ๆ
         foreach (var symbol in availableSymbols)
         {
-            totalWeight += GetDynamicWeight(symbol, reelIndex, chance067);
+            bool isTarget = false;
+            if (reelIndex == 0 && symbol.SymbolName == "0") isTarget = true;
+            else if (reelIndex == 1 && symbol.SymbolName == "6") isTarget = true;
+            else if (reelIndex == 2 && symbol.SymbolName == "7") isTarget = true;
+
+            if (isTarget)
+            {
+                targetSymbol = symbol;
+            }
+            else
+            {
+                sumOthersWeight += symbol.BaseWeight;
+            }
         }
 
-        int randomValue = Random.Range(0, totalWeight);
+        // ถ้ารีลนี้มีสัญลักษณ์เป้าหมาย และมีสัญลักษณ์อื่น ๆ อยู่ด้วย
+        if (targetSymbol != null && sumOthersWeight > 0)
+        {
+            // คำนวณหา targetWeight ที่ทำให้โอกาสสุ่มได้ targetSymbol เท่ากับ targetProbability พอดี
+            // จากสูตร: targetWeight / (targetWeight + sumOthersWeight) = targetProbability
+            // จะได้: targetWeight = (targetProbability * sumOthersWeight) / (1 - targetProbability)
+            float calculatedTargetWeight = (targetProbability * sumOthersWeight) / (1f - targetProbability);
+            int targetWeight = Mathf.RoundToInt(calculatedTargetWeight);
 
+            int totalWeight = sumOthersWeight + targetWeight;
+            int randomValue = Random.Range(0, totalWeight);
+
+            if (randomValue < targetWeight)
+            {
+                return targetSymbol;
+            }
+            else
+            {
+                randomValue -= targetWeight;
+                foreach (var symbol in availableSymbols)
+                {
+                    if (symbol == targetSymbol) continue;
+                    if (randomValue < symbol.BaseWeight)
+                    {
+                        return symbol;
+                    }
+                    randomValue -= symbol.BaseWeight;
+                }
+            }
+        }
+
+        // หากไม่มีสัญลักษณ์เป้าหมาย หรือไม่มีสัญลักษณ์อื่นเลย ให้ใช้การสุ่มถ่วงน้ำหนักปกติ
+        int normalTotalWeight = 0;
         foreach (var symbol in availableSymbols)
         {
-            int currentWeight = GetDynamicWeight(symbol, reelIndex, chance067);
-            if (randomValue < currentWeight)
+            normalTotalWeight += symbol.BaseWeight;
+        }
+
+        int normalRandomValue = Random.Range(0, normalTotalWeight);
+        foreach (var symbol in availableSymbols)
+        {
+            if (normalRandomValue < symbol.BaseWeight)
             {
                 return symbol;
             }
-            randomValue -= currentWeight;
+            normalRandomValue -= symbol.BaseWeight;
         }
+
         return availableSymbols.Count > 0 ? availableSymbols[0] : null;
-    }
-
-    // คำนวณน้ำหนักของสัญลักษณ์ตามค่า % 067 ของรีลนั้นๆ
-    private int GetDynamicWeight(SlotSymbolData symbol, int reelIndex, float chance067)
-    {
-        int weight = symbol.BaseWeight;
-
-        // ตรวจสอบความถูกต้องของสัญลักษณ์เป้าหมายในแต่ละรีล (Reel 1 -> 0 / Reel 2 -> 6 / Reel 3 -> 7)
-        bool isTarget = false;
-        if (reelIndex == 0 && symbol.SymbolName == "0") isTarget = true;
-        else if (reelIndex == 1 && symbol.SymbolName == "6") isTarget = true;
-        else if (reelIndex == 2 && symbol.SymbolName == "7") isTarget = true;
-
-        if (isTarget)
-        {
-            // เพิ่มน้ำหนักขึ้นตามค่าสะสม % 067 (ตัวอย่าง: เพิ่มขึ้น 10 เท่าของเปอร์เซ็นต์สะสม)
-            weight += Mathf.RoundToInt(chance067 * 10f);
-        }
-
-        return weight;
     }
 
     private IEnumerator AnimateSlotsAndSendResult()
@@ -394,6 +463,13 @@ public class SlotMachine : MonoBehaviour
 
         if (MapManager.Instance != null) {
             MapManager.Instance.OnSlotMachineSpinCompleted(finalResult);
+        }
+
+        isSpinning = false;
+        if (spinButton != null)
+        {
+            var btn = spinButton.GetComponent<UnityEngine.UI.Button>();
+            if (btn != null) btn.interactable = true;
         }
     }
 

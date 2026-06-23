@@ -16,6 +16,7 @@ public class MapManager : MonoBehaviour
     public GameObject canvasWin;
     public GameObject canvasLose;
     public GameObject mainMenuCanvas;
+    public GameObject afterEnemyDieObject;
 
     [Header("Buttons")]
     public Button playButton;
@@ -72,6 +73,7 @@ public class MapManager : MonoBehaviour
         if (mainMenuCanvas != null) mainMenuCanvas.SetActive(false);
         if (canvasWin != null) canvasWin.SetActive(false);
         if (canvasLose != null) canvasLose.SetActive(false);
+        if (afterEnemyDieObject != null) afterEnemyDieObject.SetActive(false);
 
         // Deactivate all map UIs initially
         DeactivateAllMapObjects();
@@ -131,6 +133,11 @@ public class MapManager : MonoBehaviour
         // 1. Deactivate old map's objects
         DeactivateAllMapObjects();
 
+        if (afterEnemyDieObject != null)
+        {
+            afterEnemyDieObject.SetActive(false);
+        }
+
         // Unlock all slot reels for the new level and clear display sprites
         if (slotMachine != null)
         {
@@ -141,6 +148,10 @@ public class MapManager : MonoBehaviour
                 {
                     slotMachine.isReelLocked[i] = false;
                 }
+            }
+            if (slotMachine.spinButton != null)
+            {
+                slotMachine.spinButton.SetActive(true);
             }
         }
 
@@ -237,9 +248,27 @@ public class MapManager : MonoBehaviour
             Debug.Log("All enemies defeated. HP restored to max, Shield reset to 0.");
         }
 
+        bool isBossMap = false;
         if (currentLevelIndex >= 0 && currentLevelIndex < levels.Length && levels[currentLevelIndex] != null)
         {
             ScriptableMap currentMap = levels[currentLevelIndex];
+            if (currentMap.mapType == MapType.Boss)
+            {
+                isBossMap = true;
+                if (afterEnemyDieObject != null)
+                {
+                    afterEnemyDieObject.SetActive(true);
+                }
+            }
+
+            if (currentMap.mapType == MapType.MonsterMap)
+            {
+                if (slotMachine != null && slotMachine.spinButton != null)
+                {
+                    slotMachine.spinButton.SetActive(false);
+                }
+            }
+
             if (currentMap.mapType == MapType.Boss)
             {
                 // Boss defeated -> Switch mode to SlotSymbolData to allow Jackpot spin
@@ -248,6 +277,10 @@ public class MapManager : MonoBehaviour
                     slotMachine.currentMode = SlotMachine.SlotMachineMode.SlotSymbolData;
                     slotMachine.PopulateAvailableSymbols();
                     slotMachine.UpdateSpinButtonText();
+                    if (slotMachine.spinButton != null)
+                    {
+                        slotMachine.spinButton.SetActive(true);
+                    }
                     Debug.Log("Boss defeated! Slot machine switched to Jackpot Mode (SlotSymbolData).");
                 }
             }
@@ -255,7 +288,7 @@ public class MapManager : MonoBehaviour
 
         if (goNextLevelButton != null)
         {
-            goNextLevelButton.gameObject.SetActive(true);
+            goNextLevelButton.gameObject.SetActive(!isBossMap);
         }
     }
 
@@ -264,6 +297,13 @@ public class MapManager : MonoBehaviour
         // Check for jackpot win condition: SlotSymbolData mode and got 0-6-7
         if (slotMachine != null && slotMachine.currentMode == SlotMachine.SlotMachineMode.SlotSymbolData)
         {
+            // If the completed spin consists of combat icons, it was the spin that killed the boss.
+            // We ignore it so the player can actually perform their jackpot spin.
+            if (results != null && results.Length > 0 && results[0] is SlotIconData)
+            {
+                return;
+            }
+
             if (results != null && results.Length == 3 &&
                 results[0] != null && results[0].SymbolName == "0" &&
                 results[1] != null && results[1].SymbolName == "6" &&
@@ -271,6 +311,21 @@ public class MapManager : MonoBehaviour
             {
                 TriggerWin();
                 return;
+            }
+
+            // If jackpot spin is complete but they didn't win, check if they still have tickets
+            bool hasTickets = PlayerStats.Instance != null && PlayerStats.Instance.ticket67 > 0;
+            if (!hasTickets)
+            {
+                if (slotMachine.spinButton != null)
+                {
+                    slotMachine.spinButton.SetActive(false);
+                }
+            }
+
+            if (goNextLevelButton != null)
+            {
+                goNextLevelButton.gameObject.SetActive(true);
             }
         }
 
@@ -284,6 +339,10 @@ public class MapManager : MonoBehaviour
                 if (slotMachine != null)
                 {
                     slotMachine.UpdateSpinButtonText();
+                    if (slotMachine.spinButton != null)
+                    {
+                        slotMachine.spinButton.SetActive(false);
+                    }
                 }
                 if (goNextLevelButton != null)
                 {
