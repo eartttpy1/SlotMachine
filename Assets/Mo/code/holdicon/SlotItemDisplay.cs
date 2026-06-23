@@ -183,8 +183,13 @@ public class SlotItemDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExit
             if (PlayerStats.Instance.coins >= ticketData.price)
             {
                 PlayerStats.Instance.coins -= ticketData.price;
-                PlayerStats.Instance.ticket67++;
-                Debug.Log($"ซื้อ Ticket 67 สำเร็จ! คงเหลือตั๋ว: {PlayerStats.Instance.ticket67} ใบ");
+                int multiplier = 1;
+                if (GameDataManager.Instance != null)
+                {
+                    multiplier = Mathf.RoundToInt(GameDataManager.Instance.GetTicketMultiplier());
+                }
+                PlayerStats.Instance.ticket67 += multiplier;
+                Debug.Log($"ซื้อ Ticket 67 สำเร็จ! ได้รับ: {multiplier} ใบ, คงเหลือตั๋ว: {PlayerStats.Instance.ticket67} ใบ");
 
                 UpdateVisuals();
                 // อัปเดตข้อมูลคำอธิบายและราคาทันทีหลังซื้อ

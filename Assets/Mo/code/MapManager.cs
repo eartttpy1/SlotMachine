@@ -101,6 +101,10 @@ public class MapManager : MonoBehaviour
         // Reset player stats on play start if required
         if (PlayerStats.Instance != null)
         {
+            if (GameDataManager.Instance != null)
+            {
+                PlayerStats.Instance.maxHP = GameDataManager.Instance.GetMaxHP();
+            }
             PlayerStats.Instance.currentHP = PlayerStats.Instance.maxHP;
             PlayerStats.Instance.currentShield = 0;
             PlayerStats.Instance.coins = 100;
@@ -260,6 +264,10 @@ public class MapManager : MonoBehaviour
     {
         if (PlayerStats.Instance != null)
         {
+            if (GameDataManager.Instance != null)
+            {
+                PlayerStats.Instance.maxHP = GameDataManager.Instance.GetMaxHP();
+            }
             PlayerStats.Instance.currentHP = PlayerStats.Instance.maxHP;
             PlayerStats.Instance.currentShield = 0;
             Debug.Log("All enemies defeated. HP restored to max, Shield reset to 0.");

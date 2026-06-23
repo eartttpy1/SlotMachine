@@ -214,6 +214,10 @@ public class CombatManager : MonoBehaviour
         if (greatSwordCount > 0 && greatSwordData != null)
         {
             int greatSwordDmg = (greatSwordCount == 3) ? (greatSwordData.baseValue * greatSwordData.match3Multiplier) : (greatSwordCount * greatSwordData.baseValue);
+            if (GameDataManager.Instance != null)
+            {
+                greatSwordDmg = Mathf.RoundToInt(greatSwordDmg * (1f + GameDataManager.Instance.GetDamageBonus()));
+            }
             Debug.Log($"GreatSword rolled! Dealing {greatSwordDmg} AoE damage to all enemies.");
             DealAoEDamage(greatSwordDmg);
         }
@@ -225,6 +229,10 @@ public class CombatManager : MonoBehaviour
         if (swordCount > 0 && swordData != null)
         {
             pendingSwordDamage = (swordCount == 3) ? (swordData.baseValue * swordData.match3Multiplier) : (swordCount * swordData.baseValue);
+            if (GameDataManager.Instance != null)
+            {
+                pendingSwordDamage = Mathf.RoundToInt(pendingSwordDamage * (1f + GameDataManager.Instance.GetDamageBonus()));
+            }
             
             // If only one enemy left, automatically target it
             if (activeEnemies.Count == 1)

@@ -4,30 +4,14 @@ public class GameDataManager : MonoBehaviour
 {
     public static GameDataManager Instance { get; private set; }
 
-    // Keys for PlayerPrefs
-    private const string DamageReductionLevelKey = "DamageReductionLevel";
-    private const string MaxHPLevelKey = "MaxHPLevel";
-    private const string DamageBonusLevelKey = "DamageBonusLevel";
-
-    // Levels for stats
-    public int DamageReductionLevel { get; private set; }
-    public int MaxHPLevel { get; private set; }
-    public int DamageBonusLevel { get; private set; }
-
-    // Configuration for scaling
-    [Header("Stat Scaling Settings")]
-    public float baseDamageReduction = 0f;
-    public float damageReductionPerLevel = 0.05f; // 5%
-
-    public int baseMaxHP = 200;
-    public int maxHpPerLevel = 50; // Replace with desired X amount
-
-    public float baseDamageBonus = 0f;
-    public float damageBonusPerLevel = 0.20f; // 20%
+    [Header("Scriptable UpStats References")]
+    public ScriptableUpStats damageReductionStat;
+    public ScriptableUpStats damageBonusStat;
+    public ScriptableUpStats maxHpStat;
+    public ScriptableUpStats ticketDropStat;
 
     private void Awake()
     {
-        // Implement Singleton pattern
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
@@ -35,46 +19,26 @@ public class GameDataManager : MonoBehaviour
         }
 
         Instance = this;
-        DontDestroyOnLoad(gameObject); // Make it persistent across scenes
-        LoadData();
+        DontDestroyOnLoad(gameObject);
     }
 
-    private void LoadData()
+    public float GetDamageReduction()
     {
-        DamageReductionLevel = PlayerPrefs.GetInt(DamageReductionLevelKey, 0);
-        MaxHPLevel = PlayerPrefs.GetInt(MaxHPLevelKey, 0);
-        DamageBonusLevel = PlayerPrefs.GetInt(DamageBonusLevelKey, 0);
+        return damageReductionStat != null ? damageReductionStat.CurrentBaseValue : 0f;
     }
 
-    public void SaveData()
+    public float GetDamageBonus()
     {
-        PlayerPrefs.SetInt(DamageReductionLevelKey, DamageReductionLevel);
-        PlayerPrefs.SetInt(MaxHPLevelKey, MaxHPLevel);
-        PlayerPrefs.SetInt(DamageBonusLevelKey, DamageBonusLevel);
-        PlayerPrefs.Save();
+        return damageBonusStat != null ? damageBonusStat.CurrentBaseValue : 0f;
     }
 
-    // Getters for actual calculated stats
-    public float GetDamageReduction() => baseDamageReduction + (DamageReductionLevel * damageReductionPerLevel);
-    public int GetMaxHP() => baseMaxHP + (MaxHPLevel * maxHpPerLevel);
-    public float GetDamageBonus() => baseDamageBonus + (DamageBonusLevel * damageBonusPerLevel);
-
-    // Upgrade methods
-    public void UpgradeDamageReduction()
+    public int GetMaxHP()
     {
-        DamageReductionLevel++;
-        SaveData();
+        return maxHpStat != null ? Mathf.RoundToInt(maxHpStat.CurrentBaseValue) : 100;
     }
 
-    public void UpgradeMaxHP()
+    public float GetTicketMultiplier()
     {
-        MaxHPLevel++;
-        SaveData();
-    }
-
-    public void UpgradeDamageBonus()
-    {
-        DamageBonusLevel++;
-        SaveData();
+        return ticketDropStat != null ? ticketDropStat.CurrentBaseValue : 1f;
     }
 }

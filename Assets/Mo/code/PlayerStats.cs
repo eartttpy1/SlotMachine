@@ -178,6 +178,11 @@ public class PlayerStats : MonoBehaviour
 
         if (damage > 0)
         {
+            if (GameDataManager.Instance != null)
+            {
+                float reduction = GameDataManager.Instance.GetDamageReduction();
+                damage = Mathf.RoundToInt(damage * (1f - reduction));
+            }
             currentHP = Mathf.Max(0, currentHP - damage);
         }
         Debug.Log($"Player took damage! Shield: {currentShield}, HP: {currentHP}/{maxHP}");
