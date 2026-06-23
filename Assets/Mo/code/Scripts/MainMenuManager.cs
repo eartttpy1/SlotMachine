@@ -35,10 +35,9 @@ public class MainMenuManager : MonoBehaviour
         upgradePanel.SetActive(true);
     }
 
-    // ¿Ñ§¡ìªÑ¹¤Ó¹Ç³ÃÒ¤Òáºº·ÇÕ¤Ù³ (100 -> 200 -> 400 -> 800...)
     private int GetCost(int currentLevel)
     {
-        return 100 * (int)Mathf.Pow(2, currentLevel);
+        return 100 * (int)Mathf.Pow(1.2f, currentLevel);
     }
 
     public void UpgradeDmg()
@@ -101,7 +100,7 @@ public class MainMenuManager : MonoBehaviour
 
     private void LoadData()
     {
-        currentPoints = PlayerPrefs.GetInt("PlayerPoints", 500); // ãËéáµéÁàÃÔèÁµé¹ 500 äÇéà·Êµì
+        currentPoints = PlayerPrefs.GetInt("PlayerPoints", 500); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 500 ï¿½ï¿½ï¿½ï¿½Êµï¿½
         dmgLevel = PlayerPrefs.GetInt("DmgLv", 0);
         hpLevel = PlayerPrefs.GetInt("HpLv", 0);
         defLevel = PlayerPrefs.GetInt("DefLv", 0);
@@ -112,7 +111,7 @@ public class MainMenuManager : MonoBehaviour
     {
         if (pointsText != null) pointsText.text = "Points: " + currentPoints;
 
-        // ãªé \n à¾×èÍ¢Öé¹ºÃÃ·Ñ´ãËÁè ¨Ñ´¡ÅØèÁ ª×èÍäÇéº¹ áÅĞ Lv ¡Ñº Cost äÇé´éÇÂ¡Ñ¹
+        // ï¿½ï¿½ \n ï¿½ï¿½ï¿½Í¢ï¿½é¹ºï¿½Ã·Ñ´ï¿½ï¿½ï¿½ï¿½ ï¿½Ñ´ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½éº¹ ï¿½ï¿½ï¿½ Lv ï¿½Ñº Cost ï¿½ï¿½ï¿½ï¿½ï¿½Â¡Ñ¹
         if (dmgText != null)
             dmgText.text = "Add 20% Dmg\nLv." + dmgLevel + " (Cost: " + GetCost(dmgLevel) + ")";
 
@@ -124,7 +123,7 @@ public class MainMenuManager : MonoBehaviour
 
         if (ticketText != null)
         {
-            int currentChance = 1 << ticketChanceLevel; // ¤Ó¹Ç³ % âÍ¡ÒÊ´ÃÍ»·ÇÕ¤Ù³
+            int currentChance = 1 << ticketChanceLevel; // ï¿½Ó¹Ç³ % ï¿½Í¡ï¿½Ê´ï¿½Í»ï¿½ï¿½Õ¤Ù³
             ticketText.text = "Ticket Drop " + currentChance + "%\nLv." + ticketChanceLevel + " (Cost: " + GetCost(ticketChanceLevel) + ")";
         }
     }
