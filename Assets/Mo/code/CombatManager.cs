@@ -26,6 +26,16 @@ public class CombatManager : MonoBehaviour
     public GameObject enemyDisplayPrefab;
     private List<EnemyDisplay> spawnedDisplays = new List<EnemyDisplay>();
 
+    [Header("Effect Spawn Locations")]
+    [Tooltip("ตำแหน่งที่ต้องการให้เกิดเอฟเฟกต์ Get Hit (เมื่อผู้เล่นโดนโจมตี)")]
+    public Transform getHitSpawnLocation;
+
+    [Tooltip("ตำแหน่งที่ต้องการให้เกิดเอฟเฟกต์ Sword (ดาบเดี่ยว) *หากว่างไว้ ระบบจะสปอว์นที่ตัวศัตรูเป้าหมายโดยอัตโนมัติ")]
+    public Transform swordSpawnLocation;
+
+    [Tooltip("ตำแหน่งที่ต้องการให้เกิดเอฟเฟกต์ Great Sword (ดาบใหญ่หมู่) *เช่น จุดกึ่งกลางหน้าจอ")]
+    public Transform greatSwordSpawnLocation;
+
     [System.Serializable]
     public class EnemyInstance
     {
@@ -59,7 +69,7 @@ public class CombatManager : MonoBehaviour
 
     private void Start()
     {
-        // For testing/initialization, start battle if templates are set and MapManager is not present
+        // สำหรับทดสอบ เริ่มการต่อสู้หากมีการตั้งค่า Template ไว้ล่วงหน้าและไม่มี MapManager ทำงานอยู่
         if (MapManager.Instance == null && enemyTemplates.Count > 0)
         {
             StartCombat(enemyTemplates, currentLevel);
@@ -107,7 +117,7 @@ public class CombatManager : MonoBehaviour
                     detailTurnText.text = "";
                     break;
                 case CombatState.EnemyTurn:
-                    // Set dynamically in EnemyTurnRoutine to show dmg detail
+                    // ตั้งค่าแบบ Dynamic ใน EnemyTurnRoutine เพื่อแสดงรายละเอียดความเสียหาย
                     break;
             }
         }
@@ -144,14 +154,14 @@ public class CombatManager : MonoBehaviour
     {
         if (enemyContainerParent == null || enemyDisplayPrefab == null) return;
 
-        // Clear existing displays
+        // เคลียร์ UI เก่า
         foreach (var disp in spawnedDisplays)
         {
             if (disp != null) Destroy(disp.gameObject);
         }
         spawnedDisplays.Clear();
 
-        // Spawn new ones
+        // สร้าง UI ใหม่ตามรายการศัตรู
         for (int i = 0; i < activeEnemies.Count; i++)
         {
             GameObject obj = Instantiate(enemyDisplayPrefab, enemyContainerParent);
@@ -219,10 +229,18 @@ public class CombatManager : MonoBehaviour
                 greatSwordDmg = Mathf.RoundToInt(greatSwordDmg * (1f + GameDataManager.Instance.GetDamageBonus()));
             }
             Debug.Log($"GreatSword rolled! Dealing {greatSwordDmg} AoE damage to all enemies.");
+
+            // เรียกใช้งาน Spawn เอฟเฟกต์ดาบใหญ่หมู่ผ่าน ShogunEffectManager
+            if (ShogunEffectManager.Instance != null)
+            {
+                Transform spawnPos = greatSwordSpawnLocation != null ? greatSwordSpawnLocation : this.transform;
+                ShogunEffectManager.Instance.SpawnGreatSwordEffect(spawnPos);
+            }
+
             DealAoEDamage(greatSwordDmg);
         }
 
-        // Check if all enemies died from AoE before resolving Swords
+        // ตรวจสอบว่าศัตรูตายหมดจากการโจมตีหมู่หรือไม่ก่อนทำดาบเดี่ยว
         if (CheckVictoryCondition()) return;
 
         // 3. Resolve Sword (Single Target Damage)
@@ -234,7 +252,7 @@ public class CombatManager : MonoBehaviour
                 pendingSwordDamage = Mathf.RoundToInt(pendingSwordDamage * (1f + GameDataManager.Instance.GetDamageBonus()));
             }
 
-            // If only one enemy left, automatically target it
+            // หากเหลือศัตรูตัวเดียว ระบบจะล็อคเป้าหมายและโจมตีให้อัตโนมัติ
             if (activeEnemies.Count == 1)
             {
                 ExecuteSwordAttack(0);
@@ -248,7 +266,7 @@ public class CombatManager : MonoBehaviour
         }
         else
         {
-            // Proceed to enemy turn if no sword damage is pending
+            // หากไม่มีดาบเดี่ยวค้างอยู่ ให้ส่งต่อเทิร์นไปหาศัตรูทันที
             StartCoroutine(EnemyTurnRoutine());
         }
     }
@@ -277,6 +295,31 @@ public class CombatManager : MonoBehaviour
         if (index < 0 || index >= activeEnemies.Count) return;
 
         Debug.Log($"Attacking enemy {activeEnemies[index].data.enemyName} for {pendingSwordDamage} Sword damage.");
+
+        // เรียกใช้งาน Spawn เอฟเฟกต์ดาบเดี่ยวผ่าน ShogunEffectManager
+        if (ShogunEffectManager.Instance != null)
+        {
+            Transform spawnPos = swordSpawnLocation;
+            if (spawnPos == null && spawnedDisplays.Count > index)
+            {
+                EnemyDisplay targetDisplay = spawnedDisplays[index];
+                if (targetDisplay != null)
+                {
+                    spawnPos = targetDisplay.transform;
+                }
+            }
+
+            // ถ้ามีพิกัดการเกิด จะสปอว์น ณ พิกัดนั้น แต่หากไม่มีจะใช้พิกัดเริ่มต้น (Default) ที่ถูก Assign ไว้ในตัวจัดการ
+            if (spawnPos != null)
+            {
+                ShogunEffectManager.Instance.SpawnSwordEffect(spawnPos);
+            }
+            else
+            {
+                ShogunEffectManager.Instance.SpawnSwordEffect();
+            }
+        }
+
         DamageEnemy(index, pendingSwordDamage);
         pendingSwordDamage = 0;
 
@@ -304,7 +347,7 @@ public class CombatManager : MonoBehaviour
 
         if (enemy.currentHP <= 0)
         {
-            // Enemy Died! Reward player
+            // ศัตรูพ่ายแพ้! มอบรางวัลให้ผู้เล่น
             if (PlayerStats.Instance != null)
             {
                 PlayerStats.Instance.coins += enemy.data.coin;
@@ -352,12 +395,12 @@ public class CombatManager : MonoBehaviour
 
         yield return new WaitForSeconds(1f);
 
-        // Each enemy turn
+        // ดำเนินเทิร์นของศัตรูแต่ละตัว
         for (int i = 0; i < activeEnemies.Count; i++)
         {
             EnemyInstance enemy = activeEnemies[i];
 
-            // Check if player died before this enemy attacks
+            // ตรวจสอบว่าผู้เล่นพ่ายแพ้ก่อนศัตรูโจมตีหรือไม่
             if (PlayerStats.Instance != null && PlayerStats.Instance.currentHP <= 0)
             {
                 break;
@@ -377,6 +420,14 @@ public class CombatManager : MonoBehaviour
 
                     PlayerStats.Instance.TakeDamage(dmgPerHit);
 
+                    // สร้างเอฟเฟกต์โดนโจมตี (Get Hit) ผ่าน ShogunEffectManager
+                    if (ShogunEffectManager.Instance != null)
+                    {
+                        Transform spawnPos = getHitSpawnLocation != null ? getHitSpawnLocation : this.transform;
+                        // ตั้งตำแหน่งชั่วคราวให้เกิดที่ Target (ผู้เล่น) 
+                        ShogunEffectManager.Instance.SpawnGetHitEffect();
+                    }
+
                     // เล่นเสียงโดนโจมตีตามเงื่อนไขเกราะป้องกัน
                     if (AudioManager.Instance != null)
                     {
@@ -394,14 +445,14 @@ public class CombatManager : MonoBehaviour
                 {
                     detailTurnText.text = $"{enemy.data.enemyName} Hit ({hit + 1}/{totalHits}): -{dmgPerHit} HP";
                 }
-                yield return new WaitForSeconds(0.4f); // Slightly longer delay to let player read
+                yield return new WaitForSeconds(0.4f); // หน่วงเวลาเล็กน้อยเพื่อให้ผู้เล่นสังเกตเห็นการโจมตี
             }
 
-            // Damage multiplier * 1.2 each turn
+            // เพิ่มความแรงในการโจมตีครั้งต่อไปอีก 1.2 เท่าต่อรอบ
             enemy.damageMultiplier *= 1.2f;
         }
 
-        // Check if player die -> upstat = true
+        // ตรวจสอบสถานะการพ่ายแพ้ของผู้เล่น -> upstat = true
         if (PlayerStats.Instance != null && PlayerStats.Instance.currentHP <= 0)
         {
             currentState = CombatState.Defeat;
@@ -411,7 +462,7 @@ public class CombatManager : MonoBehaviour
         }
         else
         {
-            // Back to player turn
+            // ย้อนกลับมายังเทิร์นของผู้เล่น
             currentState = CombatState.PlayerTurn;
             if (PlayerStats.Instance != null)
             {
