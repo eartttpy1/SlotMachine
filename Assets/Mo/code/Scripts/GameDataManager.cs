@@ -34,7 +34,8 @@ public class GameDataManager : MonoBehaviour
 
     public int GetMaxHP()
     {
-        return maxHpStat != null ? Mathf.RoundToInt(maxHpStat.CurrentBaseValue) : 100;
+        if (maxHpStat == null) return 100;
+        return maxHpStat.CountLevel == 0 ? 100 : Mathf.RoundToInt(maxHpStat.CurrentBaseValue);
     }
 
     public float GetTicketMultiplier()

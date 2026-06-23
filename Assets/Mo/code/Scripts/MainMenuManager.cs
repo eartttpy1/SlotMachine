@@ -9,6 +9,17 @@ public class MainMenuManager : MonoBehaviour
 
     [SerializeField] private TextMeshProUGUI pointsText;
 
+    [Header("Dynamic Shop Settings")]
+    [SerializeField] private GameObject upStatPrefab;
+    [SerializeField] private Transform upStatsContainer;
+    [SerializeField] private System.Collections.Generic.List<ScriptableUpStats> allUpStats = new System.Collections.Generic.List<ScriptableUpStats>();
+
+    [Header("Description Panel References")]
+    [SerializeField] private TextMeshProUGUI shopNameText;
+    [SerializeField] private TextMeshProUGUI shopDescriptionText;
+    [SerializeField] private TextMeshProUGUI shopValueProgressText;
+    [SerializeField] private TextMeshProUGUI shopPriceText;
+
     private int currentPoints;
 
     private void Start()
@@ -29,12 +40,46 @@ public class MainMenuManager : MonoBehaviour
         mainMenuPanel.SetActive(false);
         upgradePanel.SetActive(true);
 
+        PopulateUpgradeShop();
+
         if (MapManager.Instance != null)
         {
             if (MapManager.Instance.canvasWin != null) MapManager.Instance.canvasWin.SetActive(false);
             if (MapManager.Instance.canvasLose != null) MapManager.Instance.canvasLose.SetActive(false);
             if (MapManager.Instance.gameCanvas != null) MapManager.Instance.gameCanvas.SetActive(false);
             if (MapManager.Instance.mainMenuCanvas != null) MapManager.Instance.mainMenuCanvas.SetActive(true);
+        }
+    }
+
+    public void PopulateUpgradeShop()
+    {
+        if (upStatsContainer == null || upStatPrefab == null) return;
+
+        // Clear existing instantiated items
+        foreach (Transform child in upStatsContainer)
+        {
+            Destroy(child.gameObject);
+        }
+
+        // Instantiate items
+        foreach (var stat in allUpStats)
+        {
+            if (stat == null) continue;
+
+            GameObject obj = Instantiate(upStatPrefab, upStatsContainer);
+            UpStatDisplay display = obj.GetComponent<UpStatDisplay>();
+            if (display != null)
+            {
+                // Setup references
+                display.statData = stat;
+                display.nameText = shopNameText;
+                display.descriptionText = shopDescriptionText;
+                display.valueProgressText = shopValueProgressText;
+                display.priceText = shopPriceText;
+                
+                // Initialize display visuals
+                display.UpdateVisuals();
+            }
         }
     }
 

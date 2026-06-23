@@ -112,14 +112,25 @@ public class UpStatDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         
         if (valueProgressText != null)
         {
+            bool isHp = statData.statName.ToLower().Contains("hp") || statData.name.ToLower().Contains("hp");
+
             if (statData.CountLevel >= statData.maxLevel)
             {
                 valueProgressText.text = $"{statData.CurrentBaseValue} (MAX)";
             }
             else
             {
-                float nextVal = statData.CurrentBaseValue + statData.increaseValue;
-                valueProgressText.text = $"{statData.CurrentBaseValue} -> {nextVal}";
+                if (isHp)
+                {
+                    float currentVal = statData.CountLevel == 0 ? 100f : statData.CurrentBaseValue;
+                    float nextVal = statData.CountLevel == 0 ? statData.baseValue : statData.CurrentBaseValue + statData.increaseValue;
+                    valueProgressText.text = $"{currentVal} -> {nextVal}";
+                }
+                else
+                {
+                    float nextVal = statData.CountLevel == 0 ? statData.baseValue : statData.CurrentBaseValue + statData.increaseValue;
+                    valueProgressText.text = $"{statData.CurrentBaseValue} -> {nextVal}";
+                }
             }
         }
 

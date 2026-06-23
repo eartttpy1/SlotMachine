@@ -31,7 +31,15 @@ public class ScriptableUpStats : ScriptableObject
     // Dynamic baseValue that updates after buying
     public float CurrentBaseValue
     {
-        get { return PlayerPrefs.GetFloat(ValueKey, baseValue); }
+        get 
+        { 
+            if (CountLevel == 0)
+            {
+                // Default to 1 for ticket multipliers, 0 for other stats when not purchased yet
+                return name.Contains("Ticket") ? 1f : 0f;
+            }
+            return PlayerPrefs.GetFloat(ValueKey, baseValue); 
+        }
         set { PlayerPrefs.SetFloat(ValueKey, value); PlayerPrefs.Save(); }
     }
 
@@ -42,7 +50,7 @@ public class ScriptableUpStats : ScriptableObject
 
     public string GetNextValueDescription()
     {
-        float nextVal = CurrentBaseValue + increaseValue;
+        float nextVal = CountLevel == 0 ? baseValue : CurrentBaseValue + increaseValue;
         return string.Format(descriptionFormat, nextVal);
     }
 
@@ -51,7 +59,7 @@ public class ScriptableUpStats : ScriptableObject
         if (CountLevel < maxLevel)
         {
             CountLevel++;
-            CurrentBaseValue = baseValue + CountLevel * increaseValue;
+            CurrentBaseValue = baseValue + (CountLevel - 1) * increaseValue;
             Point = Mathf.RoundToInt(Point * 1.2f);
         }
     }
