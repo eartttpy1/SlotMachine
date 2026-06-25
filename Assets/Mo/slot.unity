@@ -3055,6 +3055,59 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 567389918}
   m_CullTransparentMesh: 1
+--- !u!1 &570944330
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 570944332}
+  - component: {fileID: 570944331}
+  m_Layer: 0
+  m_Name: ShogunEffectManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &570944331
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 570944330}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65637fa2ea6165a4abbaca1facfb0e08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ShogunEffectManager
+  getHitEffect:
+    effectPrefab: {fileID: 1526720982089747462, guid: 9a3cad64413457c4aa13749a930d4195, type: 3}
+    spawnLocation: {fileID: 1407131346}
+  swordEffect:
+    effectPrefab: {fileID: 4984047291600970789, guid: e07441d6bc558b84fb9624a1cb34c25b, type: 3}
+    spawnLocation: {fileID: 1407131346}
+  greatSwordEffect:
+    effectPrefab: {fileID: 6561139756634831639, guid: 57e96b9906edc344fab2edba068c1289, type: 3}
+    spawnLocation: {fileID: 1407131346}
+--- !u!4 &570944332
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 570944330}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 11.64962, y: 16.37144, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &601713400
 GameObject:
   m_ObjectHideFlags: 0
@@ -3496,6 +3549,8 @@ MonoBehaviour:
   spinButtonText: {fileID: 2002815558}
   spinButton: {fileID: 1137174177}
   isReelLocked: 000000
+  shakeDuration: 0.4
+  shakeStrength: 0.5
   debugForceThreePotions: 0
 --- !u!1 &727311102
 GameObject:
@@ -4093,6 +4148,7 @@ MonoBehaviour:
   descriptionText: {fileID: 2081031101}
   bonusDescriptionText: {fileID: 1036490450}
   priceText: {fileID: 835921647}
+  charTypingSpeed: 0.02
 --- !u!1 &824931616
 GameObject:
   m_ObjectHideFlags: 0
@@ -7801,6 +7857,37 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
+--- !u!1 &1407131345
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1407131346}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1407131346
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1407131345}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.69748, y: 0.63835, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1446695032
 GameObject:
   m_ObjectHideFlags: 0
@@ -14142,6 +14229,8 @@ MonoBehaviour:
   borderImage: {fileID: 5012851198032720848}
   hpSlider: {fileID: 9097050162050901961}
   hpText: {fileID: 1193963310199653011}
+  punchScaleStrength: 0.2
+  punchDuration: 0.3
 --- !u!224 &6664583812313336808
 RectTransform:
   m_ObjectHideFlags: 0
@@ -14974,3 +15063,5 @@ SceneRoots:
   - {fileID: 840418624}
   - {fileID: 1729084007}
   - {fileID: 52972459}
+  - {fileID: 570944332}
+  - {fileID: 1407131346}

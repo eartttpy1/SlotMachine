@@ -8,6 +8,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 585811405695424928, guid: 9a3cad64413457c4aa13749a930d4195, type: 3}
+      propertyPath: m_UiScaleMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 585811405695424928, guid: 9a3cad64413457c4aa13749a930d4195, type: 3}
+      propertyPath: m_MatchWidthOrHeight
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 585811405695424928, guid: 9a3cad64413457c4aa13749a930d4195, type: 3}
+      propertyPath: m_ReferenceResolution.x
+      value: 1920
+      objectReference: {fileID: 0}
+    - target: {fileID: 585811405695424928, guid: 9a3cad64413457c4aa13749a930d4195, type: 3}
+      propertyPath: m_ReferenceResolution.y
+      value: 1080
+      objectReference: {fileID: 0}
     - target: {fileID: 1526720982089747462, guid: 9a3cad64413457c4aa13749a930d4195, type: 3}
       propertyPath: m_Name
       value: Great Sword Variant
@@ -15,7 +31,7 @@ PrefabInstance:
     - target: {fileID: 1916660475411858851, guid: 9a3cad64413457c4aa13749a930d4195, type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: 510b4688df964214794893af9288c5d6, type: 2}
+      objectReference: {fileID: 9100000, guid: 7a5f771a6a559fd46850d2d982a5cbf0, type: 2}
     - target: {fileID: 4309433327371750799, guid: 9a3cad64413457c4aa13749a930d4195, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -98,15 +114,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6682717743873148000, guid: 9a3cad64413457c4aa13749a930d4195, type: 3}
       propertyPath: m_LocalScale.x
-      value: 1.0610826
+      value: 5.337776
       objectReference: {fileID: 0}
     - target: {fileID: 6682717743873148000, guid: 9a3cad64413457c4aa13749a930d4195, type: 3}
       propertyPath: m_LocalScale.y
-      value: 1.0610826
+      value: 5.337776
       objectReference: {fileID: 0}
     - target: {fileID: 6682717743873148000, guid: 9a3cad64413457c4aa13749a930d4195, type: 3}
       propertyPath: m_LocalScale.z
-      value: 1.0610826
+      value: 5.337776
       objectReference: {fileID: 0}
     - target: {fileID: 6682717743873148000, guid: 9a3cad64413457c4aa13749a930d4195, type: 3}
       propertyPath: m_AnchoredPosition.x
