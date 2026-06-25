@@ -19,7 +19,8 @@ public class CombatManager : MonoBehaviour
     public TextMeshProUGUI detailTurnText;
 
     [Header("DOTween UI Settings")]
-    public float turnTypingSpeed = 0.05f;
+    [Tooltip("ล็อกเวลาไปเลยว่าต้องพิมพ์ข้อความเสร็จภายในกี่วินาที (แนะนำ 0.2 - 0.25 วินาที จะพิมพ์ไวพอดีกับจังหวะเกม)")]
+    public float turnTypingDuration = 0.2f;
     private Sequence turnTypingSequence;
 
     [Header("Enemies")]
@@ -32,13 +33,13 @@ public class CombatManager : MonoBehaviour
     private List<EnemyDisplay> spawnedDisplays = new List<EnemyDisplay>();
 
     [Header("Effect Spawn Locations")]
-    [Tooltip("˹觷ͧԴͿ࿡ Get Hit (ͼⴹ)")]
+    [Tooltip("ตำแหน่งที่จะเกิดเอฟเฟกต์ Get Hit (ผู้เล่นโดน)")]
     public Transform getHitSpawnLocation;
 
-    [Tooltip("˹觷ͧԴͿ࿡ Sword (Һ) *ҡҧ кʻ칷ѵѵѵ")]
+    [Tooltip("ตำแหน่งที่จะเกิดเอฟเฟกต์ Sword (ดาบปกติ)")]
     public Transform swordSpawnLocation;
 
-    [Tooltip("˹觷ͧԴͿ࿡ Great Sword (Һ˭) * ش觡ҧ˹Ҩ")]
+    [Tooltip("ตำแหน่งที่จะเกิดเอฟเฟกต์ Great Sword (ดาบใหญ่)")]
     public Transform greatSwordSpawnLocation;
 
     [System.Serializable]
@@ -74,7 +75,6 @@ public class CombatManager : MonoBehaviour
 
     private void Start()
     {
-        // Ѻͺ õҡաõ駤 Template ǧ˹ MapManager ӧҹ
         if (MapManager.Instance == null && enemyTemplates.Count > 0)
         {
             StartCombat(enemyTemplates, currentLevel);
@@ -83,29 +83,43 @@ public class CombatManager : MonoBehaviour
 
     public void AnimateTurnText(string turnStr, string detailStr)
     {
+        // เคลียร์แอนิเมชันเก่าทิ้งทันทีเมื่อมีข้อความใหม่เข้ามา
         turnTypingSequence?.Kill();
         turnTypingSequence = DOTween.Sequence();
 
+        // 1. จัดการข้อความหลัก (Turn Text)
         if (turnText != null)
         {
             turnText.text = "";
-            int turnLen = 0;
-            turnTypingSequence.Append(DOTween.To(() => turnLen, x => {
-                turnLen = x;
-                turnText.text = turnStr.Substring(0, turnLen);
-            }, turnStr.Length, turnStr.Length * turnTypingSpeed).SetEase(Ease.Linear));
+            // ป้องกันปัญหากรณีส่งข้อความว่างเปล่าเข้ามา จะได้ไม่เสียเวลาวิ่งแอนิเมชัน
+            if (!string.IsNullOrEmpty(turnStr))
+            {
+                int turnLen = 0;
+                turnTypingSequence.Append(DOTween.To(() => turnLen, x => {
+                    turnLen = x;
+                    turnText.text = turnStr.Substring(0, turnLen);
+                }, turnStr.Length, turnTypingDuration).SetEase(Ease.OutQuad)); // ใช้ OutQuad จะพิมพ์เร็วตอนเริ่มและนุ่มนวลตอนท้าย
+            }
         }
 
-        turnTypingSequence.AppendInterval(0.15f);
+        // ใส่ Interval หน่วงเวลาระหว่างข้อความหลักกับข้อความย่อย เฉพาะตอนที่มีข้อความอยู่ทั้งคู่เท่านั้น
+        if (!string.IsNullOrEmpty(turnStr) && !string.IsNullOrEmpty(detailStr))
+        {
+            turnTypingSequence.AppendInterval(0.1f);
+        }
 
+        // 2. จัดการข้อความย่อย (Detail Turn Text)
         if (detailTurnText != null)
         {
             detailTurnText.text = "";
-            int detailLen = 0;
-            turnTypingSequence.Append(DOTween.To(() => detailLen, x => {
-                detailLen = x;
-                detailTurnText.text = detailStr.Substring(0, detailLen);
-            }, detailStr.Length, detailStr.Length * turnTypingSpeed).SetEase(Ease.Linear));
+            if (!string.IsNullOrEmpty(detailStr))
+            {
+                int detailLen = 0;
+                turnTypingSequence.Append(DOTween.To(() => detailLen, x => {
+                    detailLen = x;
+                    detailTurnText.text = detailStr.Substring(0, detailLen);
+                }, detailStr.Length, turnTypingDuration).SetEase(Ease.OutQuad));
+            }
         }
     }
 
@@ -141,14 +155,12 @@ public class CombatManager : MonoBehaviour
     {
         if (enemyContainerParent == null || enemyDisplayPrefab == null) return;
 
-        //  UI 
         foreach (var disp in spawnedDisplays)
         {
             if (disp != null) Destroy(disp.gameObject);
         }
         spawnedDisplays.Clear();
 
-        // ҧ UI ¡ѵ
         for (int i = 0; i < activeEnemies.Count; i++)
         {
             GameObject obj = Instantiate(enemyDisplayPrefab, enemyContainerParent);
@@ -199,7 +211,6 @@ public class CombatManager : MonoBehaviour
             }
         }
 
-        // 1. Resolve Shield
         if (shieldCount > 0 && shieldData != null && PlayerStats.Instance != null)
         {
             int shieldVal = (shieldCount == 3) ? (shieldData.baseValue * shieldData.match3Multiplier) : (shieldCount * shieldData.baseValue);
@@ -207,7 +218,6 @@ public class CombatManager : MonoBehaviour
             Debug.Log($"Shield rolled! Added {shieldVal} shield. Total Shield: {PlayerStats.Instance.currentShield}");
         }
 
-        // 2. Resolve GreatSword (AoE Damage to all enemies)
         if (greatSwordCount > 0 && greatSwordData != null)
         {
             int greatSwordDmg = (greatSwordCount == 3) ? (greatSwordData.baseValue * greatSwordData.match3Multiplier) : (greatSwordCount * greatSwordData.baseValue);
@@ -217,7 +227,6 @@ public class CombatManager : MonoBehaviour
             }
             Debug.Log($"GreatSword rolled! Dealing {greatSwordDmg} AoE damage to all enemies.");
 
-            // ¡ҹ Spawn Ϳ࿡Һ˭ҹ ShogunEffectManager
             if (ShogunEffectManager.Instance != null)
             {
                 Transform spawnPos = greatSwordSpawnLocation != null ? greatSwordSpawnLocation : this.transform;
@@ -227,10 +236,8 @@ public class CombatManager : MonoBehaviour
             DealAoEDamage(greatSwordDmg);
         }
 
-        // Ǩͺѵٵҡ͹ӴҺ
         if (CheckVictoryCondition()) return;
 
-        // 3. Resolve Sword (Single Target Damage)
         if (swordCount > 0 && swordData != null)
         {
             pendingSwordDamage = (swordCount == 3) ? (swordData.baseValue * swordData.match3Multiplier) : (swordCount * swordData.baseValue);
@@ -239,7 +246,6 @@ public class CombatManager : MonoBehaviour
                 pendingSwordDamage = Mathf.RoundToInt(pendingSwordDamage * (1f + GameDataManager.Instance.GetDamageBonus()));
             }
 
-            // ҡѵٵ кͤѵѵ
             if (activeEnemies.Count == 1)
             {
                 ExecuteSwordAttack(0);
@@ -254,7 +260,6 @@ public class CombatManager : MonoBehaviour
         }
         else
         {
-            // ҡմҺǤҧ 觵ѵٷѹ
             StartCoroutine(EnemyTurnRoutine());
         }
     }
@@ -284,7 +289,6 @@ public class CombatManager : MonoBehaviour
 
         Debug.Log($"Attacking enemy {activeEnemies[index].data.enemyName} for {pendingSwordDamage} Sword damage.");
 
-        // ¡ҹ Spawn Ϳ࿡ҺǼҹ ShogunEffectManager
         if (ShogunEffectManager.Instance != null)
         {
             Transform spawnPos = swordSpawnLocation;
@@ -297,7 +301,6 @@ public class CombatManager : MonoBehaviour
                 }
             }
 
-            // վԡѴԴ ʻ  ԡѴ ҡըԡѴ (Default) ١ Assign 㹵ǨѴ
             if (spawnPos != null)
             {
                 ShogunEffectManager.Instance.SpawnSwordEffect(spawnPos);
@@ -340,7 +343,6 @@ public class CombatManager : MonoBehaviour
 
         if (enemy.currentHP <= 0)
         {
-            // ѵپ! ͺҧ
             if (PlayerStats.Instance != null)
             {
                 PlayerStats.Instance.coins += enemy.data.coin;
@@ -378,7 +380,7 @@ public class CombatManager : MonoBehaviour
     {
         currentState = CombatState.EnemyTurn;
         AnimateTurnText("Enemy Turn", "Preparing to attack...");
-        
+
         if (PlayerStats.Instance != null)
         {
             PlayerStats.Instance.isplayerturn = false;
@@ -387,12 +389,10 @@ public class CombatManager : MonoBehaviour
 
         yield return new WaitForSeconds(1f);
 
-        // Թ칢ͧѵе
         for (int i = 0; i < activeEnemies.Count; i++)
         {
             EnemyInstance enemy = activeEnemies[i];
 
-            // ǨͺҼ蹾͹ѵ
             if (PlayerStats.Instance != null && PlayerStats.Instance.currentHP <= 0)
             {
                 break;
@@ -401,49 +401,38 @@ public class CombatManager : MonoBehaviour
             int dmgPerHit = Mathf.RoundToInt(enemy.data.GetBaseDMG(currentLevel) * enemy.damageMultiplier);
             int totalHits = enemy.data.countHit;
 
-            Debug.Log($"Enemy {enemy.data.enemyName} turn! Attacks {totalHits} times for {dmgPerHit} dmg each (Multiplier: {enemy.damageMultiplier:F2}).");
+            Debug.Log($"Enemy {enemy.data.enemyName} turn! Attacks {totalHits} times for {dmgPerHit} dmg each.");
 
             for (int hit = 0; hit < totalHits; hit++)
             {
                 if (PlayerStats.Instance != null)
                 {
-                    // Ҽ (Shield) ͹ⴹ
                     bool hasShield = PlayerStats.Instance.currentShield > 0;
-
                     PlayerStats.Instance.TakeDamage(dmgPerHit);
 
-                    // ҧͿ࿡ⴹ (Get Hit) ҹ ShogunEffectManager
                     if (ShogunEffectManager.Instance != null)
                     {
                         Transform spawnPos = getHitSpawnLocation != null ? getHitSpawnLocation : this.transform;
-                        // 駵˹觪ǤԴ Target () 
                         ShogunEffectManager.Instance.SpawnGetHitEffect();
                     }
 
-                    // §ⴹյ͹лͧѹ
                     if (AudioManager.Instance != null)
                     {
-                        if (hasShield)
-                        {
-                            AudioManager.Instance.PlayShieldHitSound();
-                        }
-                        else
-                        {
-                            AudioManager.Instance.PlayGetHitSound();
-                        }
+                        if (hasShield) AudioManager.Instance.PlayShieldHitSound();
+                        else AudioManager.Instance.PlayGetHitSound();
                     }
                 }
-                
+
+                // สั่งพิมพ์ข้อความด้วยความเร็วล็อกวินาทีคงที่ (เช่น 0.2 วินาที)
                 AnimateTurnText("Enemy Turn", $"{enemy.data.enemyName} Hit ({hit + 1}/{totalHits}): -{dmgPerHit} HP");
-                
-                yield return new WaitForSeconds(0.4f); // ˹ǧ硹ѧࡵ繡
+
+                // โค้ดเดิมรอ 0.4 วินาที ตอนนี้ตัวหนังสือพิมพ์เสร็จตั้งแต่ 0.2 วินาทีแรกแล้ว จะเหลือเวลาอีก 0.2 วินาทีให้ผู้เล่นได้อ่านพอดีเป๊ะ ไม่โดนข้าม!
+                yield return new WaitForSeconds(0.4f);
             }
 
-            // ç㹡դ駵ա 1.2 ҵͺ
             enemy.damageMultiplier *= 1.2f;
         }
 
-        // ǨͺʶҹСþͧ -> upstat = true
         if (PlayerStats.Instance != null && PlayerStats.Instance.currentHP <= 0)
         {
             currentState = CombatState.Defeat;
@@ -454,10 +443,9 @@ public class CombatManager : MonoBehaviour
         }
         else
         {
-            // ͹Ѻѧ칢ͧ
             currentState = CombatState.PlayerTurn;
             AnimateTurnText("Player Turn", "");
-            
+
             if (PlayerStats.Instance != null)
             {
                 PlayerStats.Instance.isplayerturn = true;

@@ -1761,6 +1761,7 @@ MonoBehaviour:
   nextlevel: 0
   turnText: {fileID: 832070161}
   detailTurnText: {fileID: 1556328960}
+  turnTypingDuration: 0.2
   enemyTemplates:
   - {fileID: 11400000, guid: 1572f1bd80f49dc49b62157d59190d3d, type: 2}
   - {fileID: 11400000, guid: 835d6bbde9991f3439918a0eb41e4911, type: 2}
