@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class SlotMachine : MonoBehaviour
 {
@@ -57,6 +58,10 @@ public class SlotMachine : MonoBehaviour
     public bool[] isReelLocked = new bool[3]; // เก็บสถานะปุ่มกดล็อกรีล [รีล1, รีล2, รีล3]
     private SlotSymbolData[] finalResult = new SlotSymbolData[3]; // ผลลัพธ์สุดท้ายหลังหมุนเสร็จ
     private bool isSpinning = false;
+
+    [Header("DOTween Settings")]
+    public float shakeDuration = 0.4f;
+    public float shakeStrength = 0.5f;
 
     private void OnValidate()
     {
@@ -499,6 +504,10 @@ public class SlotMachine : MonoBehaviour
         }
 
         isSpinning = false;
+        
+        Camera.main.transform.DOComplete();
+        Camera.main.transform.DOShakePosition(shakeDuration, shakeStrength);
+
         if (spinButton != null)
         {
             var btn = spinButton.GetComponent<UnityEngine.UI.Button>();

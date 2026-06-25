@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using TMPro;
+using DG.Tweening;
 
 public class EnemyDisplay : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
 {
@@ -10,6 +11,10 @@ public class EnemyDisplay : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
     public Image borderImage;
     public Slider hpSlider;
     public TextMeshProUGUI hpText;
+
+    [Header("DOTween Settings")]
+    public float punchScaleStrength = 0.2f;
+    public float punchDuration = 0.3f;
 
     private CombatManager.EnemyInstance associatedEnemy;
     private int enemyIndex;
@@ -46,6 +51,15 @@ public class EnemyDisplay : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
         if (borderImage != null)
         {
             borderImage.gameObject.SetActive(false);
+        }
+    }
+
+    public void PlayImpactAnimation()
+    {
+        if (enemyImage != null)
+        {
+            enemyImage.transform.DOComplete();
+            enemyImage.transform.DOPunchScale(new Vector3(punchScaleStrength, -punchScaleStrength, 0), punchDuration, 10, 1);
         }
     }
 

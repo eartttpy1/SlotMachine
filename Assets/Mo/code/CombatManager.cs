@@ -1,4 +1,4 @@
-using System.Collections;
+Ôªøusing System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
@@ -27,13 +27,13 @@ public class CombatManager : MonoBehaviour
     private List<EnemyDisplay> spawnedDisplays = new List<EnemyDisplay>();
 
     [Header("Effect Spawn Locations")]
-    [Tooltip("µ”·ÀπËß∑’ËµÈÕß°“√„ÀÈ‡°‘¥‡Õø‡ø°µÏ Get Hit (‡¡◊ËÕºŸÈ‡≈Ëπ‚¥π‚®¡µ’)")]
+    [Tooltip("‡∏ï‡∏≥‡πÅ‡∏´‡∏ô‡πà‡∏á‡∏ó‡∏µ‡πà‡∏ï‡πâ‡∏≠‡∏á‡∏Å‡∏≤‡∏£‡πÉ‡∏´‡πâ‡πÄ‡∏Å‡∏¥‡∏î‡πÄ‡∏≠‡∏ü‡πÄ‡∏ü‡∏Å‡∏ï‡πå Get Hit (‡πÄ‡∏°‡∏∑‡πà‡∏≠‡∏ú‡∏π‡πâ‡πÄ‡∏•‡πà‡∏ô‡πÇ‡∏î‡∏ô‡πÇ‡∏à‡∏°‡∏ï‡∏µ)")]
     public Transform getHitSpawnLocation;
 
-    [Tooltip("µ”·ÀπËß∑’ËµÈÕß°“√„ÀÈ‡°‘¥‡Õø‡ø°µÏ Sword (¥“∫‡¥’Ë¬«) *À“°«Ë“ß‰«È √–∫∫®– ªÕ«Ïπ∑’Ëµ—«»—µ√Ÿ‡ªÈ“À¡“¬‚¥¬Õ—µ‚π¡—µ‘")]
+    [Tooltip("‡∏ï‡∏≥‡πÅ‡∏´‡∏ô‡πà‡∏á‡∏ó‡∏µ‡πà‡∏ï‡πâ‡∏≠‡∏á‡∏Å‡∏≤‡∏£‡πÉ‡∏´‡πâ‡πÄ‡∏Å‡∏¥‡∏î‡πÄ‡∏≠‡∏ü‡πÄ‡∏ü‡∏Å‡∏ï‡πå Sword (‡∏î‡∏≤‡∏ö‡πÄ‡∏î‡∏µ‡πà‡∏¢‡∏ß) *‡∏´‡∏≤‡∏Å‡∏ß‡πà‡∏≤‡∏á‡πÑ‡∏ß‡πâ ‡∏£‡∏∞‡∏ö‡∏ö‡∏à‡∏∞‡∏™‡∏õ‡∏≠‡∏ß‡πå‡∏ô‡∏ó‡∏µ‡πà‡∏ï‡∏±‡∏ß‡∏®‡∏±‡∏ï‡∏£‡∏π‡πÄ‡∏õ‡πâ‡∏≤‡∏´‡∏°‡∏≤‡∏¢‡πÇ‡∏î‡∏¢‡∏≠‡∏±‡∏ï‡πÇ‡∏ô‡∏°‡∏±‡∏ï‡∏¥")]
     public Transform swordSpawnLocation;
 
-    [Tooltip("µ”·ÀπËß∑’ËµÈÕß°“√„ÀÈ‡°‘¥‡Õø‡ø°µÏ Great Sword (¥“∫„À≠ËÀ¡ŸË) *‡™Ëπ ®ÿ¥°÷Ëß°≈“ßÀπÈ“®Õ")]
+    [Tooltip("‡∏ï‡∏≥‡πÅ‡∏´‡∏ô‡πà‡∏á‡∏ó‡∏µ‡πà‡∏ï‡πâ‡∏≠‡∏á‡∏Å‡∏≤‡∏£‡πÉ‡∏´‡πâ‡πÄ‡∏Å‡∏¥‡∏î‡πÄ‡∏≠‡∏ü‡πÄ‡∏ü‡∏Å‡∏ï‡πå Great Sword (‡∏î‡∏≤‡∏ö‡πÉ‡∏´‡∏ç‡πà‡∏´‡∏°‡∏π‡πà) *‡πÄ‡∏ä‡πà‡∏ô ‡∏à‡∏∏‡∏î‡∏Å‡∏∂‡πà‡∏á‡∏Å‡∏•‡∏≤‡∏á‡∏´‡∏ô‡πâ‡∏≤‡∏à‡∏≠")]
     public Transform greatSwordSpawnLocation;
 
     [System.Serializable]
@@ -69,7 +69,7 @@ public class CombatManager : MonoBehaviour
 
     private void Start()
     {
-        //  ”À√—∫∑¥ Õ∫ ‡√‘Ë¡°“√µËÕ ŸÈÀ“°¡’°“√µ—Èß§Ë“ Template ‰«È≈Ë«ßÀπÈ“·≈–‰¡Ë¡’ MapManager ∑”ß“πÕ¬ŸË
+        // ‡∏™‡∏≥‡∏´‡∏£‡∏±‡∏ö‡∏ó‡∏î‡∏™‡∏≠‡∏ö ‡πÄ‡∏£‡∏¥‡πà‡∏°‡∏Å‡∏≤‡∏£‡∏ï‡πà‡∏≠‡∏™‡∏π‡πâ‡∏´‡∏≤‡∏Å‡∏°‡∏µ‡∏Å‡∏≤‡∏£‡∏ï‡∏±‡πâ‡∏á‡∏Ñ‡πà‡∏≤ Template ‡πÑ‡∏ß‡πâ‡∏•‡πà‡∏ß‡∏á‡∏´‡∏ô‡πâ‡∏≤‡πÅ‡∏•‡∏∞‡πÑ‡∏°‡πà‡∏°‡∏µ MapManager ‡∏ó‡∏≥‡∏á‡∏≤‡∏ô‡∏≠‡∏¢‡∏π‡πà
         if (MapManager.Instance == null && enemyTemplates.Count > 0)
         {
             StartCombat(enemyTemplates, currentLevel);
@@ -117,7 +117,7 @@ public class CombatManager : MonoBehaviour
                     detailTurnText.text = "";
                     break;
                 case CombatState.EnemyTurn:
-                    // µ—Èß§Ë“·∫∫ Dynamic „π EnemyTurnRoutine ‡æ◊ËÕ· ¥ß√“¬≈–‡Õ’¬¥§«“¡‡ ’¬À“¬
+                    // ‡∏ï‡∏±‡πâ‡∏á‡∏Ñ‡πà‡∏≤‡πÅ‡∏ö‡∏ö Dynamic ‡πÉ‡∏ô EnemyTurnRoutine ‡πÄ‡∏û‡∏∑‡πà‡∏≠‡πÅ‡∏™‡∏î‡∏á‡∏£‡∏≤‡∏¢‡∏•‡∏∞‡πÄ‡∏≠‡∏µ‡∏¢‡∏î‡∏Ñ‡∏ß‡∏≤‡∏°‡πÄ‡∏™‡∏µ‡∏¢‡∏´‡∏≤‡∏¢
                     break;
             }
         }
@@ -154,14 +154,14 @@ public class CombatManager : MonoBehaviour
     {
         if (enemyContainerParent == null || enemyDisplayPrefab == null) return;
 
-        // ‡§≈’¬√Ï UI ‡°Ë“
+        // ‡πÄ‡∏Ñ‡∏•‡∏µ‡∏¢‡∏£‡πå UI ‡πÄ‡∏Å‡πà‡∏≤
         foreach (var disp in spawnedDisplays)
         {
             if (disp != null) Destroy(disp.gameObject);
         }
         spawnedDisplays.Clear();
 
-        //  √È“ß UI „À¡Ëµ“¡√“¬°“√»—µ√Ÿ
+        // ‡∏™‡∏£‡πâ‡∏≤‡∏á UI ‡πÉ‡∏´‡∏°‡πà‡∏ï‡∏≤‡∏°‡∏£‡∏≤‡∏¢‡∏Å‡∏≤‡∏£‡∏®‡∏±‡∏ï‡∏£‡∏π
         for (int i = 0; i < activeEnemies.Count; i++)
         {
             GameObject obj = Instantiate(enemyDisplayPrefab, enemyContainerParent);
@@ -230,7 +230,7 @@ public class CombatManager : MonoBehaviour
             }
             Debug.Log($"GreatSword rolled! Dealing {greatSwordDmg} AoE damage to all enemies.");
 
-            // ‡√’¬°„™Èß“π Spawn ‡Õø‡ø°µÏ¥“∫„À≠ËÀ¡ŸËºË“π ShogunEffectManager
+            // ‡πÄ‡∏£‡∏µ‡∏¢‡∏Å‡πÉ‡∏ä‡πâ‡∏á‡∏≤‡∏ô Spawn ‡πÄ‡∏≠‡∏ü‡πÄ‡∏ü‡∏Å‡∏ï‡πå‡∏î‡∏≤‡∏ö‡πÉ‡∏´‡∏ç‡πà‡∏´‡∏°‡∏π‡πà‡∏ú‡πà‡∏≤‡∏ô ShogunEffectManager
             if (ShogunEffectManager.Instance != null)
             {
                 Transform spawnPos = greatSwordSpawnLocation != null ? greatSwordSpawnLocation : this.transform;
@@ -240,7 +240,7 @@ public class CombatManager : MonoBehaviour
             DealAoEDamage(greatSwordDmg);
         }
 
-        // µ√«® Õ∫«Ë“»—µ√Ÿµ“¬À¡¥®“°°“√‚®¡µ’À¡ŸËÀ√◊Õ‰¡Ë°ËÕπ∑”¥“∫‡¥’Ë¬«
+        // ‡∏ï‡∏£‡∏ß‡∏à‡∏™‡∏≠‡∏ö‡∏ß‡πà‡∏≤‡∏®‡∏±‡∏ï‡∏£‡∏π‡∏ï‡∏≤‡∏¢‡∏´‡∏°‡∏î‡∏à‡∏≤‡∏Å‡∏Å‡∏≤‡∏£‡πÇ‡∏à‡∏°‡∏ï‡∏µ‡∏´‡∏°‡∏π‡πà‡∏´‡∏£‡∏∑‡∏≠‡πÑ‡∏°‡πà‡∏Å‡πà‡∏≠‡∏ô‡∏ó‡∏≥‡∏î‡∏≤‡∏ö‡πÄ‡∏î‡∏µ‡πà‡∏¢‡∏ß
         if (CheckVictoryCondition()) return;
 
         // 3. Resolve Sword (Single Target Damage)
@@ -252,7 +252,7 @@ public class CombatManager : MonoBehaviour
                 pendingSwordDamage = Mathf.RoundToInt(pendingSwordDamage * (1f + GameDataManager.Instance.GetDamageBonus()));
             }
 
-            // À“°‡À≈◊Õ»—µ√Ÿµ—«‡¥’¬« √–∫∫®–≈ÁÕ§‡ªÈ“À¡“¬·≈–‚®¡µ’„ÀÈÕ—µ‚π¡—µ‘
+            // ‡∏´‡∏≤‡∏Å‡πÄ‡∏´‡∏•‡∏∑‡∏≠‡∏®‡∏±‡∏ï‡∏£‡∏π‡∏ï‡∏±‡∏ß‡πÄ‡∏î‡∏µ‡∏¢‡∏ß ‡∏£‡∏∞‡∏ö‡∏ö‡∏à‡∏∞‡∏•‡πá‡∏≠‡∏Ñ‡πÄ‡∏õ‡πâ‡∏≤‡∏´‡∏°‡∏≤‡∏¢‡πÅ‡∏•‡∏∞‡πÇ‡∏à‡∏°‡∏ï‡∏µ‡πÉ‡∏´‡πâ‡∏≠‡∏±‡∏ï‡πÇ‡∏ô‡∏°‡∏±‡∏ï‡∏¥
             if (activeEnemies.Count == 1)
             {
                 ExecuteSwordAttack(0);
@@ -266,7 +266,7 @@ public class CombatManager : MonoBehaviour
         }
         else
         {
-            // À“°‰¡Ë¡’¥“∫‡¥’Ë¬«§È“ßÕ¬ŸË „ÀÈ ËßµËÕ‡∑‘√Ïπ‰ªÀ“»—µ√Ÿ∑—π∑’
+            // ‡∏´‡∏≤‡∏Å‡πÑ‡∏°‡πà‡∏°‡∏µ‡∏î‡∏≤‡∏ö‡πÄ‡∏î‡∏µ‡πà‡∏¢‡∏ß‡∏Ñ‡πâ‡∏≤‡∏á‡∏≠‡∏¢‡∏π‡πà ‡πÉ‡∏´‡πâ‡∏™‡πà‡∏á‡∏ï‡πà‡∏≠‡πÄ‡∏ó‡∏¥‡∏£‡πå‡∏ô‡πÑ‡∏õ‡∏´‡∏≤‡∏®‡∏±‡∏ï‡∏£‡∏π‡∏ó‡∏±‡∏ô‡∏ó‡∏µ
             StartCoroutine(EnemyTurnRoutine());
         }
     }
@@ -296,7 +296,7 @@ public class CombatManager : MonoBehaviour
 
         Debug.Log($"Attacking enemy {activeEnemies[index].data.enemyName} for {pendingSwordDamage} Sword damage.");
 
-        // ‡√’¬°„™Èß“π Spawn ‡Õø‡ø°µÏ¥“∫‡¥’Ë¬«ºË“π ShogunEffectManager
+        // ‡πÄ‡∏£‡∏µ‡∏¢‡∏Å‡πÉ‡∏ä‡πâ‡∏á‡∏≤‡∏ô Spawn ‡πÄ‡∏≠‡∏ü‡πÄ‡∏ü‡∏Å‡∏ï‡πå‡∏î‡∏≤‡∏ö‡πÄ‡∏î‡∏µ‡πà‡∏¢‡∏ß‡∏ú‡πà‡∏≤‡∏ô ShogunEffectManager
         if (ShogunEffectManager.Instance != null)
         {
             Transform spawnPos = swordSpawnLocation;
@@ -309,7 +309,7 @@ public class CombatManager : MonoBehaviour
                 }
             }
 
-            // ∂È“¡’æ‘°—¥°“√‡°‘¥ ®– ªÕ«Ïπ ≥ æ‘°—¥π—Èπ ·µËÀ“°‰¡Ë¡’®–„™Èæ‘°—¥‡√‘Ë¡µÈπ (Default) ∑’Ë∂Ÿ° Assign ‰«È„πµ—«®—¥°“√
+            // ‡∏ñ‡πâ‡∏≤‡∏°‡∏µ‡∏û‡∏¥‡∏Å‡∏±‡∏î‡∏Å‡∏≤‡∏£‡πÄ‡∏Å‡∏¥‡∏î ‡∏à‡∏∞‡∏™‡∏õ‡∏≠‡∏ß‡πå‡∏ô ‡∏ì ‡∏û‡∏¥‡∏Å‡∏±‡∏î‡∏ô‡∏±‡πâ‡∏ô ‡πÅ‡∏ï‡πà‡∏´‡∏≤‡∏Å‡πÑ‡∏°‡πà‡∏°‡∏µ‡∏à‡∏∞‡πÉ‡∏ä‡πâ‡∏û‡∏¥‡∏Å‡∏±‡∏î‡πÄ‡∏£‡∏¥‡πà‡∏°‡∏ï‡πâ‡∏ô (Default) ‡∏ó‡∏µ‡πà‡∏ñ‡∏π‡∏Å Assign ‡πÑ‡∏ß‡πâ‡πÉ‡∏ô‡∏ï‡∏±‡∏ß‡∏à‡∏±‡∏î‡∏Å‡∏≤‡∏£
             if (spawnPos != null)
             {
                 ShogunEffectManager.Instance.SpawnSwordEffect(spawnPos);
@@ -345,9 +345,14 @@ public class CombatManager : MonoBehaviour
         enemy.currentHP = Mathf.Max(0, enemy.currentHP - damage);
         Debug.Log($"Enemy {enemy.data.enemyName} HP: {enemy.currentHP}/{enemy.maxHP}");
 
+        if (spawnedDisplays.Count > index && spawnedDisplays[index] != null)
+        {
+            spawnedDisplays[index].PlayImpactAnimation();
+        }
+
         if (enemy.currentHP <= 0)
         {
-            // »—µ√ŸæË“¬·æÈ! ¡Õ∫√“ß«—≈„ÀÈºŸÈ‡≈Ëπ
+            // ‡∏®‡∏±‡∏ï‡∏£‡∏π‡∏û‡πà‡∏≤‡∏¢‡πÅ‡∏û‡πâ! ‡∏°‡∏≠‡∏ö‡∏£‡∏≤‡∏á‡∏ß‡∏±‡∏•‡πÉ‡∏´‡πâ‡∏ú‡∏π‡πâ‡πÄ‡∏•‡πà‡∏ô
             if (PlayerStats.Instance != null)
             {
                 PlayerStats.Instance.coins += enemy.data.coin;
@@ -395,12 +400,12 @@ public class CombatManager : MonoBehaviour
 
         yield return new WaitForSeconds(1f);
 
-        // ¥”‡π‘π‡∑‘√Ïπ¢Õß»—µ√Ÿ·µË≈–µ—«
+        // ‡∏î‡∏≥‡πÄ‡∏ô‡∏¥‡∏ô‡πÄ‡∏ó‡∏¥‡∏£‡πå‡∏ô‡∏Ç‡∏≠‡∏á‡∏®‡∏±‡∏ï‡∏£‡∏π‡πÅ‡∏ï‡πà‡∏•‡∏∞‡∏ï‡∏±‡∏ß
         for (int i = 0; i < activeEnemies.Count; i++)
         {
             EnemyInstance enemy = activeEnemies[i];
 
-            // µ√«® Õ∫«Ë“ºŸÈ‡≈ËπæË“¬·æÈ°ËÕπ»—µ√Ÿ‚®¡µ’À√◊Õ‰¡Ë
+            // ‡∏ï‡∏£‡∏ß‡∏à‡∏™‡∏≠‡∏ö‡∏ß‡πà‡∏≤‡∏ú‡∏π‡πâ‡πÄ‡∏•‡πà‡∏ô‡∏û‡πà‡∏≤‡∏¢‡πÅ‡∏û‡πâ‡∏Å‡πà‡∏≠‡∏ô‡∏®‡∏±‡∏ï‡∏£‡∏π‡πÇ‡∏à‡∏°‡∏ï‡∏µ‡∏´‡∏£‡∏∑‡∏≠‡πÑ‡∏°‡πà
             if (PlayerStats.Instance != null && PlayerStats.Instance.currentHP <= 0)
             {
                 break;
@@ -415,20 +420,20 @@ public class CombatManager : MonoBehaviour
             {
                 if (PlayerStats.Instance != null)
                 {
-                    // ‡™Á§«Ë“ºŸÈ‡≈Ëπ¡’‡°√“– (Shield) ‡À≈◊ÕÕ¬ŸËÀ√◊Õ‰¡Ë°ËÕπ‚¥π‚®¡µ’
+                    // ‡πÄ‡∏ä‡πá‡∏Ñ‡∏ß‡πà‡∏≤‡∏ú‡∏π‡πâ‡πÄ‡∏•‡πà‡∏ô‡∏°‡∏µ‡πÄ‡∏Å‡∏£‡∏≤‡∏∞ (Shield) ‡πÄ‡∏´‡∏•‡∏∑‡∏≠‡∏≠‡∏¢‡∏π‡πà‡∏´‡∏£‡∏∑‡∏≠‡πÑ‡∏°‡πà‡∏Å‡πà‡∏≠‡∏ô‡πÇ‡∏î‡∏ô‡πÇ‡∏à‡∏°‡∏ï‡∏µ
                     bool hasShield = PlayerStats.Instance.currentShield > 0;
 
                     PlayerStats.Instance.TakeDamage(dmgPerHit);
 
-                    //  √È“ß‡Õø‡ø°µÏ‚¥π‚®¡µ’ (Get Hit) ºË“π ShogunEffectManager
+                    // ‡∏™‡∏£‡πâ‡∏≤‡∏á‡πÄ‡∏≠‡∏ü‡πÄ‡∏ü‡∏Å‡∏ï‡πå‡πÇ‡∏î‡∏ô‡πÇ‡∏à‡∏°‡∏ï‡∏µ (Get Hit) ‡∏ú‡πà‡∏≤‡∏ô ShogunEffectManager
                     if (ShogunEffectManager.Instance != null)
                     {
                         Transform spawnPos = getHitSpawnLocation != null ? getHitSpawnLocation : this.transform;
-                        // µ—Èßµ”·ÀπËß™—Ë«§√“«„ÀÈ‡°‘¥∑’Ë Target (ºŸÈ‡≈Ëπ) 
+                        // ‡∏ï‡∏±‡πâ‡∏á‡∏ï‡∏≥‡πÅ‡∏´‡∏ô‡πà‡∏á‡∏ä‡∏±‡πà‡∏ß‡∏Ñ‡∏£‡∏≤‡∏ß‡πÉ‡∏´‡πâ‡πÄ‡∏Å‡∏¥‡∏î‡∏ó‡∏µ‡πà Target (‡∏ú‡∏π‡πâ‡πÄ‡∏•‡πà‡∏ô) 
                         ShogunEffectManager.Instance.SpawnGetHitEffect();
                     }
 
-                    // ‡≈Ëπ‡ ’¬ß‚¥π‚®¡µ’µ“¡‡ß◊ËÕπ‰¢‡°√“–ªÈÕß°—π
+                    // ‡πÄ‡∏•‡πà‡∏ô‡πÄ‡∏™‡∏µ‡∏¢‡∏á‡πÇ‡∏î‡∏ô‡πÇ‡∏à‡∏°‡∏ï‡∏µ‡∏ï‡∏≤‡∏°‡πÄ‡∏á‡∏∑‡πà‡∏≠‡∏ô‡πÑ‡∏Ç‡πÄ‡∏Å‡∏£‡∏≤‡∏∞‡∏õ‡πâ‡∏≠‡∏á‡∏Å‡∏±‡∏ô
                     if (AudioManager.Instance != null)
                     {
                         if (hasShield)
@@ -445,14 +450,14 @@ public class CombatManager : MonoBehaviour
                 {
                     detailTurnText.text = $"{enemy.data.enemyName} Hit ({hit + 1}/{totalHits}): -{dmgPerHit} HP";
                 }
-                yield return new WaitForSeconds(0.4f); // ÀπË«ß‡«≈“‡≈Á°πÈÕ¬‡æ◊ËÕ„ÀÈºŸÈ‡≈Ëπ —ß‡°µ‡ÀÁπ°“√‚®¡µ’
+                yield return new WaitForSeconds(0.4f); // ‡∏´‡∏ô‡πà‡∏ß‡∏á‡πÄ‡∏ß‡∏•‡∏≤‡πÄ‡∏•‡πá‡∏Å‡∏ô‡πâ‡∏≠‡∏¢‡πÄ‡∏û‡∏∑‡πà‡∏≠‡πÉ‡∏´‡πâ‡∏ú‡∏π‡πâ‡πÄ‡∏•‡πà‡∏ô‡∏™‡∏±‡∏á‡πÄ‡∏Å‡∏ï‡πÄ‡∏´‡πá‡∏ô‡∏Å‡∏≤‡∏£‡πÇ‡∏à‡∏°‡∏ï‡∏µ
             }
 
-            // ‡æ‘Ë¡§«“¡·√ß„π°“√‚®¡µ’§√—ÈßµËÕ‰ªÕ’° 1.2 ‡∑Ë“µËÕ√Õ∫
+            // ‡πÄ‡∏û‡∏¥‡πà‡∏°‡∏Ñ‡∏ß‡∏≤‡∏°‡πÅ‡∏£‡∏á‡πÉ‡∏ô‡∏Å‡∏≤‡∏£‡πÇ‡∏à‡∏°‡∏ï‡∏µ‡∏Ñ‡∏£‡∏±‡πâ‡∏á‡∏ï‡πà‡∏≠‡πÑ‡∏õ‡∏≠‡∏µ‡∏Å 1.2 ‡πÄ‡∏ó‡πà‡∏≤‡∏ï‡πà‡∏≠‡∏£‡∏≠‡∏ö
             enemy.damageMultiplier *= 1.2f;
         }
 
-        // µ√«® Õ∫ ∂“π–°“√æË“¬·æÈ¢ÕßºŸÈ‡≈Ëπ -> upstat = true
+        // ‡∏ï‡∏£‡∏ß‡∏à‡∏™‡∏≠‡∏ö‡∏™‡∏ñ‡∏≤‡∏ô‡∏∞‡∏Å‡∏≤‡∏£‡∏û‡πà‡∏≤‡∏¢‡πÅ‡∏û‡πâ‡∏Ç‡∏≠‡∏á‡∏ú‡∏π‡πâ‡πÄ‡∏•‡πà‡∏ô -> upstat = true
         if (PlayerStats.Instance != null && PlayerStats.Instance.currentHP <= 0)
         {
             currentState = CombatState.Defeat;
@@ -462,7 +467,7 @@ public class CombatManager : MonoBehaviour
         }
         else
         {
-            // ¬ÈÕπ°≈—∫¡“¬—ß‡∑‘√Ïπ¢ÕßºŸÈ‡≈Ëπ
+            // ‡∏¢‡πâ‡∏≠‡∏ô‡∏Å‡∏•‡∏±‡∏ö‡∏°‡∏≤‡∏¢‡∏±‡∏á‡πÄ‡∏ó‡∏¥‡∏£‡πå‡∏ô‡∏Ç‡∏≠‡∏á‡∏ú‡∏π‡πâ‡πÄ‡∏•‡πà‡∏ô
             currentState = CombatState.PlayerTurn;
             if (PlayerStats.Instance != null)
             {
