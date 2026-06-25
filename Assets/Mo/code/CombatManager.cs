@@ -1,7 +1,8 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using DG.Tweening;
 
 public class CombatManager : MonoBehaviour
 {
@@ -17,6 +18,10 @@ public class CombatManager : MonoBehaviour
     public TextMeshProUGUI turnText;
     public TextMeshProUGUI detailTurnText;
 
+    [Header("DOTween UI Settings")]
+    public float turnTypingSpeed = 0.05f;
+    private Sequence turnTypingSequence;
+
     [Header("Enemies")]
     public List<ScriptableEnemy> enemyTemplates = new List<ScriptableEnemy>();
     public List<EnemyInstance> activeEnemies = new List<EnemyInstance>();
@@ -27,13 +32,13 @@ public class CombatManager : MonoBehaviour
     private List<EnemyDisplay> spawnedDisplays = new List<EnemyDisplay>();
 
     [Header("Effect Spawn Locations")]
-    [Tooltip("ตำแหน่งที่ต้องการให้เกิดเอฟเฟกต์ Get Hit (เมื่อผู้เล่นโดนโจมตี)")]
+    [Tooltip("˹觷ͧԴͿ࿡ Get Hit (ͼⴹ)")]
     public Transform getHitSpawnLocation;
 
-    [Tooltip("ตำแหน่งที่ต้องการให้เกิดเอฟเฟกต์ Sword (ดาบเดี่ยว) *หากว่างไว้ ระบบจะสปอว์นที่ตัวศัตรูเป้าหมายโดยอัตโนมัติ")]
+    [Tooltip("˹觷ͧԴͿ࿡ Sword (Һ) *ҡҧ кʻ칷ѵѵѵ")]
     public Transform swordSpawnLocation;
 
-    [Tooltip("ตำแหน่งที่ต้องการให้เกิดเอฟเฟกต์ Great Sword (ดาบใหญ่หมู่) *เช่น จุดกึ่งกลางหน้าจอ")]
+    [Tooltip("˹觷ͧԴͿ࿡ Great Sword (Һ˭) * ش觡ҧ˹Ҩ")]
     public Transform greatSwordSpawnLocation;
 
     [System.Serializable]
@@ -69,57 +74,38 @@ public class CombatManager : MonoBehaviour
 
     private void Start()
     {
-        // สำหรับทดสอบ เริ่มการต่อสู้หากมีการตั้งค่า Template ไว้ล่วงหน้าและไม่มี MapManager ทำงานอยู่
+        // Ѻͺ õҡաõ駤 Template ǧ˹ MapManager ӧҹ
         if (MapManager.Instance == null && enemyTemplates.Count > 0)
         {
             StartCombat(enemyTemplates, currentLevel);
         }
     }
 
-    private void Update()
+    public void AnimateTurnText(string turnStr, string detailStr)
     {
+        turnTypingSequence?.Kill();
+        turnTypingSequence = DOTween.Sequence();
+
         if (turnText != null)
         {
-            switch (currentState)
-            {
-                case CombatState.PlayerTurn:
-                    turnText.text = "Player Turn";
-                    break;
-                case CombatState.TargetSelection:
-                    turnText.text = "Player Turn";
-                    break;
-                case CombatState.EnemyTurn:
-                    turnText.text = "Enemy Turn";
-                    break;
-                case CombatState.Victory:
-                    turnText.text = "Victory!";
-                    break;
-                case CombatState.Defeat:
-                    turnText.text = "Defeat!";
-                    break;
-            }
+            turnText.text = "";
+            int turnLen = 0;
+            turnTypingSequence.Append(DOTween.To(() => turnLen, x => {
+                turnLen = x;
+                turnText.text = turnStr.Substring(0, turnLen);
+            }, turnStr.Length, turnStr.Length * turnTypingSpeed).SetEase(Ease.Linear));
         }
+
+        turnTypingSequence.AppendInterval(0.15f);
 
         if (detailTurnText != null)
         {
-            switch (currentState)
-            {
-                case CombatState.PlayerTurn:
-                    detailTurnText.text = "";
-                    break;
-                case CombatState.TargetSelection:
-                    detailTurnText.text = "Choose Target!";
-                    break;
-                case CombatState.Victory:
-                    detailTurnText.text = "";
-                    break;
-                case CombatState.Defeat:
-                    detailTurnText.text = "";
-                    break;
-                case CombatState.EnemyTurn:
-                    // ตั้งค่าแบบ Dynamic ใน EnemyTurnRoutine เพื่อแสดงรายละเอียดความเสียหาย
-                    break;
-            }
+            detailTurnText.text = "";
+            int detailLen = 0;
+            turnTypingSequence.Append(DOTween.To(() => detailLen, x => {
+                detailLen = x;
+                detailTurnText.text = detailStr.Substring(0, detailLen);
+            }, detailStr.Length, detailStr.Length * turnTypingSpeed).SetEase(Ease.Linear));
         }
     }
 
@@ -146,6 +132,7 @@ public class CombatManager : MonoBehaviour
         }
 
         currentState = CombatState.PlayerTurn;
+        AnimateTurnText("Player Turn", "");
         RefreshEnemyDisplays();
         Debug.Log($"Combat Started! Level {level}. {activeEnemies.Count} enemies spawned.");
     }
@@ -154,14 +141,14 @@ public class CombatManager : MonoBehaviour
     {
         if (enemyContainerParent == null || enemyDisplayPrefab == null) return;
 
-        // เคลียร์ UI เก่า
+        //  UI 
         foreach (var disp in spawnedDisplays)
         {
             if (disp != null) Destroy(disp.gameObject);
         }
         spawnedDisplays.Clear();
 
-        // สร้าง UI ใหม่ตามรายการศัตรู
+        // ҧ UI ¡ѵ
         for (int i = 0; i < activeEnemies.Count; i++)
         {
             GameObject obj = Instantiate(enemyDisplayPrefab, enemyContainerParent);
@@ -230,7 +217,7 @@ public class CombatManager : MonoBehaviour
             }
             Debug.Log($"GreatSword rolled! Dealing {greatSwordDmg} AoE damage to all enemies.");
 
-            // เรียกใช้งาน Spawn เอฟเฟกต์ดาบใหญ่หมู่ผ่าน ShogunEffectManager
+            // ¡ҹ Spawn Ϳ࿡Һ˭ҹ ShogunEffectManager
             if (ShogunEffectManager.Instance != null)
             {
                 Transform spawnPos = greatSwordSpawnLocation != null ? greatSwordSpawnLocation : this.transform;
@@ -240,7 +227,7 @@ public class CombatManager : MonoBehaviour
             DealAoEDamage(greatSwordDmg);
         }
 
-        // ตรวจสอบว่าศัตรูตายหมดจากการโจมตีหมู่หรือไม่ก่อนทำดาบเดี่ยว
+        // Ǩͺѵٵҡ͹ӴҺ
         if (CheckVictoryCondition()) return;
 
         // 3. Resolve Sword (Single Target Damage)
@@ -252,7 +239,7 @@ public class CombatManager : MonoBehaviour
                 pendingSwordDamage = Mathf.RoundToInt(pendingSwordDamage * (1f + GameDataManager.Instance.GetDamageBonus()));
             }
 
-            // หากเหลือศัตรูตัวเดียว ระบบจะล็อคเป้าหมายและโจมตีให้อัตโนมัติ
+            // ҡѵٵ кͤѵѵ
             if (activeEnemies.Count == 1)
             {
                 ExecuteSwordAttack(0);
@@ -260,13 +247,14 @@ public class CombatManager : MonoBehaviour
             else
             {
                 currentState = CombatState.TargetSelection;
+                AnimateTurnText("Player Turn", "Choose Target!");
                 UpdateAllDisplayVisuals();
                 Debug.Log($"Sword rolled! Pending {pendingSwordDamage} damage. Please click/select an enemy to target.");
             }
         }
         else
         {
-            // หากไม่มีดาบเดี่ยวค้างอยู่ ให้ส่งต่อเทิร์นไปหาศัตรูทันที
+            // ҡմҺǤҧ 觵ѵٷѹ
             StartCoroutine(EnemyTurnRoutine());
         }
     }
@@ -296,7 +284,7 @@ public class CombatManager : MonoBehaviour
 
         Debug.Log($"Attacking enemy {activeEnemies[index].data.enemyName} for {pendingSwordDamage} Sword damage.");
 
-        // เรียกใช้งาน Spawn เอฟเฟกต์ดาบเดี่ยวผ่าน ShogunEffectManager
+        // ¡ҹ Spawn Ϳ࿡ҺǼҹ ShogunEffectManager
         if (ShogunEffectManager.Instance != null)
         {
             Transform spawnPos = swordSpawnLocation;
@@ -309,7 +297,7 @@ public class CombatManager : MonoBehaviour
                 }
             }
 
-            // ถ้ามีพิกัดการเกิด จะสปอว์น ณ พิกัดนั้น แต่หากไม่มีจะใช้พิกัดเริ่มต้น (Default) ที่ถูก Assign ไว้ในตัวจัดการ
+            // վԡѴԴ ʻ  ԡѴ ҡըԡѴ (Default) ١ Assign 㹵ǨѴ
             if (spawnPos != null)
             {
                 ShogunEffectManager.Instance.SpawnSwordEffect(spawnPos);
@@ -352,7 +340,7 @@ public class CombatManager : MonoBehaviour
 
         if (enemy.currentHP <= 0)
         {
-            // ศัตรูพ่ายแพ้! มอบรางวัลให้ผู้เล่น
+            // ѵپ! ͺҧ
             if (PlayerStats.Instance != null)
             {
                 PlayerStats.Instance.coins += enemy.data.coin;
@@ -373,6 +361,7 @@ public class CombatManager : MonoBehaviour
         if (activeEnemies.Count == 0)
         {
             currentState = CombatState.Victory;
+            AnimateTurnText("Victory!", "");
             nextlevel = true;
             RefreshEnemyDisplays();
             Debug.Log("Victory! All enemies defeated. nextlevel set to true.");
@@ -388,10 +377,8 @@ public class CombatManager : MonoBehaviour
     private IEnumerator EnemyTurnRoutine()
     {
         currentState = CombatState.EnemyTurn;
-        if (detailTurnText != null)
-        {
-            detailTurnText.text = "Preparing to attack...";
-        }
+        AnimateTurnText("Enemy Turn", "Preparing to attack...");
+        
         if (PlayerStats.Instance != null)
         {
             PlayerStats.Instance.isplayerturn = false;
@@ -400,12 +387,12 @@ public class CombatManager : MonoBehaviour
 
         yield return new WaitForSeconds(1f);
 
-        // ดำเนินเทิร์นของศัตรูแต่ละตัว
+        // Թ칢ͧѵе
         for (int i = 0; i < activeEnemies.Count; i++)
         {
             EnemyInstance enemy = activeEnemies[i];
 
-            // ตรวจสอบว่าผู้เล่นพ่ายแพ้ก่อนศัตรูโจมตีหรือไม่
+            // ǨͺҼ蹾͹ѵ
             if (PlayerStats.Instance != null && PlayerStats.Instance.currentHP <= 0)
             {
                 break;
@@ -420,20 +407,20 @@ public class CombatManager : MonoBehaviour
             {
                 if (PlayerStats.Instance != null)
                 {
-                    // เช็คว่าผู้เล่นมีเกราะ (Shield) เหลืออยู่หรือไม่ก่อนโดนโจมตี
+                    // Ҽ (Shield) ͹ⴹ
                     bool hasShield = PlayerStats.Instance.currentShield > 0;
 
                     PlayerStats.Instance.TakeDamage(dmgPerHit);
 
-                    // สร้างเอฟเฟกต์โดนโจมตี (Get Hit) ผ่าน ShogunEffectManager
+                    // ҧͿ࿡ⴹ (Get Hit) ҹ ShogunEffectManager
                     if (ShogunEffectManager.Instance != null)
                     {
                         Transform spawnPos = getHitSpawnLocation != null ? getHitSpawnLocation : this.transform;
-                        // ตั้งตำแหน่งชั่วคราวให้เกิดที่ Target (ผู้เล่น) 
+                        // 駵˹觪ǤԴ Target () 
                         ShogunEffectManager.Instance.SpawnGetHitEffect();
                     }
 
-                    // เล่นเสียงโดนโจมตีตามเงื่อนไขเกราะป้องกัน
+                    // §ⴹյ͹лͧѹ
                     if (AudioManager.Instance != null)
                     {
                         if (hasShield)
@@ -446,29 +433,31 @@ public class CombatManager : MonoBehaviour
                         }
                     }
                 }
-                if (detailTurnText != null)
-                {
-                    detailTurnText.text = $"{enemy.data.enemyName} Hit ({hit + 1}/{totalHits}): -{dmgPerHit} HP";
-                }
-                yield return new WaitForSeconds(0.4f); // หน่วงเวลาเล็กน้อยเพื่อให้ผู้เล่นสังเกตเห็นการโจมตี
+                
+                AnimateTurnText("Enemy Turn", $"{enemy.data.enemyName} Hit ({hit + 1}/{totalHits}): -{dmgPerHit} HP");
+                
+                yield return new WaitForSeconds(0.4f); // ˹ǧ硹ѧࡵ繡
             }
 
-            // เพิ่มความแรงในการโจมตีครั้งต่อไปอีก 1.2 เท่าต่อรอบ
+            // ç㹡դ駵ա 1.2 ҵͺ
             enemy.damageMultiplier *= 1.2f;
         }
 
-        // ตรวจสอบสถานะการพ่ายแพ้ของผู้เล่น -> upstat = true
+        // ǨͺʶҹСþͧ -> upstat = true
         if (PlayerStats.Instance != null && PlayerStats.Instance.currentHP <= 0)
         {
             currentState = CombatState.Defeat;
+            AnimateTurnText("Defeat!", "");
             upstat = true;
             UpdateAllDisplayVisuals();
             Debug.Log("Player defeated! upstat set to true.");
         }
         else
         {
-            // ย้อนกลับมายังเทิร์นของผู้เล่น
+            // ͹Ѻѧ칢ͧ
             currentState = CombatState.PlayerTurn;
+            AnimateTurnText("Player Turn", "");
+            
             if (PlayerStats.Instance != null)
             {
                 PlayerStats.Instance.isplayerturn = true;
