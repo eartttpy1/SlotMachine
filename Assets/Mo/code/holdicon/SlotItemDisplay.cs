@@ -157,12 +157,10 @@ public class SlotItemDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExit
                 {
                     PlayerStats.Instance.coins -= price;
 
-                    // เอา GetCurrentValue ไปบวกเพิ่มใน basevalue ของแต่ละชิ้นเลย เพื่อเป็นการอัพเดทค่าตามการ upgrade
-                    int increment = iconData.GetUpgradeIncrement();
-                    iconData.baseValue += increment;
+                    // ไม่แก้ไข baseValue ตรงๆ ให้ใช้ค่าที่คิดจากข้างนอก (GetCurrentValue) แทนเพื่อไม่ให้ส่งผลกระทบกับตอนเริ่มใหม่
                     iconData.countUpgrade++;
 
-                    Debug.Log($"Upgraded {iconData.SymbolName}! New baseValue: {iconData.baseValue}, Level: {iconData.countUpgrade}");
+                    Debug.Log($"Upgraded {iconData.SymbolName}! New calculated value: {iconData.GetCurrentValue()}, Level: {iconData.countUpgrade}");
 
                     UpdateVisuals();
                     // อัปเดตข้อมูลคำอธิบายและราคาทันทีหลังซื้อ

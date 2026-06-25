@@ -31,8 +31,7 @@ public class SlotIconData : SlotSymbolData
     [TextArea] public string upgradeDescription;
 
     public int GetUpgradeIncrement() {
-        // upgradeMultiplier is 20, meaning 20%
-        float increment = baseValue * (upgradeMultiplier / 100f);
+        float increment = GetCurrentValue() * (upgradeMultiplier / 100f);
         return Mathf.Max(1, Mathf.RoundToInt(increment)); // Ensure it increases by at least 1
     }
 
@@ -41,25 +40,16 @@ public class SlotIconData : SlotSymbolData
     }
 
     public int GetCurrentValue() {
-        return baseValue;
-    }
-
-    [System.NonSerialized] private int initialBaseValue;
-    [System.NonSerialized] private bool hasCached = false;
-
-    public void CacheInitialValue() {
-        if (!hasCached) {
-            initialBaseValue = baseValue;
-            hasCached = true;
+        int val = baseValue;
+        for (int i = 0; i < countUpgrade; i++) {
+            float increment = val * (upgradeMultiplier / 100f);
+            val += Mathf.Max(1, Mathf.RoundToInt(increment));
         }
+        return val;
     }
 
     public void ResetToDefault() {
-        if (hasCached) {
-            baseValue = initialBaseValue;
-            countUpgrade = 0;
-            hasCached = false;
-        }
+        countUpgrade = 0;
     }
 
     private void OnDisable() {

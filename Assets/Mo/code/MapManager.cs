@@ -113,6 +113,7 @@ public class MapManager : MonoBehaviour
         if (canvasWin != null) canvasWin.SetActive(false);
         if (canvasLose != null) canvasLose.SetActive(false);
         if (afterEnemyDieObject != null) afterEnemyDieObject.SetActive(false);
+        if (starticon != null) starticon.SetActive(true);
 
         // Deactivate all map UIs initially
         DeactivateAllMapObjects();

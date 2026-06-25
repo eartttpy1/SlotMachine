@@ -45,7 +45,6 @@ public class PlayerStats : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
-            CacheAllInitialValues();
         }
         else
         {
@@ -193,14 +192,7 @@ public class PlayerStats : MonoBehaviour
         }
     }
 
-    private void CacheAllInitialValues()
-    {
-        SlotIconData[] icons = Resources.FindObjectsOfTypeAll<SlotIconData>();
-        foreach (var icon in icons)
-        {
-            icon.CacheInitialValue();
-        }
-    }
+
 
     public void ResetAllScriptableObjects()
     {

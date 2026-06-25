@@ -24,12 +24,12 @@ public class GameDataManager : MonoBehaviour
 
     public float GetDamageReduction()
     {
-        return damageReductionStat != null ? damageReductionStat.CurrentBaseValue : 0f;
+        return damageReductionStat != null ? (damageReductionStat.CurrentBaseValue / 100f) : 0f;
     }
 
     public float GetDamageBonus()
     {
-        return damageBonusStat != null ? damageBonusStat.CurrentBaseValue : 0f;
+        return damageBonusStat != null ? (damageBonusStat.CurrentBaseValue / 100f) : 0f;
     }
 
     public int GetMaxHP()
