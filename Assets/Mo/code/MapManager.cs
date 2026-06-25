@@ -145,6 +145,14 @@ public class MapManager : MonoBehaviour
             goNextLevelButton.gameObject.SetActive(true);
         }
 
+        // Reset spin button to be active and interactable for the new game
+        if (slotMachine != null && slotMachine.spinButton != null)
+        {
+            slotMachine.spinButton.SetActive(true);
+            var btn = slotMachine.spinButton.GetComponent<UnityEngine.UI.Button>();
+            if (btn != null) btn.interactable = true;
+        }
+
         UpdateMapUI();
         Debug.Log("Game started. Press Go Next Level to load Level 1.");
     }

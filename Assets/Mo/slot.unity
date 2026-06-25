@@ -12397,7 +12397,7 @@ MonoBehaviour:
   shieldSlider: {fileID: 2048493738}
   ticket67: 5
   ticket67Text: {fileID: 514203022}
-  coins: 100
+  coins: 0
   coinsText: {fileID: 1330389728}
 --- !u!114 &209171455186652311
 MonoBehaviour:

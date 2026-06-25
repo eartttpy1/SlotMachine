@@ -37,7 +37,7 @@ public class PlayerStats : MonoBehaviour
     public TextMeshProUGUI ticket67Text;
 
     [Header("Gacha Currency")]
-    public int coins = 100;
+    public int coins = 0;
     public TextMeshProUGUI coinsText;
 
     private Dictionary<SlotSymbol, int> upgradeLevels = new Dictionary<SlotSymbol, int>();
