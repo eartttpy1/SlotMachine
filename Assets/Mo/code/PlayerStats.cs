@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections.Generic;
 
 public class PlayerStats : MonoBehaviour
 {
@@ -39,6 +40,27 @@ public class PlayerStats : MonoBehaviour
     public int coins = 100;
     public TextMeshProUGUI coinsText;
 
+    private Dictionary<SlotSymbol, int> upgradeLevels = new Dictionary<SlotSymbol, int>();
+
+    public int GetUpgradeLevel(SlotSymbol symbol)
+    {
+        if (upgradeLevels.TryGetValue(symbol, out int lv))
+        {
+            return lv;
+        }
+        return 0;
+    }
+
+    public void SetUpgradeLevel(SlotSymbol symbol, int level)
+    {
+        upgradeLevels[symbol] = level;
+    }
+
+    public void ResetUpgradeLevels()
+    {
+        upgradeLevels.Clear();
+    }
+
     private void Awake()
     {
         if (Instance == null)
@@ -59,6 +81,9 @@ public class PlayerStats : MonoBehaviour
 
     public void Update()
     {
+        currentHP = Mathf.Clamp(currentHP, 0, maxHP);
+        currentShield = Mathf.Clamp(currentShield, 0, maxShield);
+
         if (currentHP <= 0 && MapManager.Instance != null)
         {
             MapManager.Instance.TriggerLose();
@@ -161,6 +186,7 @@ public class PlayerStats : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
+        damage = Mathf.Max(0, damage);
         if (currentShield > 0)
         {
             if (currentShield >= damage)
@@ -180,7 +206,7 @@ public class PlayerStats : MonoBehaviour
             if (GameDataManager.Instance != null)
             {
                 float reduction = GameDataManager.Instance.GetDamageReduction();
-                damage = Mathf.RoundToInt(damage * (1f - reduction));
+                damage = Mathf.Max(0, Mathf.RoundToInt(damage * (1f - reduction)));
             }
             currentHP = Mathf.Max(0, currentHP - damage);
         }
@@ -201,6 +227,7 @@ public class PlayerStats : MonoBehaviour
         {
             icon.ResetToDefault();
         }
+        ResetUpgradeLevels();
     }
 
     private void OnDestroy()

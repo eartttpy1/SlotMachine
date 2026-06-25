@@ -26,7 +26,24 @@ public class SlotIconData : SlotSymbolData
 
     [Header("Shop Progression")]
     public int baseUpgradePrice = 10;
-    public int countUpgrade = 0;
+    public int countUpgrade 
+    {
+        get 
+        {
+            if (PlayerStats.Instance != null)
+            {
+                return PlayerStats.Instance.GetUpgradeLevel(symbolType);
+            }
+            return 0;
+        }
+        set 
+        {
+            if (PlayerStats.Instance != null)
+            {
+                PlayerStats.Instance.SetUpgradeLevel(symbolType, value);
+            }
+        }
+    }
     public int upgradeMultiplier = 20;
     [TextArea] public string upgradeDescription;
 

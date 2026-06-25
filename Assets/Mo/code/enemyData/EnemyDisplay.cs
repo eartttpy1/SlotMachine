@@ -57,6 +57,31 @@ public class EnemyDisplay : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
         }
     }
 
+    private bool wasTargetSelecting = false;
+
+    private void Update()
+    {
+        if (CombatManager.Instance != null && CombatManager.Instance.currentState == CombatManager.CombatState.TargetSelection)
+        {
+            if (borderImage != null)
+            {
+                borderImage.gameObject.SetActive(true);
+                float lerpVal = Mathf.PingPong(Time.time * 5f, 1f); // 5f controls the speed of flashing
+                borderImage.color = Color.Lerp(Color.red, Color.white, lerpVal);
+            }
+            wasTargetSelecting = true;
+        }
+        else if (wasTargetSelecting)
+        {
+            wasTargetSelecting = false;
+            if (borderImage != null)
+            {
+                borderImage.gameObject.SetActive(false);
+                borderImage.color = Color.white;
+            }
+        }
+    }
+
     public void OnPointerEnter(PointerEventData eventData)
     {
         if (borderImage != null)
@@ -64,7 +89,7 @@ public class EnemyDisplay : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
             borderImage.gameObject.SetActive(true);
             if (CombatManager.Instance != null && CombatManager.Instance.currentState == CombatManager.CombatState.TargetSelection)
             {
-                borderImage.color = Color.red; // Target select highlight
+                // Let Update handle the flashing color
             }
             else
             {
@@ -77,6 +102,10 @@ public class EnemyDisplay : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
     {
         if (borderImage != null)
         {
+            if (CombatManager.Instance != null && CombatManager.Instance.currentState == CombatManager.CombatState.TargetSelection)
+            {
+                return; // Keep border active and flashing
+            }
             borderImage.gameObject.SetActive(false);
         }
     }

@@ -159,6 +159,12 @@ public class SlotMachine : MonoBehaviour
     {
         if (isSpinning) return;
 
+        if (CombatManager.Instance != null && CombatManager.Instance.currentState == CombatManager.CombatState.TargetSelection)
+        {
+            Debug.LogWarning("กรุณาเลือกเป้าหมายการโจมตีก่อนทำการหมุนสล็อตครั้งถัดไป!");
+            return;
+        }
+
         bool isChestMap = false;
 
         // ป้องกันการหมุนซ้ำในด่าน Chest
