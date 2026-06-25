@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: TicketShopItem_
   m_EditorClassIdentifier: Assembly-CSharp::TicketShopItemData
   itemName: Ticket 67
-  itemSprite: {fileID: 21300000, guid: 7c469e4770011b54fa4b2092d16a50df, type: 3}
+  itemSprite: {fileID: 4995752898797507947, guid: 24b8a4f894dd9f6419fee00a8a1e5ca1, type: 3}
   amountTicket67: 1
   itemDescription: Get 1 ticket 67 for bet 067 mode after boss
   price: 10
