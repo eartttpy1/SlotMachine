@@ -23,6 +23,14 @@ public class CombatManager : MonoBehaviour
     public float turnTypingDuration = 0.2f;
     private Sequence turnTypingSequence;
 
+    [Header("Combat Delays")]
+    [Tooltip("เวลาหน่วงก่อนที่ศัตรูตัวแรกจะเริ่มโจมตี")]
+    public float delayBeforeEnemyAttack = 1.0f;
+    [Tooltip("เวลาหน่วงระหว่างการโจมตีแต่ละ Hit ของศัตรู")]
+    public float delayBetweenEnemyHits = 0.5f;
+    [Tooltip("เวลาหน่วงระหว่างที่ศัตรูแต่ละตัวสลับกันโจมตี")]
+    public float delayBetweenEnemies = 0.8f;
+
     [Header("Enemies")]
     public List<ScriptableEnemy> enemyTemplates = new List<ScriptableEnemy>();
     public List<EnemyInstance> activeEnemies = new List<EnemyInstance>();
@@ -268,7 +276,7 @@ public class CombatManager : MonoBehaviour
     {
         for (int i = activeEnemies.Count - 1; i >= 0; i--)
         {
-            DamageEnemy(i, dmg);
+            DamageEnemy(i, dmg, isGreatSword: true);
         }
     }
 
@@ -311,7 +319,7 @@ public class CombatManager : MonoBehaviour
             }
         }
 
-        DamageEnemy(index, pendingSwordDamage);
+        DamageEnemy(index, pendingSwordDamage, isGreatSword: false);
         pendingSwordDamage = 0;
 
         if (!CheckVictoryCondition())
@@ -328,7 +336,7 @@ public class CombatManager : MonoBehaviour
         }
     }
 
-    private void DamageEnemy(int index, int damage)
+    private void DamageEnemy(int index, int damage, bool isGreatSword = false)
     {
         if (index < 0 || index >= activeEnemies.Count) return;
 
@@ -339,6 +347,14 @@ public class CombatManager : MonoBehaviour
         if (spawnedDisplays.Count > index && spawnedDisplays[index] != null)
         {
             spawnedDisplays[index].PlayImpactAnimation();
+            if (isGreatSword)
+            {
+                spawnedDisplays[index].PlayGreatSwordHitAnimation();
+            }
+            else
+            {
+                spawnedDisplays[index].PlaySwordHitAnimation();
+            }
         }
 
         if (enemy.currentHP <= 0)
@@ -387,7 +403,7 @@ public class CombatManager : MonoBehaviour
         }
         UpdateAllDisplayVisuals();
 
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(delayBeforeEnemyAttack);
 
         for (int i = 0; i < activeEnemies.Count; i++)
         {
@@ -426,11 +442,17 @@ public class CombatManager : MonoBehaviour
                 // สั่งพิมพ์ข้อความด้วยความเร็วล็อกวินาทีคงที่ (เช่น 0.2 วินาที)
                 AnimateTurnText("Enemy Turn", $"{enemy.data.enemyName} Hit ({hit + 1}/{totalHits}): -{dmgPerHit} HP");
 
-                // โค้ดเดิมรอ 0.4 วินาที ตอนนี้ตัวหนังสือพิมพ์เสร็จตั้งแต่ 0.2 วินาทีแรกแล้ว จะเหลือเวลาอีก 0.2 วินาทีให้ผู้เล่นได้อ่านพอดีเป๊ะ ไม่โดนข้าม!
-                yield return new WaitForSeconds(0.4f);
+                // หน่วงเวลาระหว่างการโจมตีแต่ละ hit
+                yield return new WaitForSeconds(delayBetweenEnemyHits);
             }
 
             enemy.damageMultiplier *= 1.2f;
+
+            // หน่วงเวลาระหว่างสลับตัวศัตรูในการโจมตี (ถ้ายังเหลือศัตรูตัวถัดไป)
+            if (i < activeEnemies.Count - 1)
+            {
+                yield return new WaitForSeconds(delayBetweenEnemies);
+            }
         }
 
         if (PlayerStats.Instance != null && PlayerStats.Instance.currentHP <= 0)
@@ -451,6 +473,19 @@ public class CombatManager : MonoBehaviour
                 PlayerStats.Instance.isplayerturn = true;
             }
             UpdateAllDisplayVisuals();
+
+            // Reactivate spin button for the next player turn
+            if (MapManager.Instance != null && MapManager.Instance.slotMachine != null)
+            {
+                GameObject spinBtn = MapManager.Instance.slotMachine.spinButton;
+                if (spinBtn != null)
+                {
+                    spinBtn.SetActive(true);
+                    var btn = spinBtn.GetComponent<UnityEngine.UI.Button>();
+                    if (btn != null) btn.interactable = true;
+                }
+            }
+
             Debug.Log("Player turn starts! Roll slot 1 time.");
         }
     }

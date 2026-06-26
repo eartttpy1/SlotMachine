@@ -70,6 +70,11 @@ public class SlotItemDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExit
     {
         if (borderObject != null) borderObject.gameObject.SetActive(true);
 
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.PlayButtonHover();
+        }
+
         // ส่งข้อมูลไปยัง Panel แสดงคำอธิบายส่วนกลาง
         if (DescriptionPanel.Instance != null && symbolData != null)
         {
@@ -142,6 +147,11 @@ public class SlotItemDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExit
     public void OnPointerClick(PointerEventData eventData)
     {
         if (!isUpgradeShop) return;
+
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.PlayButtonClick();
+        }
 
         if (PlayerStats.Instance == null) return;
 

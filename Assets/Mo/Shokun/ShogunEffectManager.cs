@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// ShogunEffectManager จัดการการสร้างเอฟเฟกต์ (VFX) ในการต่อสู้
-/// โดยอิงจาก Prefab และตำแหน่งเกิด (Transform) ที่กำหนดไว้ล่วงหน้า
+/// ShogunEffectManager ๏ฟฝัด๏ฟฝ๏ฟฝรก๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝาง๏ฟฝอฟเฟก๏ฟฝ๏ฟฝ (VFX) ในก๏ฟฝรต๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ
+/// ๏ฟฝ๏ฟฝ๏ฟฝิง๏ฟฝาก Prefab ๏ฟฝ๏ฟฝะต๏ฟฝ๏ฟฝหน๏ฟฝ๏ฟฝิด (Transform) ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝหน๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝวงหน๏ฟฝ๏ฟฝ
 /// </summary>
 public class ShogunEffectManager : MonoBehaviour
 {
@@ -13,10 +13,10 @@ public class ShogunEffectManager : MonoBehaviour
     [System.Serializable]
     public class EffectGroup
     {
-        [Tooltip("เอฟเฟกต์ Prefab ที่ต้องการให้สปอว์น")]
+        [Tooltip("๏ฟฝอฟเฟก๏ฟฝ๏ฟฝ Prefab ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝอง๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝสป๏ฟฝ๏ฟฝ๏ฟฝ")]
         public GameObject effectPrefab;
 
-        [Tooltip("GameObject หรือตำแหน่งพิกัดที่ต้องการให้เอฟเฟกต์นี้ไปเกิด")]
+        [Tooltip("GameObject ๏ฟฝ๏ฟฝ๏ฟฝอต๏ฟฝ๏ฟฝหน่งพิกัด๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝอง๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝอฟเฟก๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝิด")]
         public Transform spawnLocation;
     }
 
@@ -42,7 +42,7 @@ public class ShogunEffectManager : MonoBehaviour
     }
 
     /// <summary>
-    /// สปอว์นเอฟเฟกต์เมื่อตัวละครโดนโจมตี (Get Hit) ตามตำแหน่ง GameObject ที่ตั้งค่าไว้
+    /// สป๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝอฟเฟก๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝอต๏ฟฝ๏ฟฝ๏ฟฝะค๏ฟฝโดน๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ (Get Hit) ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝหน๏ฟฝ GameObject ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ้งค๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ
     /// </summary>
     public void SpawnGetHitEffect()
     {
@@ -50,7 +50,7 @@ public class ShogunEffectManager : MonoBehaviour
     }
 
     /// <summary>
-    /// สปอว์นเอฟเฟกต์ดาบเดี่ยว (Sword) ตามตำแหน่ง GameObject ที่ตั้งค่าไว้
+    /// สป๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝอฟเฟก๏ฟฝ๏ฟฝาบ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ (Sword) ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝหน๏ฟฝ GameObject ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ้งค๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ
     /// </summary>
     public void SpawnSwordEffect()
     {
@@ -58,7 +58,7 @@ public class ShogunEffectManager : MonoBehaviour
     }
 
     /// <summary>
-    /// สปอว์นเอฟเฟกต์ดาบเดี่ยว (Sword) แบบระบุตำแหน่งปลายทาง (เช่น ตัวศัตรูที่ถูกเลือก)
+    /// สป๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝอฟเฟก๏ฟฝ๏ฟฝาบ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ (Sword) แบบ๏ฟฝะบุต๏ฟฝ๏ฟฝหน่งป๏ฟฝ๏ฟฝยทาง (๏ฟฝ๏ฟฝ ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝัต๏ฟฝูท๏ฟฝ๏ฟฝูก๏ฟฝ๏ฟฝ๏ฟฝอก)
     /// </summary>
     public void SpawnSwordEffect(Transform customLocation)
     {
@@ -70,7 +70,7 @@ public class ShogunEffectManager : MonoBehaviour
 
         if (swordEffect == null || swordEffect.effectPrefab == null)
         {
-            Debug.LogWarning($"[ShogunEffectManager] ไม่สามารถสปอว์นได้เนื่องจากลืมใส่ Sword Effect Prefab!");
+            Debug.LogWarning($"[ShogunEffectManager] ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝรถสป๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝอง๏ฟฝาก๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ Sword Effect Prefab!");
             return;
         }
 
@@ -78,7 +78,7 @@ public class ShogunEffectManager : MonoBehaviour
     }
 
     /// <summary>
-    /// สปอว์นเอฟเฟกต์ดาบใหญ่หมู่ (Great Sword) ตามตำแหน่ง GameObject ที่ตั้งค่าไว้
+    /// สป๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝอฟเฟก๏ฟฝ๏ฟฝาบ๏ฟฝหญ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ (Great Sword) ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝหน๏ฟฝ GameObject ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ้งค๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ
     /// </summary>
     public void SpawnGreatSwordEffect()
     {
@@ -86,7 +86,7 @@ public class ShogunEffectManager : MonoBehaviour
     }
 
     /// <summary>
-    /// สปอว์นเอฟเฟกต์ดาบใหญ่หมู่ (Great Sword) แบบระบุตำแหน่งแสดงผลชั่วคราว
+    /// สป๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝอฟเฟก๏ฟฝ๏ฟฝาบ๏ฟฝหญ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ (Great Sword) แบบ๏ฟฝะบุต๏ฟฝ๏ฟฝหน๏ฟฝ๏ฟฝสด๏ฟฝ๏ฟฝลช๏ฟฝ๏ฟฝวค๏ฟฝ๏ฟฝ๏ฟฝ
     /// </summary>
     public void SpawnGreatSwordEffect(Transform customLocation)
     {
@@ -98,15 +98,15 @@ public class ShogunEffectManager : MonoBehaviour
 
         if (greatSwordEffect == null || greatSwordEffect.effectPrefab == null)
         {
-            Debug.LogWarning($"[ShogunEffectManager] ไม่สามารถสปอว์นได้เนื่องจากลืมใส่ Great Sword Effect Prefab!");
+            Debug.LogWarning($"[ShogunEffectManager] ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝรถสป๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝอง๏ฟฝาก๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ Great Sword Effect Prefab!");
             return;
         }
 
         Instantiate(greatSwordEffect.effectPrefab, customLocation.position, customLocation.rotation);
     }
-
+    
     /// <summary>
-    /// ฟังก์ชันภายในสำหรับการ Instantiate เอฟเฟกต์และตรวจสอบความถูกต้องของข้อมูล
+    /// ๏ฟฝัง๏ฟฝ๏ฟฝัน๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝับ๏ฟฝ๏ฟฝ๏ฟฝ Instantiate ๏ฟฝอฟเฟก๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝะต๏ฟฝวจ๏ฟฝอบ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝูก๏ฟฝ๏ฟฝอง๏ฟฝอง๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ
     /// </summary>
     private void SpawnEffect(EffectGroup group)
     {
@@ -114,17 +114,17 @@ public class ShogunEffectManager : MonoBehaviour
 
         if (group.effectPrefab == null)
         {
-            Debug.LogWarning($"[ShogunEffectManager] ไม่สามารถสปอว์นได้เนื่องจากลืมใส่ Effect Prefab!");
+            Debug.LogWarning($"[ShogunEffectManager] ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝรถสป๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝอง๏ฟฝาก๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ Effect Prefab!");
             return;
         }
 
         if (group.spawnLocation == null)
         {
-            Debug.LogWarning($"[ShogunEffectManager] ไม่สามารถสปอว์น {group.effectPrefab.name} ได้เนื่องจากลืมตั้งค่า Spawn Location GameObject!");
+            Debug.LogWarning($"[ShogunEffectManager] ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝรถสป๏ฟฝ๏ฟฝ๏ฟฝ {group.effectPrefab.name} ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝอง๏ฟฝาก๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ้งค๏ฟฝ๏ฟฝ Spawn Location GameObject!");
             return;
         }
 
-        // สปอว์น Instance ออกมาตามพิกัดและตำแหน่งที่ถูกกำหนดไว้โดย GameObject นั้นๆ
+        // สป๏ฟฝ๏ฟฝ๏ฟฝ Instance ๏ฟฝอก๏ฟฝาต๏ฟฝ๏ฟฝ๏ฟฝิกัด๏ฟฝ๏ฟฝะต๏ฟฝ๏ฟฝหน่งท๏ฟฝ๏ฟฝูก๏ฟฝ๏ฟฝหน๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ GameObject ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ
         Instantiate(group.effectPrefab, group.spawnLocation.position, group.spawnLocation.rotation);
     }
 }

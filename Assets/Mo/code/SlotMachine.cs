@@ -223,6 +223,27 @@ public class SlotMachine : MonoBehaviour
             if (btn != null) btn.interactable = false;
         }
 
+        // Hide spinButton during combat on MonsterMap and BossMap
+        bool isCombatMap = false;
+        if (MapManager.Instance != null && MapManager.Instance.currentLevelIndex >= 0 && MapManager.Instance.levels != null)
+        {
+            if (MapManager.Instance.currentLevelIndex < MapManager.Instance.levels.Length)
+            {
+                ScriptableMap currentMap = MapManager.Instance.levels[MapManager.Instance.currentLevelIndex];
+                if (currentMap != null && (currentMap.mapType == MapType.MonsterMap || currentMap.mapType == MapType.Boss))
+                {
+                    isCombatMap = true;
+                }
+            }
+        }
+        if (isCombatMap && currentMode == SlotMachineMode.SlotIconData)
+        {
+            if (spinButton != null)
+            {
+                spinButton.SetActive(false);
+            }
+        }
+
         // เล่นเสียงเปิดกล่องสมบัติเมื่อกดสปินในด่าน Chest
         if (isChestMap && AudioManager.Instance != null)
         {

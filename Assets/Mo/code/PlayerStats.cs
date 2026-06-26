@@ -228,6 +228,25 @@ public class PlayerStats : MonoBehaviour
             icon.ResetToDefault();
         }
         ResetUpgradeLevels();
+
+        // Refresh UI displays in the scene
+        SlotItemDisplay[] displays = Resources.FindObjectsOfTypeAll<SlotItemDisplay>();
+        foreach (var display in displays)
+        {
+            if (display != null && display.gameObject != null && display.gameObject.scene.name != null)
+            {
+                display.UpdateVisuals();
+            }
+        }
+
+        UpStatDisplay[] upDisplays = Resources.FindObjectsOfTypeAll<UpStatDisplay>();
+        foreach (var display in upDisplays)
+        {
+            if (display != null && display.gameObject != null && display.gameObject.scene.name != null)
+            {
+                display.UpdateVisuals();
+            }
+        }
     }
 
     private void OnDestroy()

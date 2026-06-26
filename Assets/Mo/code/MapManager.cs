@@ -209,6 +209,8 @@ public class MapManager : MonoBehaviour
             if (slotMachine.spinButton != null)
             {
                 slotMachine.spinButton.SetActive(true);
+                var btn = slotMachine.spinButton.GetComponent<UnityEngine.UI.Button>();
+                if (btn != null) btn.interactable = true;
             }
         }
 

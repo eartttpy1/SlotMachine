@@ -15,8 +15,12 @@ public class AudioManager : MonoBehaviour
     [SerializeField] private AudioClip openChestSound;
 
     [Header("Player Hurt Sound Clips")]
-    [SerializeField] private AudioClip getHitSound;          // เสียงได้รับบาดเจ็บปกติ
-    [SerializeField] private AudioClip shieldHitSound;      // เสียงโดนตีแต่ติดเกราะ
+    [SerializeField] private AudioClip getHitSound;
+    [SerializeField] private AudioClip shieldHitSound;
+
+    [Header("UI Sound Clips")]
+    [SerializeField] private AudioClip buttonClickSound;
+    [SerializeField] private AudioClip buttonHoverSound;
 
     private void Awake()
     {
@@ -68,6 +72,22 @@ public class AudioManager : MonoBehaviour
         if (sfxSource != null && shieldHitSound != null)
         {
             sfxSource.PlayOneShot(shieldHitSound);
+        }
+    }
+
+    public void PlayButtonClick()
+    {
+        if (sfxSource != null && buttonClickSound != null)
+        {
+            sfxSource.PlayOneShot(buttonClickSound);
+        }
+    }
+
+    public void PlayButtonHover()
+    {
+        if (sfxSource != null && buttonHoverSound != null)
+        {
+            sfxSource.PlayOneShot(buttonHoverSound);
         }
     }
 }

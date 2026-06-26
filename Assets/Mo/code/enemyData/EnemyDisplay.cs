@@ -16,6 +16,10 @@ public class EnemyDisplay : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
     public float punchScaleStrength = 0.2f;
     public float punchDuration = 0.3f;
 
+    [Header("Hit Animations")]
+    public GameObject swordHitObject;
+    public GameObject greatSwordHitObject;
+
     private CombatManager.EnemyInstance associatedEnemy;
     private int enemyIndex;
 
@@ -63,8 +67,41 @@ public class EnemyDisplay : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
         }
     }
 
+    public void PlaySwordHitAnimation()
+    {
+        if (swordHitObject != null)
+        {
+            swordHitObject.SetActive(false);
+            swordHitObject.SetActive(true);
+            Animator anim = swordHitObject.GetComponent<Animator>();
+            if (anim != null)
+            {
+                anim.Play(0, -1, 0f);
+            }
+        }
+    }
+
+    public void PlayGreatSwordHitAnimation()
+    {
+        if (greatSwordHitObject != null)
+        {
+            greatSwordHitObject.SetActive(false);
+            greatSwordHitObject.SetActive(true);
+            Animator anim = greatSwordHitObject.GetComponent<Animator>();
+            if (anim != null)
+            {
+                anim.Play(0, -1, 0f);
+            }
+        }
+    }
+
     public void OnPointerClick(PointerEventData eventData)
     {
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.PlayButtonClick();
+        }
+
         if (CombatManager.Instance != null && CombatManager.Instance.currentState == CombatManager.CombatState.TargetSelection)
         {
             CombatManager.Instance.SelectEnemyTarget(enemyIndex);
@@ -98,6 +135,11 @@ public class EnemyDisplay : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
 
     public void OnPointerEnter(PointerEventData eventData)
     {
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.PlayButtonHover();
+        }
+
         if (borderImage != null)
         {
             borderImage.gameObject.SetActive(true);

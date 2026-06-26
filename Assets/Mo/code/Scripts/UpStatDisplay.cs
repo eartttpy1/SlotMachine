@@ -54,6 +54,10 @@ public class UpStatDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     public void OnPointerEnter(PointerEventData eventData)
     {
         if (borderObject != null) borderObject.gameObject.SetActive(true);
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.PlayButtonHover();
+        }
         ShowInfo();
     }
 
@@ -65,6 +69,11 @@ public class UpStatDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     public void OnPointerClick(PointerEventData eventData)
     {
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.PlayButtonClick();
+        }
+
         if (statData == null) return;
 
         int currentPoints = PlayerPrefs.GetInt("PlayerPoints", 500);
