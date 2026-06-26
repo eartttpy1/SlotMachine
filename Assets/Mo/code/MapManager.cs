@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -449,19 +450,35 @@ public class MapManager : MonoBehaviour
 
     public void TriggerWin()
     {
+        StartCoroutine(TriggerWinRoutine());
+    }
+
+    private IEnumerator TriggerWinRoutine()
+    {
         ConcludePoints(true);
-        if (canvasWin != null) canvasWin.SetActive(true);
         if (goNextLevelButton != null) goNextLevelButton.gameObject.SetActive(false);
         if (PlayerStats.Instance != null) PlayerStats.Instance.ResetAllScriptableObjects();
+        
+        yield return new WaitForSeconds(1.0f);
+        
+        if (canvasWin != null) canvasWin.SetActive(true);
         Debug.Log("WIN! 067 Jackpot reached!");
     }
 
     public void TriggerLose()
     {
+        StartCoroutine(TriggerLoseRoutine());
+    }
+
+    private IEnumerator TriggerLoseRoutine()
+    {
         ConcludePoints(false);
-        if (canvasLose != null) canvasLose.SetActive(true);
         if (goNextLevelButton != null) goNextLevelButton.gameObject.SetActive(false);
         if (PlayerStats.Instance != null) PlayerStats.Instance.ResetAllScriptableObjects();
+        
+        yield return new WaitForSeconds(1.0f);
+        
+        if (canvasLose != null) canvasLose.SetActive(true);
         Debug.Log("LOSE! Game Over.");
     }
 

@@ -28,6 +28,10 @@ public class EnemyDisplay : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
         associatedEnemy = enemy;
         enemyIndex = index;
         UpdateVisuals();
+
+        // Ensure hit animations are inactive on startup
+        if (swordHitObject != null) swordHitObject.SetActive(false);
+        if (greatSwordHitObject != null) greatSwordHitObject.SetActive(false);
     }
 
     public void UpdateVisuals()

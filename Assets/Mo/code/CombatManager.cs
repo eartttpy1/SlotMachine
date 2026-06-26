@@ -189,6 +189,11 @@ public class CombatManager : MonoBehaviour
             return;
         }
 
+        StartCoroutine(ResolvePlayerTurnRoutine(results));
+    }
+
+    private IEnumerator ResolvePlayerTurnRoutine(SlotSymbolData[] results)
+    {
         int swordCount = 0;
         int greatSwordCount = 0;
         int shieldCount = 0;
@@ -224,6 +229,7 @@ public class CombatManager : MonoBehaviour
             int shieldVal = (shieldCount == 3) ? (shieldData.baseValue * shieldData.match3Multiplier) : (shieldCount * shieldData.baseValue);
             PlayerStats.Instance.currentShield += shieldVal;
             Debug.Log($"Shield rolled! Added {shieldVal} shield. Total Shield: {PlayerStats.Instance.currentShield}");
+            yield return new WaitForSeconds(0.2f);
         }
 
         if (greatSwordCount > 0 && greatSwordData != null)
@@ -241,10 +247,29 @@ public class CombatManager : MonoBehaviour
                 ShogunEffectManager.Instance.SpawnGreatSwordEffect(spawnPos);
             }
 
-            DealAoEDamage(greatSwordDmg);
+            // Play animations on all enemies first
+            for (int i = 0; i < activeEnemies.Count; i++)
+            {
+                if (spawnedDisplays.Count > i && spawnedDisplays[i] != null)
+                {
+                    spawnedDisplays[i].PlayGreatSwordHitAnimation();
+                    spawnedDisplays[i].PlayImpactAnimation();
+                }
+            }
+
+            // Wait for GreatSword animation to land before reducing HP on UI
+            yield return new WaitForSeconds(0.5f);
+
+            // Apply damage to all enemies
+            for (int i = activeEnemies.Count - 1; i >= 0; i--)
+            {
+                DamageEnemy(i, greatSwordDmg);
+            }
+            
+            yield return new WaitForSeconds(0.3f);
         }
 
-        if (CheckVictoryCondition()) return;
+        if (CheckVictoryCondition()) yield break;
 
         if (swordCount > 0 && swordData != null)
         {
@@ -256,7 +281,7 @@ public class CombatManager : MonoBehaviour
 
             if (activeEnemies.Count == 1)
             {
-                ExecuteSwordAttack(0);
+                yield return StartCoroutine(ExecuteSwordAttackRoutine(0));
             }
             else
             {
@@ -269,14 +294,6 @@ public class CombatManager : MonoBehaviour
         else
         {
             StartCoroutine(EnemyTurnRoutine());
-        }
-    }
-
-    private void DealAoEDamage(int dmg)
-    {
-        for (int i = activeEnemies.Count - 1; i >= 0; i--)
-        {
-            DamageEnemy(i, dmg, isGreatSword: true);
         }
     }
 
@@ -293,7 +310,12 @@ public class CombatManager : MonoBehaviour
 
     private void ExecuteSwordAttack(int index)
     {
-        if (index < 0 || index >= activeEnemies.Count) return;
+        StartCoroutine(ExecuteSwordAttackRoutine(index));
+    }
+
+    private IEnumerator ExecuteSwordAttackRoutine(int index)
+    {
+        if (index < 0 || index >= activeEnemies.Count) yield break;
 
         Debug.Log($"Attacking enemy {activeEnemies[index].data.enemyName} for {pendingSwordDamage} Sword damage.");
 
@@ -319,7 +341,17 @@ public class CombatManager : MonoBehaviour
             }
         }
 
-        DamageEnemy(index, pendingSwordDamage, isGreatSword: false);
+        // Play animations on the targeted enemy first
+        if (spawnedDisplays.Count > index && spawnedDisplays[index] != null)
+        {
+            spawnedDisplays[index].PlaySwordHitAnimation();
+            spawnedDisplays[index].PlayImpactAnimation();
+        }
+
+        // Wait for Sword animation to land before reducing HP on UI
+        yield return new WaitForSeconds(0.4f);
+
+        DamageEnemy(index, pendingSwordDamage);
         pendingSwordDamage = 0;
 
         if (!CheckVictoryCondition())
@@ -336,26 +368,13 @@ public class CombatManager : MonoBehaviour
         }
     }
 
-    private void DamageEnemy(int index, int damage, bool isGreatSword = false)
+    private void DamageEnemy(int index, int damage)
     {
         if (index < 0 || index >= activeEnemies.Count) return;
 
         EnemyInstance enemy = activeEnemies[index];
         enemy.currentHP = Mathf.Max(0, enemy.currentHP - damage);
         Debug.Log($"Enemy {enemy.data.enemyName} HP: {enemy.currentHP}/{enemy.maxHP}");
-
-        if (spawnedDisplays.Count > index && spawnedDisplays[index] != null)
-        {
-            spawnedDisplays[index].PlayImpactAnimation();
-            if (isGreatSword)
-            {
-                spawnedDisplays[index].PlayGreatSwordHitAnimation();
-            }
-            else
-            {
-                spawnedDisplays[index].PlaySwordHitAnimation();
-            }
-        }
 
         if (enemy.currentHP <= 0)
         {
