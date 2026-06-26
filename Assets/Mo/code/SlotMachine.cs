@@ -430,15 +430,7 @@ public class SlotMachine : MonoBehaviour
                 }
             }
 
-            // เรียกเล่นเสียงดาบ
-            if (greatSwordsRolled > 0 && AudioManager.Instance != null)
-            {
-                AudioManager.Instance.PlayGreatSwordSound();
-            }
-            else if (swordsRolled > 0 && AudioManager.Instance != null)
-            {
-                AudioManager.Instance.PlaySwordSound();
-            }
+
 
             if (potionsRolled > 0)
             {

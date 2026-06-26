@@ -155,6 +155,11 @@ public class PlayerStats : MonoBehaviour
             currentHP = Mathf.Min(currentHP + healAmount, maxHP);
             Debug.Log($"Healed for {healAmount}! Potions left: {countpotion}, HP: {currentHP}/{maxHP}");
             UpdatePotionUI();
+
+            if (AudioManager.Instance != null)
+            {
+                AudioManager.Instance.PlayHealSound();
+            }
         }
     }
 

@@ -21,6 +21,7 @@ public class AudioManager : MonoBehaviour
     [Header("UI Sound Clips")]
     [SerializeField] private AudioClip buttonClickSound;
     [SerializeField] private AudioClip buttonHoverSound;
+    [SerializeField] private AudioClip healSound;
 
     private void Awake()
     {
@@ -88,6 +89,14 @@ public class AudioManager : MonoBehaviour
         if (sfxSource != null && buttonHoverSound != null)
         {
             sfxSource.PlayOneShot(buttonHoverSound);
+        }
+    }
+
+    public void PlayHealSound()
+    {
+        if (sfxSource != null && healSound != null)
+        {
+            sfxSource.PlayOneShot(healSound);
         }
     }
 }

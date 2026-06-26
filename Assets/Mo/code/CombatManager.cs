@@ -257,6 +257,11 @@ public class CombatManager : MonoBehaviour
                 }
             }
 
+            if (AudioManager.Instance != null)
+            {
+                AudioManager.Instance.PlayGreatSwordSound();
+            }
+
             // Wait for GreatSword animation to land before reducing HP on UI
             yield return new WaitForSeconds(0.5f);
 
@@ -346,6 +351,11 @@ public class CombatManager : MonoBehaviour
         {
             spawnedDisplays[index].PlaySwordHitAnimation();
             spawnedDisplays[index].PlayImpactAnimation();
+        }
+
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.PlaySwordSound();
         }
 
         // Wait for Sword animation to land before reducing HP on UI

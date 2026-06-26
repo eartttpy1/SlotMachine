@@ -101,14 +101,20 @@ public class EnemyDisplay : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (AudioManager.Instance != null)
-        {
-            AudioManager.Instance.PlayButtonClick();
-        }
-
         if (CombatManager.Instance != null && CombatManager.Instance.currentState == CombatManager.CombatState.TargetSelection)
         {
+            if (AudioManager.Instance != null)
+            {
+                AudioManager.Instance.PlaySwordSound();
+            }
             CombatManager.Instance.SelectEnemyTarget(enemyIndex);
+        }
+        else
+        {
+            if (AudioManager.Instance != null)
+            {
+                AudioManager.Instance.PlayButtonClick();
+            }
         }
     }
 
