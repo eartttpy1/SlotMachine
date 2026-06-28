@@ -16,12 +16,11 @@ MonoBehaviour:
   iconName: Shield
   iconSprite: {fileID: 21300000, guid: dbf73f40808fcfc4b97953c621a25e17, type: 3}
   skillDescription: grants 20 shield
-  iconBonusDescription: Bonus x3
+  iconBonusDescription: Bonus x5
   baseValue: 20
   match3Multiplier: 5
   isMultipleTargets: 0
   baseWeightRandom: 1
   baseUpgradePrice: 10
-  countUpgrade: 0
   upgradeMultiplier: 20
   upgradeDescription: Upgrade, +20% shield

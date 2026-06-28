@@ -16,12 +16,11 @@ MonoBehaviour:
   iconName: Great Sword
   iconSprite: {fileID: 21300000, guid: b6165d553bd1b8c4488e6005a560404b, type: 3}
   skillDescription: 20 damage to multiple targets
-  iconBonusDescription: Bonus x3
+  iconBonusDescription: Bonus x5
   baseValue: 20
   match3Multiplier: 5
   isMultipleTargets: 1
   baseWeightRandom: 1
   baseUpgradePrice: 10
-  countUpgrade: 0
   upgradeMultiplier: 20
   upgradeDescription: Upgrade, +20% damage

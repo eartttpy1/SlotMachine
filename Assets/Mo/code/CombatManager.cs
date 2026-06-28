@@ -226,7 +226,7 @@ public class CombatManager : MonoBehaviour
 
         if (shieldCount > 0 && shieldData != null && PlayerStats.Instance != null)
         {
-            int shieldVal = (shieldCount == 3) ? (shieldData.baseValue * shieldData.match3Multiplier) : (shieldCount * shieldData.baseValue);
+            int shieldVal = (shieldCount == 3) ? (shieldData.GetCurrentValue() * shieldData.match3Multiplier) : (shieldCount * shieldData.GetCurrentValue());
             PlayerStats.Instance.currentShield += shieldVal;
             Debug.Log($"Shield rolled! Added {shieldVal} shield. Total Shield: {PlayerStats.Instance.currentShield}");
             yield return new WaitForSeconds(0.2f);
@@ -234,7 +234,7 @@ public class CombatManager : MonoBehaviour
 
         if (greatSwordCount > 0 && greatSwordData != null)
         {
-            int greatSwordDmg = (greatSwordCount == 3) ? (greatSwordData.baseValue * greatSwordData.match3Multiplier) : (greatSwordCount * greatSwordData.baseValue);
+            int greatSwordDmg = (greatSwordCount == 3) ? (greatSwordData.GetCurrentValue() * greatSwordData.match3Multiplier) : (greatSwordCount * greatSwordData.GetCurrentValue());
             if (GameDataManager.Instance != null)
             {
                 greatSwordDmg = Mathf.RoundToInt(greatSwordDmg * (1f + GameDataManager.Instance.GetDamageBonus()));
@@ -278,7 +278,7 @@ public class CombatManager : MonoBehaviour
 
         if (swordCount > 0 && swordData != null)
         {
-            pendingSwordDamage = (swordCount == 3) ? (swordData.baseValue * swordData.match3Multiplier) : (swordCount * swordData.baseValue);
+            pendingSwordDamage = (swordCount == 3) ? (swordData.GetCurrentValue() * swordData.match3Multiplier) : (swordCount * swordData.GetCurrentValue());
             if (GameDataManager.Instance != null)
             {
                 pendingSwordDamage = Mathf.RoundToInt(pendingSwordDamage * (1f + GameDataManager.Instance.GetDamageBonus()));

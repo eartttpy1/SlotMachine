@@ -16,6 +16,6 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: 1b519793abcf58043adc78e5755d6e2b, type: 3}
   baseValue: 200
   increaseValue: 100
-  descriptionFormat: start 200 Hp
+  descriptionFormat: start {0} Hp
   maxLevel: 10
   baseCost: 100

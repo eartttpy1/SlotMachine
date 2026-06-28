@@ -22,6 +22,14 @@ public class GameDataManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
+    private void Start()
+    {
+        if (damageReductionStat == null) Debug.LogWarning("[GameDataManager] damageReductionStat is not assigned in the Inspector!");
+        if (damageBonusStat == null) Debug.LogWarning("[GameDataManager] damageBonusStat is not assigned in the Inspector!");
+        if (maxHpStat == null) Debug.LogWarning("[GameDataManager] maxHpStat is not assigned in the Inspector!");
+        if (ticketDropStat == null) Debug.LogWarning("[GameDataManager] ticketDropStat is not assigned in the Inspector!");
+    }
+
     public float GetDamageReduction()
     {
         return damageReductionStat != null ? (damageReductionStat.CurrentBaseValue / 100f) : 0f;

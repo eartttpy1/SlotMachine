@@ -16,12 +16,11 @@ MonoBehaviour:
   iconName: Sword
   iconSprite: {fileID: 21300000, guid: c952f65d1ca8acf418bd02815780bf3b, type: 3}
   skillDescription: 30 damage to 1 target
-  iconBonusDescription: Bonus x3
+  iconBonusDescription: Bonus x5
   baseValue: 30
   match3Multiplier: 5
   isMultipleTargets: 0
   baseWeightRandom: 1
   baseUpgradePrice: 10
-  countUpgrade: 0
   upgradeMultiplier: 20
   upgradeDescription: Upgrade, +20% damage

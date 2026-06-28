@@ -16,6 +16,6 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: dbf73f40808fcfc4b97953c621a25e17, type: 3}
   baseValue: 5
   increaseValue: 2
-  descriptionFormat: damage taken reduced by 5%
+  descriptionFormat: damage taken reduced by {0}%
   maxLevel: 10
   baseCost: 45

@@ -29,6 +29,18 @@ public class MainMenuManager : MonoBehaviour
         ShowMainMenu();
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            currentPoints += 1000;
+            SaveData();
+            UpdateUI();
+            Debug.Log($"[Test] Added 1000 points. Current points: {currentPoints}");
+        }
+    }
+
+
     public void ShowMainMenu()
     {
         mainMenuPanel.SetActive(true);

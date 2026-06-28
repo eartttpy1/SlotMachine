@@ -21,7 +21,42 @@ public class SlotIconData : SlotSymbolData
     public override string SymbolName => iconName;
     public override Sprite SymbolSprite => iconSprite;
     public override int BaseWeight => baseWeightRandom;
-    public override string description => skillDescription;
+    public override string description 
+    {
+        get
+        {
+            switch (symbolType)
+            {
+                case SlotSymbol.Sword:
+                    int swordVal = GetCurrentValue();
+                    if (GameDataManager.Instance != null)
+                    {
+                        swordVal = Mathf.RoundToInt(swordVal * (1f + GameDataManager.Instance.GetDamageBonus()));
+                    }
+                    return $"{swordVal} damage to 1 target";
+
+                case SlotSymbol.GreatSword:
+                    int gsVal = GetCurrentValue();
+                    if (GameDataManager.Instance != null)
+                    {
+                        gsVal = Mathf.RoundToInt(gsVal * (1f + GameDataManager.Instance.GetDamageBonus()));
+                    }
+                    return $"{gsVal} damage to multiple targets";
+
+                case SlotSymbol.Shield:
+                    return $"grants {GetCurrentValue()} shield";
+
+                case SlotSymbol.HealingPotion:
+                    return $"Heal {GetCurrentValue()} HP";
+
+                case SlotSymbol.Coin:
+                    return $"gain {GetCurrentValue()} coin";
+
+                default:
+                    return skillDescription;
+            }
+        }
+    }
     public override string bonusDescription => iconBonusDescription;
 
     [Header("Shop Progression")]
@@ -61,6 +96,15 @@ public class SlotIconData : SlotSymbolData
         for (int i = 0; i < countUpgrade; i++) {
             float increment = val * (upgradeMultiplier / 100f);
             val += Mathf.Max(1, Mathf.RoundToInt(increment));
+        }
+        return val;
+    }
+
+    public int GetValueWithUpstat(int val) {
+        if (symbolType == SlotSymbol.Sword || symbolType == SlotSymbol.GreatSword) {
+            if (GameDataManager.Instance != null) {
+                return Mathf.RoundToInt(val * (1f + GameDataManager.Instance.GetDamageBonus()));
+            }
         }
         return val;
     }
