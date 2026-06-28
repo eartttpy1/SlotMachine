@@ -9,6 +9,7 @@ public class SlotItemDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExit
     public Image iconImage;
     public Image borderObject; // กรอบ Border ที่จะแสดงเมื่อชี้เมาส์
     public TMPro.TextMeshProUGUI maxOverlayText; // ข้อความคำว่า MAX ซ้อนบนไอคอน (Optional)
+    public TMPro.TextMeshProUGUI priceOverlayText; // ข้อความแสดงราคาซ้อนบนไอคอน (Optional)
 
     [Header("Active Data")]
     public SlotSymbolData symbolData; // ข้อมูลสัญลักษณ์ที่ถูกเลือกใช้งานในปัจจุบัน
@@ -59,6 +60,39 @@ public class SlotItemDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExit
             else
             {
                 maxOverlayText.gameObject.SetActive(false);
+            }
+        }
+
+        if (priceOverlayText != null)
+        {
+            if (isUpgradeShop && symbolData != null)
+            {
+                SlotIconData iconData = symbolData as SlotIconData;
+                TicketShopItemData ticketData = symbolData as TicketShopItemData;
+
+                if (iconData != null)
+                {
+                    if (iconData.countUpgrade >= 3)
+                    {
+                        priceOverlayText.text = "MAX";
+                    }
+                    else
+                    {
+                        priceOverlayText.text = $"{iconData.GetCurrentPrice()}";
+                    }
+                }
+                else if (ticketData != null)
+                {
+                    priceOverlayText.text = $"{ticketData.price}";
+                }
+                else
+                {
+                    priceOverlayText.text = "";
+                }
+            }
+            else
+            {
+                priceOverlayText.text = "";
             }
         }
     }

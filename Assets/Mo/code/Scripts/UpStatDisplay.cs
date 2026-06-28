@@ -9,6 +9,7 @@ public class UpStatDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     public Image iconImage;
     public Image borderObject;
     public TextMeshProUGUI maxOverlayText;
+    public TextMeshProUGUI priceOverlayText; // ข้อความแสดงราคาซ้อนบนไอคอน Upstat (Optional)
 
     [Header("UpStat Data")]
     public ScriptableUpStats statData;
@@ -47,6 +48,18 @@ public class UpStatDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
             else
             {
                 maxOverlayText.gameObject.SetActive(false);
+            }
+        }
+
+        if (priceOverlayText != null && statData != null)
+        {
+            if (statData.CountLevel >= statData.maxLevel)
+            {
+                priceOverlayText.text = "MAX";
+            }
+            else
+            {
+                priceOverlayText.text = $"{statData.Point}";
             }
         }
     }
