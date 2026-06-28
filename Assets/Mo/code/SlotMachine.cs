@@ -244,6 +244,12 @@ public class SlotMachine : MonoBehaviour
             }
         }
 
+        // เล่นเสียงสปินสล็อต
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.PlaySlotSpinSound();
+        }
+
         // เล่นเสียงเปิดกล่องสมบัติเมื่อกดสปินในด่าน Chest
         if (isChestMap && AudioManager.Instance != null)
         {
@@ -388,7 +394,30 @@ public class SlotMachine : MonoBehaviour
     {
         Debug.Log("ตู้สล็อตกำลังหมุนติ้ว ๆ...");
 
-        yield return new WaitForSeconds(1.5f);
+        float duration = 1.5f;
+        float elapsed = 0f;
+        float cycleInterval = 0.08f;
+        float timer = 0f;
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            timer += Time.deltaTime;
+
+            if (timer >= cycleInterval)
+            {
+                timer = 0f;
+                for (int i = 0; i < 3; i++)
+                {
+                    if (!isReelLocked[i] && reelDisplays[i] != null && availableSymbols.Count > 0)
+                    {
+                        int randomIndex = Random.Range(0, availableSymbols.Count);
+                        reelDisplays[i].SetupSlotDisplay(availableSymbols[randomIndex]);
+                    }
+                }
+            }
+            yield return null;
+        }
         for (int i = 0; i < 3; i++)
         {
             if (reelDisplays[i] != null && finalResult[i] != null)

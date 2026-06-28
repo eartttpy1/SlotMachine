@@ -6,6 +6,10 @@ public class AudioManager : MonoBehaviour
 
     [Header("Audio Sources")]
     [SerializeField] private AudioSource sfxSource;
+    [SerializeField] private AudioSource bgmSource;
+
+    [Header("Background Music")]
+    [SerializeField] private AudioClip bgmMusic;
 
     [Header("Sword Sound Clips")]
     [SerializeField] private AudioClip swordSound;
@@ -22,6 +26,7 @@ public class AudioManager : MonoBehaviour
     [SerializeField] private AudioClip buttonClickSound;
     [SerializeField] private AudioClip buttonHoverSound;
     [SerializeField] private AudioClip healSound;
+    [SerializeField] private AudioClip slotSpinSound;
 
     private void Awake()
     {
@@ -34,6 +39,11 @@ public class AudioManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+
+    private void Start()
+    {
+        PlayDefaultBGM();
     }
 
     public void PlaySwordSound()
@@ -97,6 +107,50 @@ public class AudioManager : MonoBehaviour
         if (sfxSource != null && healSound != null)
         {
             sfxSource.PlayOneShot(healSound);
+        }
+    }
+
+    public void PlaySlotSpinSound()
+    {
+        if (sfxSource != null && slotSpinSound != null)
+        {
+            sfxSource.PlayOneShot(slotSpinSound);
+        }
+    }
+
+    public void PlayDefaultBGM()
+    {
+        if (bgmMusic != null)
+        {
+            PlayBGM(bgmMusic);
+        }
+    }
+
+    public void PlayBGM(AudioClip clip)
+    {
+        if (bgmSource != null && clip != null)
+        {
+            if (bgmSource.clip == clip && bgmSource.isPlaying) return;
+
+            bgmSource.clip = clip;
+            bgmSource.loop = true;
+            bgmSource.Play();
+        }
+    }
+
+    public void StopBGM()
+    {
+        if (bgmSource != null)
+        {
+            bgmSource.Stop();
+        }
+    }
+
+    public void PauseBGM()
+    {
+        if (bgmSource != null)
+        {
+            bgmSource.Pause();
         }
     }
 }

@@ -461,6 +461,7 @@ public class MapManager : MonoBehaviour
         
         yield return new WaitForSeconds(1.0f);
         
+        if (gameCanvas != null) gameCanvas.SetActive(false);
         if (canvasWin != null) canvasWin.SetActive(true);
         Debug.Log("WIN! 067 Jackpot reached!");
     }
@@ -478,6 +479,7 @@ public class MapManager : MonoBehaviour
         
         yield return new WaitForSeconds(1.0f);
         
+        if (gameCanvas != null) gameCanvas.SetActive(false);
         if (canvasLose != null) canvasLose.SetActive(true);
         Debug.Log("LOSE! Game Over.");
     }
