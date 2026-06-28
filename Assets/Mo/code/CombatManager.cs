@@ -40,6 +40,9 @@ public class CombatManager : MonoBehaviour
     public GameObject enemyDisplayPrefab;
     private List<EnemyDisplay> spawnedDisplays = new List<EnemyDisplay>();
 
+    [Header("Mini-Games")]
+    public GreatSwordMiniGame greatSwordMiniGame;
+
     [Header("Effect Spawn Locations")]
     [Tooltip("ตำแหน่งที่จะเกิดเอฟเฟกต์ Get Hit (ผู้เล่นโดน)")]
     public Transform getHitSpawnLocation;
@@ -234,12 +237,24 @@ public class CombatManager : MonoBehaviour
 
         if (greatSwordCount > 0 && greatSwordData != null)
         {
-            int greatSwordDmg = (greatSwordCount == 3) ? (greatSwordData.GetCurrentValue() * greatSwordData.match3Multiplier) : (greatSwordCount * greatSwordData.GetCurrentValue());
+            int baseGreatSwordDmg = (greatSwordCount == 3) ? (greatSwordData.GetCurrentValue() * greatSwordData.match3Multiplier) : (greatSwordCount * greatSwordData.GetCurrentValue());
             if (GameDataManager.Instance != null)
             {
-                greatSwordDmg = Mathf.RoundToInt(greatSwordDmg * (1f + GameDataManager.Instance.GetDamageBonus()));
+                baseGreatSwordDmg = Mathf.RoundToInt(baseGreatSwordDmg * (1f + GameDataManager.Instance.GetDamageBonus()));
             }
-            Debug.Log($"GreatSword rolled! Dealing {greatSwordDmg} AoE damage to all enemies.");
+
+            int finalGreatSwordDmg = baseGreatSwordDmg;
+
+            // Trigger Mini-Game if assigned
+            if (greatSwordMiniGame != null)
+            {
+                yield return StartCoroutine(greatSwordMiniGame.StartMiniGame(baseGreatSwordDmg, (resultDmg) => 
+                {
+                    finalGreatSwordDmg = resultDmg;
+                }));
+            }
+
+            Debug.Log($"GreatSword rolled! Dealing {finalGreatSwordDmg} AoE damage to all enemies.");
 
             if (ShogunEffectManager.Instance != null)
             {
@@ -268,7 +283,7 @@ public class CombatManager : MonoBehaviour
             // Apply damage to all enemies
             for (int i = activeEnemies.Count - 1; i >= 0; i--)
             {
-                DamageEnemy(i, greatSwordDmg);
+                DamageEnemy(i, finalGreatSwordDmg);
             }
             
             yield return new WaitForSeconds(0.3f);
