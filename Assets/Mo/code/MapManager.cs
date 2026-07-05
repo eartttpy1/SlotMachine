@@ -144,6 +144,7 @@ public class MapManager : MonoBehaviour
         if (goNextLevelButton != null)
         {
             goNextLevelButton.gameObject.SetActive(true);
+            goNextLevelButton.interactable = true;
         }
 
         // Reset spin button to be active and interactable for the new game

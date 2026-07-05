@@ -287,6 +287,13 @@ public class GreatSwordMiniGame : MonoBehaviour
             float penaltyScale = Mathf.Lerp(0.1f, earlyReleasePenaltyMultiplier, t);
             FinishMiniGame(Mathf.RoundToInt(baseDamage * penaltyScale), "WEAK HIT...");
         }
+        else
+        {
+            // Late Release - Penalty applied
+            float t = Mathf.Clamp01((overheatThreshold - val) / (overheatThreshold - critThresholdMax));
+            float penaltyScale = Mathf.Lerp(overheatMultiplier, earlyReleasePenaltyMultiplier, t);
+            FinishMiniGame(Mathf.RoundToInt(baseDamage * penaltyScale), "TOO LATE...");
+        }
     }
 
     private void FinishMiniGame(int finalDamage, string feedback)

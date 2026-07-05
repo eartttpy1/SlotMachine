@@ -1888,7 +1888,7 @@ RectTransform:
   m_Father: {fileID: 257464369}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -2765,7 +2765,7 @@ RectTransform:
   m_Father: {fileID: 631023602}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -13473,14 +13473,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c7492fba1342dd409ab5c3aad8a56d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GreatSwordMiniGame
-  miniGamePanel: {fileID: 1447884406}
-  chargeSlider: {fileID: 2103041160}
-  feedbackText: {fileID: 1096501595}
-  chargeSpeed: 1
+  parentCanvas: {fileID: 1447884409}
+  customPixelFont: {fileID: 11400000, guid: 3b3a0a0e3628beb47832a666894c3af1, type: 2}
+  chargeSpeed: 0.4
   critThresholdMin: 0.8
   critThresholdMax: 0.9
-  critMultiplier: 2
   overheatThreshold: 1
+  critMultiplier: 2
+  earlyReleasePenaltyMultiplier: 0.5
   overheatMultiplier: 0.2
 --- !u!1 &2037965010
 GameObject:
@@ -14059,7 +14059,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2103041159
 RectTransform:
   m_ObjectHideFlags: 0

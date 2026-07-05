@@ -223,6 +223,11 @@ public class SlotMachine : MonoBehaviour
             if (btn != null) btn.interactable = false;
         }
 
+        if (MapManager.Instance != null && MapManager.Instance.goNextLevelButton != null)
+        {
+            MapManager.Instance.goNextLevelButton.interactable = false;
+        }
+
         // Hide spinButton during combat on MonsterMap and BossMap
         bool isCombatMap = false;
         if (MapManager.Instance != null && MapManager.Instance.currentLevelIndex >= 0 && MapManager.Instance.levels != null)
@@ -554,6 +559,11 @@ public class SlotMachine : MonoBehaviour
         {
             var btn = spinButton.GetComponent<UnityEngine.UI.Button>();
             if (btn != null) btn.interactable = true;
+        }
+
+        if (MapManager.Instance != null && MapManager.Instance.goNextLevelButton != null)
+        {
+            MapManager.Instance.goNextLevelButton.interactable = true;
         }
     }
 

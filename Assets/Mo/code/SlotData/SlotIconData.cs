@@ -25,6 +25,11 @@ public class SlotIconData : SlotSymbolData
     {
         get
         {
+            // if (!string.IsNullOrEmpty(skillDescription))
+            // {
+            //     return skillDescription;
+            // }
+
             switch (symbolType)
             {
                 case SlotSymbol.Sword:
@@ -41,7 +46,7 @@ public class SlotIconData : SlotSymbolData
                     {
                         gsVal = Mathf.RoundToInt(gsVal * (1f + GameDataManager.Instance.GetDamageBonus()));
                     }
-                    return $"{gsVal} damage to multiple targets";
+                    return $"{gsVal} damage to multiple targets \nMiniGame x2";
 
                 case SlotSymbol.Shield:
                     return $"grants {GetCurrentValue()} shield";
