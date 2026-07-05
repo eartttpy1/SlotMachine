@@ -34,6 +34,7 @@ public class AudioManager : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
+            EnsureAudioSources();
         }
         else
         {
@@ -41,13 +42,69 @@ public class AudioManager : MonoBehaviour
         }
     }
 
+    private void OnEnable()
+    {
+        UnityEngine.SceneManagement.SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        UnityEngine.SceneManagement.SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(UnityEngine.SceneManagement.Scene scene, UnityEngine.SceneManagement.LoadSceneMode mode)
+    {
+        EnsureAudioSources();
+        PlayDefaultBGM();
+    }
+
+    private void EnsureAudioSources()
+    {
+        // Unity objects that are destroyed or missing evaluate to null in C#
+        if (sfxSource == null || bgmSource == null)
+        {
+            AudioSource[] sources = GetComponentsInChildren<AudioSource>(true);
+            
+            if (sfxSource == null)
+            {
+                sfxSource = System.Array.Find(sources, s => s != null && s.gameObject.name.ToLower().Contains("sfx"));
+                if (sfxSource == null && sources.Length > 0) sfxSource = sources[0];
+                if (sfxSource == null)
+                {
+                    GameObject sfxObj = new GameObject("SFXSource");
+                    sfxObj.transform.SetParent(transform);
+                    sfxSource = sfxObj.AddComponent<AudioSource>();
+                }
+            }
+            
+            if (bgmSource == null)
+            {
+                bgmSource = System.Array.Find(sources, s => s != null && (s.gameObject.name.ToLower().Contains("bgm") || s.gameObject.name.ToLower().Contains("music")));
+                if (bgmSource == null && sources.Length > 1) bgmSource = sources[1];
+                if (bgmSource == null && sources.Length > 0 && sfxSource != sources[0]) bgmSource = sources[0];
+                if (bgmSource == null)
+                {
+                    GameObject bgmObj = new GameObject("BGMSource");
+                    bgmObj.transform.SetParent(transform);
+                    bgmSource = bgmObj.AddComponent<AudioSource>();
+                }
+            }
+            if (bgmSource != null)
+            {
+                bgmSource.volume = 0.5f;
+            }
+        }
+    }
+
     private void Start()
     {
+        EnsureAudioSources();
         PlayDefaultBGM();
     }
 
     public void PlaySwordSound()
     {
+        EnsureAudioSources();
         if (sfxSource != null && swordSound != null)
         {
             sfxSource.PlayOneShot(swordSound);
@@ -56,6 +113,7 @@ public class AudioManager : MonoBehaviour
 
     public void PlayGreatSwordSound()
     {
+        EnsureAudioSources();
         if (sfxSource != null && greatSwordSound != null)
         {
             sfxSource.PlayOneShot(greatSwordSound);
@@ -64,6 +122,7 @@ public class AudioManager : MonoBehaviour
 
     public void PlayOpenChestSound()
     {
+        EnsureAudioSources();
         if (sfxSource != null && openChestSound != null)
         {
             sfxSource.PlayOneShot(openChestSound);
@@ -72,6 +131,7 @@ public class AudioManager : MonoBehaviour
 
     public void PlayGetHitSound()
     {
+        EnsureAudioSources();
         if (sfxSource != null && getHitSound != null)
         {
             sfxSource.PlayOneShot(getHitSound);
@@ -80,6 +140,7 @@ public class AudioManager : MonoBehaviour
 
     public void PlayShieldHitSound()
     {
+        EnsureAudioSources();
         if (sfxSource != null && shieldHitSound != null)
         {
             sfxSource.PlayOneShot(shieldHitSound);
@@ -88,6 +149,7 @@ public class AudioManager : MonoBehaviour
 
     public void PlayButtonClick()
     {
+        EnsureAudioSources();
         if (sfxSource != null && buttonClickSound != null)
         {
             sfxSource.PlayOneShot(buttonClickSound);
@@ -96,6 +158,7 @@ public class AudioManager : MonoBehaviour
 
     public void PlayButtonHover()
     {
+        EnsureAudioSources();
         if (sfxSource != null && buttonHoverSound != null)
         {
             sfxSource.PlayOneShot(buttonHoverSound);
@@ -104,6 +167,7 @@ public class AudioManager : MonoBehaviour
 
     public void PlayHealSound()
     {
+        EnsureAudioSources();
         if (sfxSource != null && healSound != null)
         {
             sfxSource.PlayOneShot(healSound);
@@ -112,6 +176,7 @@ public class AudioManager : MonoBehaviour
 
     public void PlaySlotSpinSound()
     {
+        EnsureAudioSources();
         if (sfxSource != null && slotSpinSound != null)
         {
             sfxSource.PlayOneShot(slotSpinSound);
@@ -120,6 +185,7 @@ public class AudioManager : MonoBehaviour
 
     public void PlayDefaultBGM()
     {
+        EnsureAudioSources();
         if (bgmMusic != null)
         {
             PlayBGM(bgmMusic);
@@ -128,8 +194,10 @@ public class AudioManager : MonoBehaviour
 
     public void PlayBGM(AudioClip clip)
     {
+        EnsureAudioSources();
         if (bgmSource != null && clip != null)
         {
+            bgmSource.volume = 0.5f;
             if (bgmSource.clip == clip && bgmSource.isPlaying) return;
 
             bgmSource.clip = clip;
@@ -140,6 +208,7 @@ public class AudioManager : MonoBehaviour
 
     public void StopBGM()
     {
+        EnsureAudioSources();
         if (bgmSource != null)
         {
             bgmSource.Stop();
@@ -148,6 +217,7 @@ public class AudioManager : MonoBehaviour
 
     public void PauseBGM()
     {
+        EnsureAudioSources();
         if (bgmSource != null)
         {
             bgmSource.Pause();

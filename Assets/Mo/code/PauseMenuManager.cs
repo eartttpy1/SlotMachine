@@ -7,14 +7,14 @@ public class PauseMenuManager : MonoBehaviour
     [Header("UI References")]
     public GameObject pauseUI;
 
-    // ‡æ‘Ë¡™ËÕß ”À√—∫≈“°·ºËπÀ≈—ß‡∫≈Õ¡“„ Ë
-    [Tooltip("≈“°«—µ∂ÿ BlurBackground ¡“„ Ë™ËÕßπ’È")]
+    // ‡πÄ‡∏û‡∏¥‡πà‡∏°‡∏ä‡πà‡∏≠‡∏á‡∏™‡∏≥‡∏´‡∏£‡∏±‡∏ö‡∏•‡∏≤‡∏Å‡πÅ‡∏ú‡πà‡∏ô‡∏´‡∏•‡∏±‡∏á‡πÄ‡∏ö‡∏•‡∏≠‡∏°‡∏≤‡πÉ‡∏™‡πà
+    [Tooltip("‡∏•‡∏≤‡∏Å‡∏ß‡∏±‡∏ï‡∏ñ‡∏∏ BlurBackground ‡∏°‡∏≤‡πÉ‡∏™‡πà‡∏ä‡πà‡∏≠‡∏á‡∏ô‡∏µ‡πâ")]
     public GameObject blurBackground;
 
-    [Tooltip("≈“°«—µ∂ÿ MainMenu_Panel ¡“„ Ë™ËÕßπ’È")]
+    [Tooltip("‡∏•‡∏≤‡∏Å‡∏ß‡∏±‡∏ï‡∏ñ‡∏∏ MainMenu_Panel ‡∏°‡∏≤‡πÉ‡∏™‡πà‡∏ä‡πà‡∏≠‡∏á‡∏ô‡∏µ‡πâ")]
     public GameObject mainMenuPanel;
 
-    [Tooltip("≈“°«—µ∂ÿ MainmenuCanvas ¡“„ Ë™ËÕßπ’È")]
+    [Tooltip("‡∏•‡∏≤‡∏Å‡∏ß‡∏±‡∏ï‡∏ñ‡∏∏ MainmenuCanvas ‡∏°‡∏≤‡πÉ‡∏™‡πà‡∏ä‡πà‡∏≠‡∏á‡∏ô‡∏µ‡πâ")]
     public GameObject mainMenuCanvas;
 
     [Header("URP Volume Reference")]
@@ -25,7 +25,7 @@ public class PauseMenuManager : MonoBehaviour
 
     void Start()
     {
-        // ‡√‘Ë¡‡°¡¡“ „ÀÈ —Ëßª‘¥∑—Èß‡¡πŸ·≈–·ºËπÀ≈—ß‡∫≈Õæ√ÈÕ¡°—π
+        // ‡πÄ‡∏£‡∏¥‡πà‡∏°‡πÄ‡∏Å‡∏°‡∏°‡∏≤ ‡πÉ‡∏´‡πâ‡∏™‡∏±‡πà‡∏á‡∏õ‡∏¥‡∏î‡∏ó‡∏±‡πâ‡∏á‡πÄ‡∏°‡∏ô‡∏π‡πÅ‡∏•‡∏∞‡πÅ‡∏ú‡πà‡∏ô‡∏´‡∏•‡∏±‡∏á‡πÄ‡∏ö‡∏•‡∏≠‡∏û‡∏£‡πâ‡∏≠‡∏°‡∏Å‡∏±‡∏ô
         if (pauseUI != null) pauseUI.SetActive(false);
         if (blurBackground != null) blurBackground.SetActive(false);
         if (urpVolume != null) urpVolume.weight = 0f;
@@ -51,7 +51,7 @@ public class PauseMenuManager : MonoBehaviour
     public void PauseGame()
     {
         pauseUI.SetActive(true);
-        if (blurBackground != null) blurBackground.SetActive(true); // ‡ª‘¥À≈—ß‡∫≈ÕµÕπ Pause
+        if (blurBackground != null) blurBackground.SetActive(true); // ‡πÄ‡∏õ‡∏¥‡∏î‡∏´‡∏•‡∏±‡∏á‡πÄ‡∏ö‡∏•‡∏≠‡∏ï‡∏≠‡∏ô Pause
 
         if (urpVolume != null) urpVolume.weight = 1f;
         Time.timeScale = 0f;
@@ -63,7 +63,7 @@ public class PauseMenuManager : MonoBehaviour
     public void ResumeGame()
     {
         pauseUI.SetActive(false);
-        if (blurBackground != null) blurBackground.SetActive(false); // ª‘¥À≈—ß‡∫≈ÕµÕπ‡≈ËπµËÕ
+        if (blurBackground != null) blurBackground.SetActive(false); // ‡∏õ‡∏¥‡∏î‡∏´‡∏•‡∏±‡∏á‡πÄ‡∏ö‡∏•‡∏≠‡∏ï‡∏≠‡∏ô‡πÄ‡∏•‡πà‡∏ô‡∏ï‡πà‡∏≠
 
         if (urpVolume != null) urpVolume.weight = 0f;
         Time.timeScale = 1f;
@@ -74,7 +74,7 @@ public class PauseMenuManager : MonoBehaviour
 
     public void OpenSettings()
     {
-        Debug.Log("‡ª‘¥ÀπÈ“µ—Èß§Ë“ (Settings Clicked!)");
+        Debug.Log("‡πÄ‡∏õ‡∏¥‡∏î‡∏´‡∏ô‡πâ‡∏≤‡∏ï‡∏±‡πâ‡∏á‡∏Ñ‡πà‡∏≤ (Settings Clicked!)");
     }
 
     public void FleeToMainMenu()
@@ -82,17 +82,21 @@ public class PauseMenuManager : MonoBehaviour
         Time.timeScale = 1f;
 
         if (pauseUI != null) pauseUI.SetActive(false);
-        if (blurBackground != null) blurBackground.SetActive(false); // ¡—Ëπ„®«Ë“ª‘¥À≈—ß‡∫≈Õ™—«√ÏÊ °ËÕπ√’‡´Áµ
+        if (blurBackground != null) blurBackground.SetActive(false); // ‡∏°‡∏±‡πà‡∏ô‡πÉ‡∏à‡∏ß‡πà‡∏≤‡∏õ‡∏¥‡∏î‡∏´‡∏•‡∏±‡∏á‡πÄ‡∏ö‡∏•‡∏≠‡∏ä‡∏±‡∏ß‡∏£‡πå‡πÜ ‡∏Å‡πà‡∏≠‡∏ô‡∏£‡∏µ‡πÄ‡∏ã‡πá‡∏ï
         if (urpVolume != null) urpVolume.weight = 0f;
         if (blockerImage != null) blockerImage.gameObject.SetActive(false);
 
         AudioSource[] allAudioSources = FindObjectsByType<AudioSource>(FindObjectsSortMode.None);
         foreach (AudioSource audio in allAudioSources)
         {
+            if (AudioManager.Instance != null && (audio.gameObject == AudioManager.Instance.gameObject || audio.transform.IsChildOf(AudioManager.Instance.transform)))
+            {
+                continue;
+            }
             audio.Stop();
         }
 
-        // ‚À≈¥´’πµ—«‡Õß„À¡Ë‡æ◊ËÕ‡§≈’¬√Ï√–∫∫µËÕ ŸÈ·≈–°“√ Roll §È“ß·∫∫ Surrender ≈È“ß‰æË√ÈÕ¬‡ªÕ√Ï‡´ÁπµÏ
+        // ‡πÇ‡∏´‡∏•‡∏î‡∏ã‡∏µ‡∏ô‡∏ï‡∏±‡∏ß‡πÄ‡∏≠‡∏á‡πÉ‡∏´‡∏°‡πà‡πÄ‡∏û‡∏∑‡πà‡∏≠‡πÄ‡∏Ñ‡∏•‡∏µ‡∏¢‡∏£‡πå‡∏£‡∏∞‡∏ö‡∏ö‡∏ï‡πà‡∏≠‡∏™‡∏π‡πâ‡πÅ‡∏•‡∏∞‡∏Å‡∏≤‡∏£ Roll ‡∏Ñ‡πâ‡∏≤‡∏á‡πÅ‡∏ö‡∏ö Surrender ‡∏•‡πâ‡∏≤‡∏á‡πÑ‡∏û‡πà‡∏£‡πâ‡∏≠‡∏¢‡πÄ‡∏õ‡∏≠‡∏£‡πå‡πÄ‡∏ã‡πá‡∏ô‡∏ï‡πå
         string currentSceneName = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
         UnityEngine.SceneManagement.SceneManager.LoadScene(currentSceneName);
 
