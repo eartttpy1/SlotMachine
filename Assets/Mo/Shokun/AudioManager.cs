@@ -20,7 +20,7 @@ public class AudioManager : MonoBehaviour
 
     [Header("Player Hurt Sound Clips")]
     [SerializeField] private AudioClip getHitSound;
-    [SerializeField] private AudioClip shieldHitSound;
+    [SerializeField] private AudioClip parrySound;
 
     [Header("UI Sound Clips")]
     [SerializeField] private AudioClip buttonClickSound;
@@ -134,18 +134,12 @@ public class AudioManager : MonoBehaviour
         EnsureAudioSources();
         if (sfxSource != null && getHitSound != null)
         {
+            Debug.Log("AudioManager: Playing GetHitSound -> " + getHitSound.name);
             sfxSource.PlayOneShot(getHitSound);
         }
     }
 
-    public void PlayShieldHitSound()
-    {
-        EnsureAudioSources();
-        if (sfxSource != null && shieldHitSound != null)
-        {
-            sfxSource.PlayOneShot(shieldHitSound);
-        }
-    }
+
 
     public void PlayButtonClick()
     {
@@ -221,6 +215,16 @@ public class AudioManager : MonoBehaviour
         if (bgmSource != null)
         {
             bgmSource.Pause();
+        }
+    }
+
+    public void PlayParrySound()
+    {
+        EnsureAudioSources();
+        if (sfxSource != null && parrySound != null)
+        {
+            Debug.Log("AudioManager: Playing ParrySound -> " + parrySound.name);
+            sfxSource.PlayOneShot(parrySound);
         }
     }
 }

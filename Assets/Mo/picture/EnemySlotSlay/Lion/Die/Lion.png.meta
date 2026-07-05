@@ -1,0 +1,357 @@
+fileFormatVersion: 2
+guid: f0a7a6d0acaa3e94ba4062a9aeb20829
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -1224384326437599908
+    second: Lion_0
+  - first:
+      213: 1731740487818298547
+    second: Lion_1
+  - first:
+      213: -1341699111379921251
+    second: Lion_2
+  - first:
+      213: -4331280993586816951
+    second: Lion_3
+  - first:
+      213: -6126171613083159431
+    second: Lion_4
+  - first:
+      213: 3075894662631533492
+    second: Lion_5
+  - first:
+      213: -6631980412950786725
+    second: Lion_6
+  - first:
+      213: 7637034836877232567
+    second: Lion_7
+  - first:
+      213: -2506398138167502584
+    second: Lion_8
+  - first:
+      213: -6285599949630077010
+    second: Lion_9
+  - first:
+      213: 900864444387492903
+    second: Lion_10
+  - first:
+      213: -4848305508191306653
+    second: Lion_11
+  - first:
+      213: -7569098589899524330
+    second: Lion_12
+  - first:
+      213: 2181809233299497846
+    second: Lion_13
+  - first:
+      213: 7479773171619057994
+    second: Lion_14
+  - first:
+      213: 1655008148082069265
+    second: Lion_15
+  - first:
+      213: 7070115788255192177
+    second: Lion_16
+  - first:
+      213: 6364874997085531624
+    second: Lion_17
+  - first:
+      213: -4496436773746458385
+    second: Lion_18
+  - first:
+      213: -2735857162043879775
+    second: Lion_19
+  - first:
+      213: -6986929648274956107
+    second: Lion_20
+  - first:
+      213: 693689714272890484
+    second: Lion_21
+  - first:
+      213: 7469527175899121396
+    second: Lion_22
+  - first:
+      213: 8043564896847938550
+    second: Lion_23
+  - first:
+      213: -9151528973996871355
+    second: Lion_24
+  - first:
+      213: -2421251053346228316
+    second: Lion_25
+  - first:
+      213: -759681902755667889
+    second: Lion_26
+  - first:
+      213: 1445409502132960916
+    second: Lion_27
+  - first:
+      213: 6600232568869843004
+    second: Lion_28
+  - first:
+      213: 8518218734874119296
+    second: Lion_29
+  - first:
+      213: 2109226936999788470
+    second: Lion_30
+  - first:
+      213: -8777700437352982871
+    second: Lion_31
+  - first:
+      213: 7308817981633558682
+    second: Lion_32
+  - first:
+      213: -2550742540903496865
+    second: Lion_33
+  - first:
+      213: 4491833202172741748
+    second: Lion_34
+  - first:
+      213: 6047241102149260008
+    second: Lion_35
+  - first:
+      213: -3390674315900406092
+    second: Lion_36
+  - first:
+      213: 7187745741231757996
+    second: Lion_37
+  - first:
+      213: -1393823870263531064
+    second: Lion_38
+  - first:
+      213: 4622407803660848701
+    second: Lion_39
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Lion_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 96
+        height: 128
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c55812231fc120fe0800000000000000
+      internalID: -1224384326437599908
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lion_1
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 0
+        width: 96
+        height: 128
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3b4429b6cc0680810800000000000000
+      internalID: 1731740487818298547
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lion_2
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 0
+        width: 96
+        height: 128
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d961ebe44c3516de0800000000000000
+      internalID: -1341699111379921251
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lion_3
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 0
+        width: 96
+        height: 128
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9485bda62e234e3c0800000000000000
+      internalID: -4331280993586816951
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: fb9d080c864293c4aa49083224ee3e67
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":96.0,"y":128.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
+    nameFileIdTable:
+      Lion_0: -1224384326437599908
+      Lion_1: 1731740487818298547
+      Lion_2: -1341699111379921251
+      Lion_3: -4331280993586816951
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

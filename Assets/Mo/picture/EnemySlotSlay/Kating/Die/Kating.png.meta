@@ -1,0 +1,393 @@
+fileFormatVersion: 2
+guid: 6087a7f5b0dd59642a2831ec2c90e139
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -6088049192696432693
+    second: Kating_0
+  - first:
+      213: 8981466998214853185
+    second: Kating_1
+  - first:
+      213: 8891361354749909727
+    second: Kating_2
+  - first:
+      213: -6125185390808890709
+    second: Kating_3
+  - first:
+      213: 8125536079819643185
+    second: Kating_4
+  - first:
+      213: 5375563707057128122
+    second: Kating_5
+  - first:
+      213: -4740658797611203042
+    second: Kating_6
+  - first:
+      213: -5770623561277983889
+    second: Kating_7
+  - first:
+      213: 1136282842110904489
+    second: Kating_8
+  - first:
+      213: 281148993311382820
+    second: Kating_9
+  - first:
+      213: 1075774977311317095
+    second: Kating_10
+  - first:
+      213: 4726387054249450246
+    second: Kating_11
+  - first:
+      213: 1049605883250267198
+    second: Kating_12
+  - first:
+      213: 4224909636172945409
+    second: Kating_13
+  - first:
+      213: -2831528063295032132
+    second: Kating_14
+  - first:
+      213: 5695499916387194235
+    second: Kating_15
+  - first:
+      213: 5300825594147464567
+    second: Kating_16
+  - first:
+      213: -3774160950900655269
+    second: Kating_17
+  - first:
+      213: -252344325659657659
+    second: Kating_18
+  - first:
+      213: 513485969199518358
+    second: Kating_19
+  - first:
+      213: -8870889203711899059
+    second: Kating_20
+  - first:
+      213: -6601833555578669500
+    second: Kating_21
+  - first:
+      213: 5486187007996218708
+    second: Kating_22
+  - first:
+      213: -4690728209852796582
+    second: Kating_23
+  - first:
+      213: -497044951719215936
+    second: Kating_24
+  - first:
+      213: -7852463542107159177
+    second: Kating_25
+  - first:
+      213: 3642989525164245666
+    second: Kating_26
+  - first:
+      213: -4567168453664328568
+    second: Kating_27
+  - first:
+      213: 6161760523221186507
+    second: Kating_28
+  - first:
+      213: 3986937749117827572
+    second: Kating_29
+  - first:
+      213: 7752488044852470193
+    second: Kating_30
+  - first:
+      213: -8855731425205386972
+    second: Kating_31
+  - first:
+      213: -3277897176500148641
+    second: Kating_32
+  - first:
+      213: -1132932438610785474
+    second: Kating_33
+  - first:
+      213: -6404713740519901255
+    second: Kating_34
+  - first:
+      213: -4570065297567725783
+    second: Kating_35
+  - first:
+      213: -7296502042221813977
+    second: Kating_36
+  - first:
+      213: -1040749497572274841
+    second: Kating_37
+  - first:
+      213: -5326548461083049426
+    second: Kating_38
+  - first:
+      213: -8737606108694562501
+    second: Kating_39
+  - first:
+      213: -561557970096556385
+    second: Kating_40
+  - first:
+      213: -1127664404671765066
+    second: Kating_41
+  - first:
+      213: -3123493551500824099
+    second: Kating_42
+  - first:
+      213: 8995702964952526336
+    second: Kating_43
+  - first:
+      213: 1880740708096330843
+    second: Kating_44
+  - first:
+      213: -234936536892484911
+    second: Kating_45
+  - first:
+      213: 55180028386210262
+    second: Kating_46
+  - first:
+      213: 6624619936483095320
+    second: Kating_47
+  - first:
+      213: 890625473619880851
+    second: Kating_48
+  - first:
+      213: 3205420222884879696
+    second: Kating_49
+  - first:
+      213: 5014760774615840829
+    second: Kating_50
+  - first:
+      213: -8718585043514881258
+    second: Kating_51
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Kating_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 96
+        height: 128
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bc7b93ed387e28ba0800000000000000
+      internalID: -6088049192696432693
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Kating_1
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 0
+        width: 96
+        height: 128
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1428d7626a494ac70800000000000000
+      internalID: 8981466998214853185
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Kating_2
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 0
+        width: 96
+        height: 128
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fda118f2b06746b70800000000000000
+      internalID: 8891361354749909727
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Kating_3
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 0
+        width: 96
+        height: 128
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ba28c65f658fefaa0800000000000000
+      internalID: -6125185390808890709
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 432a5196dc8486f4bb9fabcd4b112316
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":96.0,"y":128.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
+    nameFileIdTable:
+      Kating_0: -6088049192696432693
+      Kating_1: 8981466998214853185
+      Kating_2: 8891361354749909727
+      Kating_3: -6125185390808890709
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

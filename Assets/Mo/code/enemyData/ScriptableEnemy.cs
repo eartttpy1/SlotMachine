@@ -5,6 +5,7 @@ public abstract class ScriptableEnemy : ScriptableObject
     [Header("Base Info")]
     public string enemyName;
     public Sprite sprite;
+    public AnimatorOverrideController animationOverrideController;
 
     [Header("Stats Settings")]
     public int baseHP = 100;

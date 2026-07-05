@@ -1,0 +1,427 @@
+fileFormatVersion: 2
+guid: 9172f0ef42f046046b4171a521116f77
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 7888889113197609061
+    second: pingLag-sheet_0
+  - first:
+      213: -2397977685666326527
+    second: pingLag-sheet_1
+  - first:
+      213: 1943449702529000887
+    second: pingLag-sheet_2
+  - first:
+      213: 775890120041944018
+    second: pingLag-sheet_3
+  - first:
+      213: -214623390726079631
+    second: pingLag-sheet_4
+  - first:
+      213: 8759082073579866663
+    second: pingLag-sheet_5
+  - first:
+      213: 4166555111539100155
+    second: pingLag-sheet_6
+  - first:
+      213: 1148676437049972831
+    second: pingLag-sheet_7
+  - first:
+      213: 82326640858491713
+    second: pingLag-sheet_8
+  - first:
+      213: 324920208207695272
+    second: pingLag-sheet_9
+  - first:
+      213: 6610452441843073343
+    second: pingLag-sheet_10
+  - first:
+      213: 1030578693311422270
+    second: pingLag-sheet_11
+  - first:
+      213: -1197258635995921713
+    second: pingLag-sheet_12
+  - first:
+      213: 556588637307615728
+    second: pingLag-sheet_13
+  - first:
+      213: 8169064946125925618
+    second: pingLag-sheet_14
+  - first:
+      213: 8917415418113249462
+    second: pingLag-sheet_15
+  - first:
+      213: 9078619423425509963
+    second: pingLag-sheet_16
+  - first:
+      213: -5423884233236917985
+    second: pingLag-sheet_17
+  - first:
+      213: 7972979235102711011
+    second: pingLag-sheet_18
+  - first:
+      213: -2501837657891364315
+    second: pingLag-sheet_19
+  - first:
+      213: -3237749661088919913
+    second: pingLag-sheet_20
+  - first:
+      213: -8564751869415586614
+    second: pingLag-sheet_21
+  - first:
+      213: 7374557994408075100
+    second: pingLag-sheet_22
+  - first:
+      213: -2057308599614408151
+    second: pingLag-sheet_23
+  - first:
+      213: -8279644217593389061
+    second: pingLag-sheet_24
+  - first:
+      213: -7507544870702506190
+    second: pingLag-sheet_25
+  - first:
+      213: -6049815682121243020
+    second: pingLag-sheet_26
+  - first:
+      213: -1052549024482212084
+    second: pingLag-sheet_27
+  - first:
+      213: 2172998290107451634
+    second: pingLag-sheet_28
+  - first:
+      213: 7586321122309711479
+    second: pingLag-sheet_29
+  - first:
+      213: -3130191571007796017
+    second: pingLag-sheet_30
+  - first:
+      213: -6788504122897959905
+    second: pingLag-sheet_31
+  - first:
+      213: 7167909216751399721
+    second: pingLag-sheet_32
+  - first:
+      213: -9210613752584085008
+    second: pingLag-sheet_33
+  - first:
+      213: 8009609862937423736
+    second: pingLag-sheet_34
+  - first:
+      213: -3620541193130113284
+    second: pingLag-sheet_35
+  - first:
+      213: 547915228468989982
+    second: pingLag-sheet_36
+  - first:
+      213: -6260134910023330652
+    second: pingLag-sheet_37
+  - first:
+      213: 2036399562987546968
+    second: pingLag-sheet_38
+  - first:
+      213: -9110347709639628158
+    second: pingLag-sheet_39
+  - first:
+      213: -3163237749679426028
+    second: pingLag-sheet_40
+  - first:
+      213: -4792523162552573253
+    second: pingLag-sheet_41
+  - first:
+      213: 6979906720661730362
+    second: pingLag-sheet_42
+  - first:
+      213: -5259077459259417803
+    second: pingLag-sheet_43
+  - first:
+      213: -8208182490633820635
+    second: pingLag-sheet_44
+  - first:
+      213: 6525583196023500306
+    second: pingLag-sheet_45
+  - first:
+      213: 6080650725691908092
+    second: pingLag-sheet_46
+  - first:
+      213: 5900808388050406219
+    second: pingLag-sheet_47
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: pingLag-sheet_0
+      rect:
+        serializedVersion: 2
+        x: 20
+        y: 0
+        width: 96
+        height: 128
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5600790f9d6fa7d60800000000000000
+      internalID: 7888889113197609061
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pingLag-sheet_1
+      rect:
+        serializedVersion: 2
+        x: 148
+        y: 0
+        width: 96
+        height: 128
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1089b8afffba8bed0800000000000000
+      internalID: -2397977685666326527
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pingLag-sheet_2
+      rect:
+        serializedVersion: 2
+        x: 276
+        y: 0
+        width: 96
+        height: 128
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7b56416253588fa10800000000000000
+      internalID: 1943449702529000887
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pingLag-sheet_3
+      rect:
+        serializedVersion: 2
+        x: 404
+        y: 0
+        width: 96
+        height: 128
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2d3d5dd04f384ca00800000000000000
+      internalID: 775890120041944018
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pingLag-sheet_4
+      rect:
+        serializedVersion: 2
+        x: 532
+        y: 0
+        width: 96
+        height: 128
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 17b384bc921850df0800000000000000
+      internalID: -214623390726079631
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pingLag-sheet_5
+      rect:
+        serializedVersion: 2
+        x: 660
+        y: 0
+        width: 96
+        height: 128
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 72a48320db28e8970800000000000000
+      internalID: 8759082073579866663
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: aa851d4a6d0ba9c4bb17c4195cf78e8c
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":128.0,"y":128.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
+    nameFileIdTable:
+      pingLag-sheet_0: 7888889113197609061
+      pingLag-sheet_1: -2397977685666326527
+      pingLag-sheet_2: 1943449702529000887
+      pingLag-sheet_3: 775890120041944018
+      pingLag-sheet_4: -214623390726079631
+      pingLag-sheet_5: 8759082073579866663
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -92,6 +92,75 @@ public class CombatManager : MonoBehaviour
         }
     }
 
+    [Header("Parry System")]
+    public float parryWindowDuration = 0.4f;
+    public float parryCooldown = 0.1f;
+    private bool isParrying = false;
+    private float lastParryTime = -99f;
+
+    private void Update()
+    {
+        // Right click to parry (MouseButton 1 is Right Click)
+        if (currentState == CombatState.EnemyTurn && Input.GetMouseButtonDown(1))
+        {
+            if (Time.time >= lastParryTime + parryCooldown)
+            {
+                StartCoroutine(TriggerParryWindow());
+            }
+        }
+    }
+
+    private IEnumerator TriggerParryWindow()
+    {
+        isParrying = true;
+        lastParryTime = Time.time;
+        Debug.Log("Parry Active!");
+        
+        if (detailTurnText != null)
+        {
+            detailTurnText.text = "<color=#00FFFF>PARRY ACTIVE!</color>";
+        }
+
+        yield return new WaitForSeconds(parryWindowDuration);
+        isParrying = false;
+        Debug.Log("Parry Ended.");
+        if (detailTurnText != null && detailTurnText.text.Contains("PARRY ACTIVE"))
+        {
+            detailTurnText.text = "";
+        }
+    }
+
+    public void OnEnemyAttackSwing(EnemyInstance enemy, EnemyDisplay display)
+    {
+        if (PlayerStats.Instance == null || PlayerStats.Instance.currentHP <= 0) return;
+
+        int dmgPerHit = Mathf.RoundToInt(enemy.data.GetBaseDMG(currentLevel) * enemy.damageMultiplier);
+        bool hasShield = PlayerStats.Instance.currentShield > 0;
+
+        if (isParrying)
+        {
+            Debug.Log("Attack Parried!");
+            if (AudioManager.Instance != null)
+            {
+                AudioManager.Instance.PlayParrySound();
+            }
+            AnimateTurnText("Enemy Turn", "<color=#00FFFF>PARRIED!</color>");
+        }
+        else
+        {
+            PlayerStats.Instance.TakeDamage(dmgPerHit);
+            if (ShogunEffectManager.Instance != null)
+            {
+                ShogunEffectManager.Instance.SpawnGetHitEffect();
+            }
+            if (AudioManager.Instance != null)
+            {
+                AudioManager.Instance.PlayGetHitSound();
+            }
+            AnimateTurnText("Enemy Turn", $"{enemy.data.enemyName} Hit: -{dmgPerHit} HP");
+        }
+    }
+
     public void AnimateTurnText(string turnStr, string detailStr)
     {
         // เคลียร์แอนิเมชันเก่าทิ้งทันทีเมื่อมีข้อความใหม่เข้ามา
@@ -281,12 +350,40 @@ public class CombatManager : MonoBehaviour
             yield return new WaitForSeconds(0.5f);
 
             // Apply damage to all enemies
+            bool anyDied = false;
             for (int i = activeEnemies.Count - 1; i >= 0; i--)
             {
-                DamageEnemy(i, finalGreatSwordDmg);
+                EnemyInstance enemy = activeEnemies[i];
+                enemy.currentHP = Mathf.Max(0, enemy.currentHP - finalGreatSwordDmg);
+                if (enemy.currentHP <= 0)
+                {
+                    anyDied = true;
+                    if (spawnedDisplays.Count > i && spawnedDisplays[i] != null)
+                    {
+                        spawnedDisplays[i].PlayDieAnimation();
+                    }
+                    if (PlayerStats.Instance != null)
+                    {
+                        PlayerStats.Instance.coins += enemy.data.coin;
+                        PlayerStats.Instance.AddChance067(enemy.data.chance067);
+                    }
+                }
             }
-            
-            yield return new WaitForSeconds(0.3f);
+
+            UpdateAllDisplayVisuals();
+
+            if (anyDied)
+            {
+                yield return new WaitForSeconds(1.0f);
+                for (int i = activeEnemies.Count - 1; i >= 0; i--)
+                {
+                    if (activeEnemies[i].currentHP <= 0)
+                    {
+                        activeEnemies.RemoveAt(i);
+                    }
+                }
+                RefreshEnemyDisplays();
+            }
         }
 
         if (CheckVictoryCondition()) yield break;
@@ -376,7 +473,7 @@ public class CombatManager : MonoBehaviour
         // Wait for Sword animation to land before reducing HP on UI
         yield return new WaitForSeconds(0.4f);
 
-        DamageEnemy(index, pendingSwordDamage);
+        yield return StartCoroutine(DamageEnemy(index, pendingSwordDamage));
         pendingSwordDamage = 0;
 
         if (!CheckVictoryCondition())
@@ -393,9 +490,9 @@ public class CombatManager : MonoBehaviour
         }
     }
 
-    private void DamageEnemy(int index, int damage)
+    private IEnumerator DamageEnemy(int index, int damage)
     {
-        if (index < 0 || index >= activeEnemies.Count) return;
+        if (index < 0 || index >= activeEnemies.Count) yield break;
 
         EnemyInstance enemy = activeEnemies[index];
         enemy.currentHP = Mathf.Max(0, enemy.currentHP - damage);
@@ -409,6 +506,13 @@ public class CombatManager : MonoBehaviour
                 PlayerStats.Instance.AddChance067(enemy.data.chance067);
                 Debug.Log($"Enemy {enemy.data.enemyName} defeated! Reward: +{enemy.data.coin} coins, +{enemy.data.chance067}% chance067");
             }
+            if (spawnedDisplays.Count > index && spawnedDisplays[index] != null)
+            {
+                spawnedDisplays[index].PlayDieAnimation();
+            }
+            UpdateAllDisplayVisuals();
+            yield return new WaitForSeconds(1.0f);
+
             activeEnemies.RemoveAt(index);
             RefreshEnemyDisplays();
         }
@@ -465,26 +569,13 @@ public class CombatManager : MonoBehaviour
 
             for (int hit = 0; hit < totalHits; hit++)
             {
-                if (PlayerStats.Instance != null)
+                if (spawnedDisplays.Count > i && spawnedDisplays[i] != null)
                 {
-                    bool hasShield = PlayerStats.Instance.currentShield > 0;
-                    PlayerStats.Instance.TakeDamage(dmgPerHit);
-
-                    if (ShogunEffectManager.Instance != null)
-                    {
-                        Transform spawnPos = getHitSpawnLocation != null ? getHitSpawnLocation : this.transform;
-                        ShogunEffectManager.Instance.SpawnGetHitEffect();
-                    }
-
-                    if (AudioManager.Instance != null)
-                    {
-                        if (hasShield) AudioManager.Instance.PlayShieldHitSound();
-                        else AudioManager.Instance.PlayGetHitSound();
-                    }
+                    spawnedDisplays[i].PlayAttackAnimation();
                 }
 
                 // สั่งพิมพ์ข้อความด้วยความเร็วล็อกวินาทีคงที่ (เช่น 0.2 วินาที)
-                AnimateTurnText("Enemy Turn", $"{enemy.data.enemyName} Hit ({hit + 1}/{totalHits}): -{dmgPerHit} HP");
+                AnimateTurnText("Enemy Turn", $"{enemy.data.enemyName} Attacks ({hit + 1}/{totalHits})");
 
                 // หน่วงเวลาระหว่างการโจมตีแต่ละ hit
                 yield return new WaitForSeconds(delayBetweenEnemyHits);

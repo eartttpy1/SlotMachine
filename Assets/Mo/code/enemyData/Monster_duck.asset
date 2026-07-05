@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ScriptableMonster
   enemyName: monster1
   sprite: {fileID: 21300000, guid: aac42871b76c99c448bcbde6229bf4cb, type: 3}
+  animationOverrideController: {fileID: 22100000, guid: f344e0a238f30764b80c68392c4534ad, type: 2}
   baseHP: 50
   hpIncreasePerLevel: 10
   baseDMG: 7

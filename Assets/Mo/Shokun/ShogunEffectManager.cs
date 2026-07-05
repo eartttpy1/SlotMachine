@@ -74,7 +74,13 @@ public class ShogunEffectManager : MonoBehaviour
             return;
         }
 
-        Instantiate(swordEffect.effectPrefab, customLocation.position, customLocation.rotation);
+        GameObject spawned = Instantiate(swordEffect.effectPrefab, customLocation.position, customLocation.rotation);
+        AudioSource[] audioSources = spawned.GetComponentsInChildren<AudioSource>(true);
+        foreach (AudioSource src in audioSources)
+        {
+            src.mute = true;
+            src.enabled = false;
+        }
     }
 
     /// <summary>
@@ -102,7 +108,13 @@ public class ShogunEffectManager : MonoBehaviour
             return;
         }
 
-        Instantiate(greatSwordEffect.effectPrefab, customLocation.position, customLocation.rotation);
+        GameObject spawned = Instantiate(greatSwordEffect.effectPrefab, customLocation.position, customLocation.rotation);
+        AudioSource[] audioSources = spawned.GetComponentsInChildren<AudioSource>(true);
+        foreach (AudioSource src in audioSources)
+        {
+            src.mute = true;
+            src.enabled = false;
+        }
     }
     
     /// <summary>
@@ -120,11 +132,17 @@ public class ShogunEffectManager : MonoBehaviour
 
         if (group.spawnLocation == null)
         {
-            Debug.LogWarning($"[ShogunEffectManager] �������öʻ��� {group.effectPrefab.name} �����ͧ�ҡ�����駤�� Spawn Location GameObject!");
+            Debug.LogWarning($"[ShogunEffectManager] öʻ {group.effectPrefab.name} ͧҡ駤 Spawn Location GameObject!");
             return;
         }
 
-        // ʻ��� Instance �͡�ҵ���ԡѴ��е��˹觷��١��˹������ GameObject ����
-        Instantiate(group.effectPrefab, group.spawnLocation.position, group.spawnLocation.rotation);
+        // ʻ Instance ͡ҵԡѴе˹觷١˹ GameObject 
+        GameObject spawned = Instantiate(group.effectPrefab, group.spawnLocation.position, group.spawnLocation.rotation);
+        AudioSource[] audioSources = spawned.GetComponentsInChildren<AudioSource>(true);
+        foreach (AudioSource src in audioSources)
+        {
+            src.mute = true;
+            src.enabled = false;
+        }
     }
 }

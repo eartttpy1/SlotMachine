@@ -20,6 +20,9 @@ public class EnemyDisplay : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
     public GameObject swordHitObject;
     public GameObject greatSwordHitObject;
 
+    [Header("Enemy Animator")]
+    public Animator enemyAnimator;
+
     private CombatManager.EnemyInstance associatedEnemy;
     private int enemyIndex;
 
@@ -32,6 +35,20 @@ public class EnemyDisplay : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
         // Ensure hit animations are inactive on startup
         if (swordHitObject != null) swordHitObject.SetActive(false);
         if (greatSwordHitObject != null) greatSwordHitObject.SetActive(false);
+
+        if (enemyAnimator == null)
+        {
+            enemyAnimator = GetComponent<Animator>();
+        }
+        if (enemyAnimator == null)
+        {
+            enemyAnimator = GetComponentInChildren<Animator>();
+        }
+
+        if (enemyAnimator != null && associatedEnemy != null && associatedEnemy.data != null && associatedEnemy.data.animationOverrideController != null)
+        {
+            enemyAnimator.runtimeAnimatorController = associatedEnemy.data.animationOverrideController;
+        }
     }
 
     public void UpdateVisuals()
@@ -173,6 +190,40 @@ public class EnemyDisplay : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
                 return; // Keep border active and flashing
             }
             borderImage.gameObject.SetActive(false);
+        }
+     }
+
+    public void PlayAttackAnimation()
+    {
+        if (enemyAnimator != null)
+        {
+            enemyAnimator.SetTrigger("ATK");
+        }
+    }
+
+    public void PlayDieAnimation()
+    {
+        if (enemyAnimator != null)
+        {
+            enemyAnimator.SetBool("isDie", true);
+        }
+    }
+
+    // Call this via Unity Animation Event on the enemy's attack clip
+    public void TriggerEnemyAttackSFX()
+    {
+        if (CombatManager.Instance != null && associatedEnemy != null)
+        {
+            CombatManager.Instance.OnEnemyAttackSwing(associatedEnemy, this);
+        }
+    }
+
+    // Direct sound play option for Animation Events
+    public void PlayGetHitSoundEvent()
+    {
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.PlayGetHitSound();
         }
     }
 }
