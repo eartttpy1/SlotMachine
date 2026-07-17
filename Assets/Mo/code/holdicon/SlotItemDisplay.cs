@@ -18,6 +18,7 @@ public class SlotItemDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExit
     public bool isStartIcon;
     public bool isUpgradeShop;
     public bool isGachaShop;
+    public bool isSelectionItem;
 
     private void Awake()
     {
@@ -47,6 +48,21 @@ public class SlotItemDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExit
         if (iconImage != null && symbolData != null)
         {
             iconImage.sprite = symbolData.SymbolSprite;
+            if (isSelectionItem && symbolData is SlotIconData selectIcon)
+            {
+                bool isSelected = PlayerStats.Instance != null && PlayerStats.Instance.selectedSlotIcons.Contains(selectIcon);
+                if (borderObject != null)
+                {
+                    borderObject.gameObject.SetActive(isSelected);
+                    borderObject.color = isSelected ? Color.red : Color.white;
+                }
+                iconImage.color = isSelected ? Color.white : new Color(1f, 1f, 1f, 0.4f);
+            }
+            else
+            {
+                if (borderObject != null) borderObject.color = Color.white;
+                iconImage.color = Color.white;
+            }
         }
 
         if (maxOverlayText != null)
@@ -102,7 +118,19 @@ public class SlotItemDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExit
     /// </summary>
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (borderObject != null) borderObject.gameObject.SetActive(true);
+        if (borderObject != null)
+        {
+            borderObject.gameObject.SetActive(true);
+            if (isSelectionItem && symbolData is SlotIconData selectIcon)
+            {
+                bool isSelected = PlayerStats.Instance != null && PlayerStats.Instance.selectedSlotIcons.Contains(selectIcon);
+                borderObject.color = isSelected ? Color.red : Color.white;
+            }
+            else
+            {
+                borderObject.color = Color.white;
+            }
+        }
 
         if (AudioManager.Instance != null)
         {
@@ -117,7 +145,7 @@ public class SlotItemDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExit
             string bonus = "";
             string price = "";
 
-            if (isStartIcon)
+            if (isStartIcon || isSelectionItem)
             {
                 desc = symbolData.description;
                 bonus = symbolData.bonusDescription;
@@ -174,7 +202,19 @@ public class SlotItemDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExit
     /// </summary>
     public void OnPointerExit(PointerEventData eventData)
     {
-        if (borderObject != null) borderObject.gameObject.SetActive(false);
+        if (isSelectionItem && symbolData is SlotIconData selectIcon)
+        {
+            bool isSelected = PlayerStats.Instance != null && PlayerStats.Instance.selectedSlotIcons.Contains(selectIcon);
+            if (borderObject != null)
+            {
+                borderObject.gameObject.SetActive(isSelected);
+                borderObject.color = isSelected ? Color.red : Color.white;
+            }
+        }
+        else
+        {
+            if (borderObject != null) borderObject.gameObject.SetActive(false);
+        }
 
         // สั่งให้ Panel ส่วนกลางซ่อนตัวหรือล้างข้อมูล
         if (DescriptionPanel.Instance != null)
@@ -188,6 +228,38 @@ public class SlotItemDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExit
     /// </summary>
     public void OnPointerClick(PointerEventData eventData)
     {
+        if (isSelectionItem && symbolData is SlotIconData selectIcon)
+        {
+            if (AudioManager.Instance != null)
+            {
+                AudioManager.Instance.PlayButtonClick();
+            }
+
+            if (PlayerStats.Instance != null)
+            {
+                bool isSelected = PlayerStats.Instance.selectedSlotIcons.Contains(selectIcon);
+                if (isSelected)
+                {
+                    PlayerStats.Instance.selectedSlotIcons.Remove(selectIcon);
+                    Debug.Log($"Removed {selectIcon.SymbolName} from slot selection. Total: {PlayerStats.Instance.selectedSlotIcons.Count}");
+                }
+                else
+                {
+                    if (PlayerStats.Instance.selectedSlotIcons.Count < 3)
+                    {
+                        PlayerStats.Instance.selectedSlotIcons.Add(selectIcon);
+                        Debug.Log($"Added {selectIcon.SymbolName} to slot selection. Total: {PlayerStats.Instance.selectedSlotIcons.Count}");
+                    }
+                    else
+                    {
+                        Debug.LogWarning("เลือกไอเท็มได้สูงสุด 3 ชิ้นเท่านั้น!");
+                    }
+                }
+                UpdateVisuals();
+            }
+            return;
+        }
+
         if (!isUpgradeShop) return;
 
         if (AudioManager.Instance != null)

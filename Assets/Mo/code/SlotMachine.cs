@@ -25,9 +25,19 @@ public class SlotMachine : MonoBehaviour
         availableSymbols.Clear();
         if (currentMode == SlotMachineMode.SlotIconData)
         {
-            foreach (var item in slotIconList)
+            if (PlayerStats.Instance != null && PlayerStats.Instance.selectedSlotIcons != null && PlayerStats.Instance.selectedSlotIcons.Count >= 3)
             {
-                if (item != null) availableSymbols.Add(item);
+                foreach (var item in PlayerStats.Instance.selectedSlotIcons)
+                {
+                    if (item != null) availableSymbols.Add(item);
+                }
+            }
+            else
+            {
+                foreach (var item in slotIconList)
+                {
+                    if (item != null) availableSymbols.Add(item);
+                }
             }
         }
         else if (currentMode == SlotMachineMode.GachaReward)

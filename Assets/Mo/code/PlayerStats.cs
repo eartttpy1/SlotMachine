@@ -40,6 +40,9 @@ public class PlayerStats : MonoBehaviour
     public int coins = 0;
     public TextMeshProUGUI coinsText;
 
+    [Header("Slot Selection Pool")]
+    public List<SlotIconData> selectedSlotIcons = new List<SlotIconData>();
+
     private Dictionary<SlotSymbol, int> upgradeLevels = new Dictionary<SlotSymbol, int>();
 
     public int GetUpgradeLevel(SlotSymbol symbol)

@@ -117,6 +117,11 @@ public class MainMenuManager : MonoBehaviour
 
     public void StartGame()
     {
+        if (PlayerStats.Instance != null && PlayerStats.Instance.selectedSlotIcons.Count != 3)
+        {
+            Debug.LogWarning("ต้องเลือกไอเท็มให้ครบ 3 ชิ้นก่อนเริ่มเกม!");
+            return;
+        }
         SceneManager.LoadScene("GamePlay");
     }
 

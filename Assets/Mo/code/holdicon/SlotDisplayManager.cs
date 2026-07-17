@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class SlotDisplayManager : MonoBehaviour
 {
-    public enum SpawnMode { StartIcon, UpgradeShop, GachaShop }
+    public enum SpawnMode { StartIcon, UpgradeShop, GachaShop, SelectionScreen }
 
     [Header("Configuration")]
     public SpawnMode spawnMode;      // เลือกว่า Manager ตัวนี้จะสร้างไอคอนของสถานะใด
@@ -14,6 +14,7 @@ public class SlotDisplayManager : MonoBehaviour
     public List<SlotSymbolData> startIconList = new List<SlotSymbolData>();
     public List<SlotSymbolData> upgradeShopList = new List<SlotSymbolData>();
     public List<GachaRewardData> gachaShopList = new List<GachaRewardData>();
+    public List<SlotIconData> allAvailableIcons = new List<SlotIconData>();
 
     private void Start()
     {
@@ -56,6 +57,13 @@ public class SlotDisplayManager : MonoBehaviour
                 CreateItem(gachaShopList[i], SpawnMode.GachaShop);
             }
         }
+        else if (spawnMode == SpawnMode.SelectionScreen)
+        {
+            for (int i = 0; i < allAvailableIcons.Count; i++)
+            {
+                CreateItem(allAvailableIcons[i], SpawnMode.SelectionScreen);
+            }
+        }
     }
 
     private void CreateItem(SlotSymbolData data, SpawnMode mode)
@@ -72,6 +80,7 @@ public class SlotDisplayManager : MonoBehaviour
             display.isStartIcon = (mode == SpawnMode.StartIcon);
             display.isUpgradeShop = (mode == SpawnMode.UpgradeShop);
             display.isGachaShop = (mode == SpawnMode.GachaShop);
+            display.isSelectionItem = (mode == SpawnMode.SelectionScreen);
 
             // ป้อนข้อมูล ScriptableObject และสั่งให้อัปเดตรูปภาพทันที
             display.symbolData = data;

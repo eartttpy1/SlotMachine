@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SlotIconData
   symbolType: 8
   iconName: Str Potion
-  iconSprite: {fileID: 21300000, guid: c952f65d1ca8acf418bd02815780bf3b, type: 3}
+  iconSprite: {fileID: -1610079512861360539, guid: 51a93489a7b788c4a93bfd6da5a11358, type: 3}
   skillDescription: Increases own damage by 20% for 3 turns
   iconBonusDescription: Bonus x5
   baseValue: 20
