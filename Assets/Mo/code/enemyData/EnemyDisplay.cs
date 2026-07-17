@@ -12,6 +12,11 @@ public class EnemyDisplay : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
     public Slider hpSlider;
     public TextMeshProUGUI hpText;
 
+    [Header("Damage Popup UI")]
+    public TextMeshProUGUI damagePopupText;
+    private Vector3 originalPopupPos;
+    private bool hasStoredOriginalPos = false;
+
     [Header("DOTween Settings")]
     public float punchScaleStrength = 0.2f;
     public float punchDuration = 0.3f;
@@ -225,5 +230,47 @@ public class EnemyDisplay : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
         {
             AudioManager.Instance.PlayGetHitSound();
         }
+    }
+
+    public void ShowDamagePopup(int damage)
+    {
+        if (damagePopupText == null) return;
+
+        if (!hasStoredOriginalPos)
+        {
+            originalPopupPos = damagePopupText.transform.localPosition;
+            hasStoredOriginalPos = true;
+        }
+
+        // Clone the original damagePopupText GameObject
+        GameObject popupGo = Instantiate(damagePopupText.gameObject, damagePopupText.transform.parent, false);
+        popupGo.SetActive(true);
+
+        TextMeshProUGUI newText = popupGo.GetComponent<TextMeshProUGUI>();
+        newText.text = $"-{damage}";
+        
+        // Reset scale and color
+        popupGo.transform.localScale = Vector3.zero;
+        newText.color = Color.red;
+
+        // Adjust scale based on damage size: baseline scale 0.7, +0.008 per point of damage
+        float targetScale = Mathf.Clamp(0.7f + (damage * 0.008f), 0.7f, 2.0f);
+
+        // Add a slight random offset to the position so overlapping popups are readable!
+        float randomOffsetX = UnityEngine.Random.Range(-30f, 30f);
+        float randomOffsetY = UnityEngine.Random.Range(-15f, 15f);
+        popupGo.transform.localPosition = originalPopupPos + new Vector3(randomOffsetX, randomOffsetY, 0f);
+
+        Vector3 targetPos = popupGo.transform.localPosition + new Vector3(0f, 80f, 0f);
+
+        // Bounce/Punch scale effect
+        popupGo.transform.DOScale(targetScale, 0.2f).SetEase(Ease.OutBack);
+
+        // Float upwards and fade out
+        popupGo.transform.DOLocalMove(targetPos, 0.8f).SetEase(Ease.OutQuad);
+        newText.DOFade(0f, 0.8f).SetEase(Ease.InQuad).OnComplete(() =>
+        {
+            Destroy(popupGo);
+        });
     }
 }

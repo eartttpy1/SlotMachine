@@ -72,8 +72,13 @@ public class CombatManager : MonoBehaviour
         }
     }
 
-    private int pendingSwordDamage = 0;
-    private int pendingStunChance = 0;
+    private int rolledSwordCount;
+    private SlotIconData rolledSwordData;
+    private int rolledAxeCount;
+    private SlotIconData rolledAxeData;
+    private int rolledHammerCount;
+    private SlotIconData rolledHammerData;
+    private float rolledMultiplier;
 
     [Header("Player Status Buffs")]
     public int strBuffTurns = 0;
@@ -174,6 +179,7 @@ public class CombatManager : MonoBehaviour
         else
         {
             PlayerStats.Instance.TakeDamage(dmgPerHit);
+            PlayerStats.Instance.ShowDamagePopup(dmgPerHit);
             if (ShogunEffectManager.Instance != null)
             {
                 ShogunEffectManager.Instance.SpawnGetHitEffect();
@@ -192,6 +198,11 @@ public class CombatManager : MonoBehaviour
                 {
                     enemy.currentHP = Mathf.Max(0, enemy.currentHP - reflectedDmg);
                     Debug.Log($"Reflected {reflectedDmg} damage to {enemy.data.enemyName}. HP is now {enemy.currentHP}");
+                    if (display != null)
+                    {
+                        display.ShowDamagePopup(reflectedDmg);
+                        display.PlayImpactAnimation();
+                    }
                     
                     if (enemy.currentHP <= 0)
                     {
@@ -266,8 +277,10 @@ public class CombatManager : MonoBehaviour
         currentLevel = level;
         upstat = false;
         nextlevel = false;
-        pendingSwordDamage = 0;
-        pendingStunChance = 0;
+        rolledSwordCount = 0;
+        rolledAxeCount = 0;
+        rolledHammerCount = 0;
+        rolledMultiplier = 1f;
         strBuffTurns = 0;
         strBuffMultiplier = 0f;
         reflectPercent = 0;
@@ -469,6 +482,10 @@ public class CombatManager : MonoBehaviour
             {
                 EnemyInstance enemy = activeEnemies[i];
                 enemy.currentHP = Mathf.Max(0, enemy.currentHP - finalGreatSwordDmg);
+                if (spawnedDisplays.Count > i && spawnedDisplays[i] != null)
+                {
+                    spawnedDisplays[i].ShowDamagePopup(finalGreatSwordDmg);
+                }
                 if (enemy.currentHP <= 0)
                 {
                     anyDied = true;
@@ -519,16 +536,18 @@ public class CombatManager : MonoBehaviour
 
         if (axeCount > 0 && axeData != null)
         {
+            int minDmg, maxDmg;
+            axeData.GetAxeDamageRange(out minDmg, out maxDmg);
             int baseAxe = 0;
             if (axeCount == 3)
             {
-                baseAxe = UnityEngine.Random.Range(10, 101) * axeData.match3Multiplier;
+                baseAxe = UnityEngine.Random.Range(minDmg, maxDmg + 1) * axeData.match3Multiplier;
             }
             else
             {
                 for (int i = 0; i < axeCount; i++)
                 {
-                    baseAxe += UnityEngine.Random.Range(10, 101);
+                    baseAxe += UnityEngine.Random.Range(minDmg, maxDmg + 1);
                 }
             }
             totalSingleDmg += Mathf.RoundToInt(baseAxe * singleTargetMultiplier);
@@ -541,21 +560,30 @@ public class CombatManager : MonoBehaviour
             hammerChance = (hammerData.countUpgrade > 0) ? 60 : 50;
         }
 
-        if (totalSingleDmg > 0)
-        {
-            pendingSwordDamage = totalSingleDmg;
-            pendingStunChance = hammerChance;
+        rolledSwordCount = swordCount;
+        rolledSwordData = swordData;
+        rolledAxeCount = axeCount;
+        rolledAxeData = axeData;
+        rolledHammerCount = hammerCount;
+        rolledHammerData = hammerData;
+        rolledMultiplier = singleTargetMultiplier;
 
+        bool hasSingleAttacks = (swordCount > 0 && swordData != null) || 
+                                (axeCount > 0 && axeData != null) || 
+                                (hammerCount > 0 && hammerData != null);
+
+        if (hasSingleAttacks)
+        {
             if (activeEnemies.Count == 1)
             {
-                yield return StartCoroutine(ExecuteSwordAttackRoutine(0));
+                yield return StartCoroutine(ExecuteAllSingleAttacksRoutine(0));
             }
             else
             {
                 currentState = CombatState.TargetSelection;
                 AnimateTurnText("Player Turn", "Choose Target!");
                 UpdateAllDisplayVisuals();
-                Debug.Log($"Single target attack rolled! Pending {pendingSwordDamage} damage (stun chance: {pendingStunChance}%). Please select target.");
+                Debug.Log("Single target weapons rolled. Select target to begin sequence.");
             }
         }
         else
@@ -566,78 +594,121 @@ public class CombatManager : MonoBehaviour
 
     public void SelectEnemyTarget(int index)
     {
-        if (currentState != CombatState.TargetSelection || pendingSwordDamage <= 0)
+        if (currentState != CombatState.TargetSelection)
         {
-            Debug.LogWarning("No pending sword attack target selection needed.");
             return;
         }
 
-        ExecuteSwordAttack(index);
+        StartCoroutine(ExecuteAllSingleAttacksRoutine(index));
     }
 
-    private void ExecuteSwordAttack(int index)
+    private IEnumerator ExecuteAllSingleAttacksRoutine(int index)
     {
-        StartCoroutine(ExecuteSwordAttackRoutine(index));
-    }
+        currentState = CombatState.PlayerTurn;
 
-    private IEnumerator ExecuteSwordAttackRoutine(int index)
-    {
-        if (index < 0 || index >= activeEnemies.Count) yield break;
-
-        Debug.Log($"Attacking enemy {activeEnemies[index].data.enemyName} for {pendingSwordDamage} Sword damage.");
-
-        if (ShogunEffectManager.Instance != null)
+        // 1. SWORD ATTACK
+        if (rolledSwordCount > 0 && rolledSwordData != null && index < activeEnemies.Count && activeEnemies[index].currentHP > 0)
         {
-            Transform spawnPos = swordSpawnLocation;
-            if (spawnPos == null && spawnedDisplays.Count > index)
+            int baseSword = (rolledSwordCount == 3) ? (rolledSwordData.GetCurrentValue() * rolledSwordData.match3Multiplier) : (rolledSwordCount * rolledSwordData.GetCurrentValue());
+            int dmg = Mathf.RoundToInt(baseSword * rolledMultiplier);
+
+            Debug.Log($"Sequence: Sword attack for {dmg} damage.");
+            
+            if (ShogunEffectManager.Instance != null)
             {
-                EnemyDisplay targetDisplay = spawnedDisplays[index];
-                if (targetDisplay != null)
-                {
-                    spawnPos = targetDisplay.transform;
-                }
+                Transform spawnPos = (spawnedDisplays.Count > index) ? spawnedDisplays[index].transform : swordSpawnLocation;
+                ShogunEffectManager.Instance.SpawnSwordEffect(spawnPos != null ? spawnPos : this.transform);
+            }
+            if (spawnedDisplays.Count > index && spawnedDisplays[index] != null)
+            {
+                spawnedDisplays[index].PlaySwordHitAnimation();
+                spawnedDisplays[index].PlayImpactAnimation();
+            }
+            if (AudioManager.Instance != null)
+            {
+                AudioManager.Instance.PlaySwordSound();
             }
 
-            if (spawnPos != null)
+            yield return new WaitForSeconds(0.4f);
+            yield return StartCoroutine(DamageEnemy(index, dmg));
+            yield return new WaitForSeconds(0.2f);
+        }
+
+        // 2. AXE ATTACK
+        if (rolledAxeCount > 0 && rolledAxeData != null && index < activeEnemies.Count && activeEnemies[index].currentHP > 0)
+        {
+            int minDmg, maxDmg;
+            rolledAxeData.GetAxeDamageRange(out minDmg, out maxDmg);
+            int baseAxe = 0;
+            if (rolledAxeCount == 3)
             {
-                ShogunEffectManager.Instance.SpawnSwordEffect(spawnPos);
+                baseAxe = UnityEngine.Random.Range(minDmg, maxDmg + 1) * rolledAxeData.match3Multiplier;
             }
             else
             {
-                ShogunEffectManager.Instance.SpawnSwordEffect();
+                for (int i = 0; i < rolledAxeCount; i++)
+                {
+                    baseAxe += UnityEngine.Random.Range(minDmg, maxDmg + 1);
+                }
             }
-        }
+            int dmg = Mathf.RoundToInt(baseAxe * rolledMultiplier);
 
-        // Play animations on the targeted enemy first
-        if (spawnedDisplays.Count > index && spawnedDisplays[index] != null)
-        {
-            spawnedDisplays[index].PlaySwordHitAnimation();
-            spawnedDisplays[index].PlayImpactAnimation();
-        }
+            Debug.Log($"Sequence: Axe attack for {dmg} damage.");
 
-        if (AudioManager.Instance != null)
-        {
-            AudioManager.Instance.PlaySwordSound();
-        }
-
-        // Wait for Sword animation to land before reducing HP on UI
-        yield return new WaitForSeconds(0.4f);
-
-        yield return StartCoroutine(DamageEnemy(index, pendingSwordDamage));
-        
-        if (pendingStunChance > 0 && index < activeEnemies.Count && activeEnemies[index].currentHP > 0)
-        {
-            if (UnityEngine.Random.Range(0, 100) < pendingStunChance)
+            if (spawnedDisplays.Count > index && spawnedDisplays[index] != null)
             {
-                activeEnemies[index].stunTurns = 1;
-                Debug.Log($"{activeEnemies[index].data.enemyName} is STUNNED!");
-                AnimateTurnText("Player Turn", $"{activeEnemies[index].data.enemyName} STUNNED!");
-                yield return new WaitForSeconds(0.6f);
+                spawnedDisplays[index].PlaySwordHitAnimation();
+                spawnedDisplays[index].PlayImpactAnimation();
             }
+            if (AudioManager.Instance != null)
+            {
+                AudioManager.Instance.PlaySwordSound();
+            }
+
+            yield return new WaitForSeconds(0.4f);
+            yield return StartCoroutine(DamageEnemy(index, dmg));
+            yield return new WaitForSeconds(0.2f);
         }
 
-        pendingSwordDamage = 0;
-        pendingStunChance = 0;
+        // 3. HAMMER ATTACK
+        if (rolledHammerCount > 0 && rolledHammerData != null && index < activeEnemies.Count && activeEnemies[index].currentHP > 0)
+        {
+            int baseHammer = (rolledHammerCount == 3) ? (rolledHammerData.GetCurrentValue() * rolledHammerData.match3Multiplier) : (rolledHammerCount * rolledHammerData.GetCurrentValue());
+            int dmg = Mathf.RoundToInt(baseHammer * rolledMultiplier);
+            int hammerChance = (rolledHammerData.countUpgrade > 0) ? 60 : 50;
+
+            Debug.Log($"Sequence: Hammer attack for {dmg} damage.");
+
+            if (spawnedDisplays.Count > index && spawnedDisplays[index] != null)
+            {
+                spawnedDisplays[index].PlaySwordHitAnimation();
+                spawnedDisplays[index].PlayImpactAnimation();
+            }
+            if (AudioManager.Instance != null)
+            {
+                AudioManager.Instance.PlaySwordSound();
+            }
+
+            yield return new WaitForSeconds(0.4f);
+            yield return StartCoroutine(DamageEnemy(index, dmg));
+
+            if (index < activeEnemies.Count && activeEnemies[index].currentHP > 0)
+            {
+                if (UnityEngine.Random.Range(0, 100) < hammerChance)
+                {
+                    activeEnemies[index].stunTurns = 1;
+                    Debug.Log($"{activeEnemies[index].data.enemyName} is STUNNED!");
+                    AnimateTurnText("Player Turn", $"{activeEnemies[index].data.enemyName} STUNNED!");
+                    yield return new WaitForSeconds(0.6f);
+                }
+            }
+            yield return new WaitForSeconds(0.2f);
+        }
+
+        // Clear rolled weapon counts
+        rolledSwordCount = 0;
+        rolledAxeCount = 0;
+        rolledHammerCount = 0;
 
         if (!CheckVictoryCondition())
         {
@@ -660,6 +731,11 @@ public class CombatManager : MonoBehaviour
         EnemyInstance enemy = activeEnemies[index];
         enemy.currentHP = Mathf.Max(0, enemy.currentHP - damage);
         Debug.Log($"Enemy {enemy.data.enemyName} HP: {enemy.currentHP}/{enemy.maxHP}");
+
+        if (spawnedDisplays.Count > index && spawnedDisplays[index] != null)
+        {
+            spawnedDisplays[index].ShowDamagePopup(damage);
+        }
 
         if (enemy.currentHP <= 0)
         {

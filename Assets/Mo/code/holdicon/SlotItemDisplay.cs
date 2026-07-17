@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using DG.Tweening;
 
 public class SlotItemDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
@@ -19,6 +20,9 @@ public class SlotItemDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExit
     public bool isUpgradeShop;
     public bool isGachaShop;
     public bool isSelectionItem;
+    public bool isItemShop;
+
+    private Tween blinkTween;
 
     private void Awake()
     {
@@ -26,6 +30,42 @@ public class SlotItemDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExit
         if (iconImage == null)
         {
             iconImage = GetComponent<Image>();
+        }
+    }
+
+    private void UpdateBlinkState()
+    {
+        if (blinkTween != null)
+        {
+            blinkTween.Kill();
+            blinkTween = null;
+        }
+
+        if (isStartIcon && SlotDisplayManager.isDeleteModeActive)
+        {
+            if (borderObject != null)
+            {
+                borderObject.gameObject.SetActive(true);
+                borderObject.color = Color.red;
+                blinkTween = borderObject.DOFade(0.2f, 0.4f).SetLoops(-1, LoopType.Yoyo).SetUpdate(true);
+            }
+        }
+        else
+        {
+            if (borderObject != null && !isSelectionItem)
+            {
+                borderObject.gameObject.SetActive(false);
+                borderObject.color = Color.white;
+            }
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if (blinkTween != null)
+        {
+            blinkTween.Kill();
+            blinkTween = null;
         }
     }
 
@@ -58,6 +98,12 @@ public class SlotItemDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExit
                 }
                 iconImage.color = isSelected ? Color.white : new Color(1f, 1f, 1f, 0.4f);
             }
+            else if (isItemShop && symbolData is SlotIconData shopIcon)
+            {
+                bool isSold = PlayerStats.Instance != null && PlayerStats.Instance.selectedSlotIcons.Contains(shopIcon);
+                if (borderObject != null) borderObject.gameObject.SetActive(false);
+                iconImage.color = isSold ? new Color(1f, 1f, 1f, 0.4f) : Color.white;
+            }
             else
             {
                 if (borderObject != null) borderObject.color = Color.white;
@@ -72,6 +118,12 @@ public class SlotItemDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExit
             {
                 maxOverlayText.gameObject.SetActive(true);
                 maxOverlayText.text = "MAX";
+            }
+            else if (isItemShop && iconData != null)
+            {
+                bool isSold = PlayerStats.Instance != null && PlayerStats.Instance.selectedSlotIcons.Contains(iconData);
+                maxOverlayText.gameObject.SetActive(isSold);
+                maxOverlayText.text = "SOLD";
             }
             else
             {
@@ -90,7 +142,7 @@ public class SlotItemDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExit
                 {
                     if (iconData.countUpgrade >= 3)
                     {
-                        priceOverlayText.text = "MAX";
+                        priceOverlayText.text = "-";
                     }
                     else
                     {
@@ -106,11 +158,18 @@ public class SlotItemDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExit
                     priceOverlayText.text = "";
                 }
             }
+            else if (isItemShop && symbolData is SlotIconData shopIcon)
+            {
+                bool isSold = PlayerStats.Instance != null && PlayerStats.Instance.selectedSlotIcons.Contains(shopIcon);
+                priceOverlayText.text = isSold ? "-" : "20";
+            }
             else
             {
                 priceOverlayText.text = "";
             }
         }
+
+        UpdateBlinkState();
     }
 
     /// <summary>
@@ -118,6 +177,12 @@ public class SlotItemDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExit
     /// </summary>
     public void OnPointerEnter(PointerEventData eventData)
     {
+        if (isStartIcon && SlotDisplayManager.isDeleteModeActive)
+        {
+            // Do not override blink border during enter in delete mode
+            return;
+        }
+
         if (borderObject != null)
         {
             borderObject.gameObject.SetActive(true);
@@ -145,10 +210,15 @@ public class SlotItemDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExit
             string bonus = "";
             string price = "";
 
-            if (isStartIcon || isSelectionItem)
+            if (isStartIcon || isSelectionItem || isItemShop)
             {
                 desc = symbolData.description;
                 bonus = symbolData.bonusDescription;
+                if (isItemShop && symbolData is SlotIconData shopIcon)
+                {
+                    bool isSold = PlayerStats.Instance != null && PlayerStats.Instance.selectedSlotIcons.Contains(shopIcon);
+                    price = isSold ? "SOLD" : "Price: 20 Coins";
+                }
             }
             else if (isUpgradeShop)
             {
@@ -202,6 +272,11 @@ public class SlotItemDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExit
     /// </summary>
     public void OnPointerExit(PointerEventData eventData)
     {
+        if (isStartIcon && SlotDisplayManager.isDeleteModeActive)
+        {
+            return;
+        }
+
         if (isSelectionItem && symbolData is SlotIconData selectIcon)
         {
             bool isSelected = PlayerStats.Instance != null && PlayerStats.Instance.selectedSlotIcons.Contains(selectIcon);
@@ -228,6 +303,71 @@ public class SlotItemDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExit
     /// </summary>
     public void OnPointerClick(PointerEventData eventData)
     {
+        if (isStartIcon && SlotDisplayManager.isDeleteModeActive && symbolData is SlotIconData deleteIcon)
+        {
+            if (PlayerStats.Instance != null)
+            {
+                if (PlayerStats.Instance.selectedSlotIcons.Count > 3)
+                {
+                    PlayerStats.Instance.selectedSlotIcons.Remove(deleteIcon);
+                    Debug.Log($"Deleted {deleteIcon.SymbolName} from slot! Active count: {PlayerStats.Instance.selectedSlotIcons.Count}");
+                    SlotDisplayManager.isDeleteModeActive = false;
+
+                    if (AudioManager.Instance != null)
+                    {
+                        AudioManager.Instance.PlayButtonClick();
+                    }
+
+                    SlotDisplayManager[] managers = FindObjectsOfType<SlotDisplayManager>();
+                    foreach (var manager in managers)
+                    {
+                        manager.SpawnItems();
+                    }
+                }
+                else
+                {
+                    Debug.LogWarning("ไม่สามารถลบได้ ต้องมีของในสล็อตอย่างน้อย 3 ชิ้น!");
+                }
+            }
+            return;
+        }
+
+        if (isItemShop && symbolData is SlotIconData shopIcon)
+        {
+            if (PlayerStats.Instance != null)
+            {
+                if (PlayerStats.Instance.selectedSlotIcons.Contains(shopIcon))
+                {
+                    Debug.LogWarning("ไอเท็มนี้ถูกซื้อไปแล้ว!");
+                    return;
+                }
+
+                int price = 20;
+                if (PlayerStats.Instance.coins >= price)
+                {
+                    PlayerStats.Instance.coins -= price;
+                    PlayerStats.Instance.selectedSlotIcons.Add(shopIcon);
+                    Debug.Log($"Bought {shopIcon.SymbolName} and added to slot! Active count: {PlayerStats.Instance.selectedSlotIcons.Count}");
+
+                    if (AudioManager.Instance != null)
+                    {
+                        AudioManager.Instance.PlayButtonClick();
+                    }
+
+                    SlotDisplayManager[] managers = FindObjectsOfType<SlotDisplayManager>();
+                    foreach (var manager in managers)
+                    {
+                        manager.SpawnItems();
+                    }
+                }
+                else
+                {
+                    Debug.LogWarning("เหรียญไม่พอ!");
+                }
+            }
+            return;
+        }
+
         if (isSelectionItem && symbolData is SlotIconData selectIcon)
         {
             if (AudioManager.Instance != null)

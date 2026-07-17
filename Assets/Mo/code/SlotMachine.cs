@@ -523,10 +523,12 @@ public class SlotMachine : MonoBehaviour
             }
             if (whiteCoinsRolled > 0 && whiteCoinIconData != null)
             {
+                int minCoins, maxCoins;
+                whiteCoinIconData.GetWhiteCoinRange(out minCoins, out maxCoins);
                 int totalWhiteCoinsAdded = 0;
                 for (int i = 0; i < whiteCoinsRolled; i++)
                 {
-                    totalWhiteCoinsAdded += UnityEngine.Random.Range(4, 9);
+                    totalWhiteCoinsAdded += UnityEngine.Random.Range(minCoins, maxCoins + 1);
                 }
                 if (whiteCoinsRolled == 3)
                 {

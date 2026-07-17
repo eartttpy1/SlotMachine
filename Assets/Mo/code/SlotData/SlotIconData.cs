@@ -58,8 +58,8 @@ public class SlotIconData : SlotSymbolData
                     return $"gain {GetCurrentValue()} coin";
 
                 case SlotSymbol.Axe:
-                    int minDmg = 10;
-                    int maxDmg = 100;
+                    int minDmg, maxDmg;
+                    GetAxeDamageRange(out minDmg, out maxDmg);
                     if (GameDataManager.Instance != null)
                     {
                         float bonus = GameDataManager.Instance.GetDamageBonus();
@@ -78,7 +78,9 @@ public class SlotIconData : SlotSymbolData
                     return $"{hammerVal} damage to 1 target, {stunChance}% chance to stun the enemy for 1 turn";
 
                 case SlotSymbol.WhiteCoin:
-                    return $"random gain 4-8 coins";
+                    int minCoins, maxCoins;
+                    GetWhiteCoinRange(out minCoins, out maxCoins);
+                    return $"random gain {minCoins}-{maxCoins} coins";
 
                 case SlotSymbol.StrPotion:
                     int strBoost = 20 + 10 * countUpgrade;
@@ -135,6 +137,30 @@ public class SlotIconData : SlotSymbolData
             val += Mathf.Max(1, Mathf.RoundToInt(increment));
         }
         return val;
+    }
+
+    public void GetAxeDamageRange(out int minDmg, out int maxDmg)
+    {
+        minDmg = 10;
+        maxDmg = 100;
+        for (int i = 0; i < countUpgrade; i++)
+        {
+            float increment = upgradeMultiplier / 100f;
+            minDmg += Mathf.Max(1, Mathf.RoundToInt(minDmg * increment));
+            maxDmg += Mathf.Max(1, Mathf.RoundToInt(maxDmg * increment));
+        }
+    }
+
+    public void GetWhiteCoinRange(out int minCoins, out int maxCoins)
+    {
+        minCoins = 4;
+        maxCoins = 8;
+        for (int i = 0; i < countUpgrade; i++)
+        {
+            float increment = upgradeMultiplier / 100f;
+            minCoins += Mathf.Max(1, Mathf.RoundToInt(minCoins * increment));
+            maxCoins += Mathf.Max(1, Mathf.RoundToInt(maxCoins * increment));
+        }
     }
 
     public int GetValueWithUpstat(int val) {

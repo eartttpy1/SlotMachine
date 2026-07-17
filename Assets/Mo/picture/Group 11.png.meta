@@ -1,11 +1,10 @@
 fileFormatVersion: 2
-guid: 36cda64067a161a4985e29a3c6374852
+guid: 8aabf48df6f5e30458298d8f2f854ca9
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 8283094497223125083
-    second: "\u0E14\u0E35\u0E44\u0E0B\u0E19\u0E4C\u0E17\u0E35\u0E48\u0E22\u0E31\u0E07\u0E44\u0E21\u0E48\u0E44\u0E14\u0E49\u0E15\u0E31\u0E49\u0E07\u0E0A\u0E37\u0E48\u0E2D
-      (9)_0"
+      213: 4728393952403248342
+    second: Group 11_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -115,7 +114,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 0
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -127,24 +126,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: "\u0E14\u0E35\u0E44\u0E0B\u0E19\u0E4C\u0E17\u0E35\u0E48\u0E22\u0E31\u0E07\u0E44\u0E21\u0E48\u0E44\u0E14\u0E49\u0E15\u0E31\u0E49\u0E07\u0E0A\u0E37\u0E48\u0E2D
-        (9)_0"
+      name: Group 11_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 65
-        width: 128
-        height: 24
+        y: 0
+        width: 211
+        height: 59
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: b582afb3f8673f270800000000000000
-      internalID: 8283094497223125083
+      spriteID: 6d4d9136f31ae9140800000000000000
+      internalID: 4728393952403248342
       vertices: []
       indices: 
       edges: []
@@ -153,7 +151,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 
@@ -163,7 +161,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      "\u0E14\u0E35\u0E44\u0E0B\u0E19\u0E4C\u0E17\u0E35\u0E48\u0E22\u0E31\u0E07\u0E44\u0E21\u0E48\u0E44\u0E14\u0E49\u0E15\u0E31\u0E49\u0E07\u0E0A\u0E37\u0E48\u0E2D (9)_0": 8283094497223125083
+      Group 11_0: 4728393952403248342
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

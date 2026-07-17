@@ -84,6 +84,14 @@ public class MapManager : MonoBehaviour
                 }
             }
         }
+
+        if (goNextLevelButton != null && PlayerStats.Instance != null)
+        {
+            if (starticon != null && starticon.activeSelf)
+            {
+                goNextLevelButton.interactable = (PlayerStats.Instance.selectedSlotIcons.Count == 3);
+            }
+        }
     }
 
     private void Start()
@@ -106,6 +114,8 @@ public class MapManager : MonoBehaviour
         if (gameCanvas != null) gameCanvas.SetActive(false);
         if (mainMenuCanvas != null) mainMenuCanvas.SetActive(true);
     }
+
+
 
     public void OnPlayPressed()
     {
@@ -282,6 +292,17 @@ public class MapManager : MonoBehaviour
                     slotMachine.currentMode = SlotMachine.SlotMachineMode.GachaReward;
                     slotMachine.PopulateAvailableSymbols();
                     slotMachine.UpdateSpinButtonText();
+                }
+                
+                // Clear and regenerate item shop items for the new shop map session
+                SlotDisplayManager[] shopManagers = FindObjectsOfType<SlotDisplayManager>();
+                foreach (var mgr in shopManagers)
+                {
+                    if (mgr.spawnMode == SlotDisplayManager.SpawnMode.ItemShop)
+                    {
+                        mgr.currentShopSessionItems.Clear();
+                        mgr.SpawnItems();
+                    }
                 }
                 break;
 
