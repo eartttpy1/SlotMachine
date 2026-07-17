@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public enum SlotSymbol { GreatSword, Sword, HealingPotion, Shield, Coin }
+public enum SlotSymbol { GreatSword, Sword, HealingPotion, Shield, Coin, Axe, Hammer, WhiteCoin, StrPotion, SpikedShield }
 
 [CreateAssetMenu(fileName = "SlotIcon_", menuName = "SlotGame/SlotIconData")]
 public class SlotIconData : SlotSymbolData
@@ -57,6 +57,38 @@ public class SlotIconData : SlotSymbolData
                 case SlotSymbol.Coin:
                     return $"gain {GetCurrentValue()} coin";
 
+                case SlotSymbol.Axe:
+                    int minDmg = 10;
+                    int maxDmg = 100;
+                    if (GameDataManager.Instance != null)
+                    {
+                        float bonus = GameDataManager.Instance.GetDamageBonus();
+                        minDmg = Mathf.RoundToInt(minDmg * (1f + bonus));
+                        maxDmg = Mathf.RoundToInt(maxDmg * (1f + bonus));
+                    }
+                    return $"random {minDmg}-{maxDmg} damage to 1 target";
+
+                case SlotSymbol.Hammer:
+                    int hammerVal = GetCurrentValue();
+                    if (GameDataManager.Instance != null)
+                    {
+                        hammerVal = Mathf.RoundToInt(hammerVal * (1f + GameDataManager.Instance.GetDamageBonus()));
+                    }
+                    int stunChance = (countUpgrade > 0) ? 60 : 50;
+                    return $"{hammerVal} damage to 1 target, {stunChance}% chance to stun the enemy for 1 turn";
+
+                case SlotSymbol.WhiteCoin:
+                    return $"random gain 4-8 coins";
+
+                case SlotSymbol.StrPotion:
+                    int strBoost = 20 + 10 * countUpgrade;
+                    return $"Increases own damage by {strBoost}% for 3 turns";
+
+                case SlotSymbol.SpikedShield:
+                    int shVal = GetCurrentValue();
+                    int reflectVal = 30 + 5 * countUpgrade;
+                    return $"grants {shVal} shield and reflects {reflectVal}% of damage back to the enemy";
+
                 default:
                     return skillDescription;
             }
@@ -106,7 +138,7 @@ public class SlotIconData : SlotSymbolData
     }
 
     public int GetValueWithUpstat(int val) {
-        if (symbolType == SlotSymbol.Sword || symbolType == SlotSymbol.GreatSword) {
+        if (symbolType == SlotSymbol.Sword || symbolType == SlotSymbol.GreatSword || symbolType == SlotSymbol.Axe || symbolType == SlotSymbol.Hammer) {
             if (GameDataManager.Instance != null) {
                 return Mathf.RoundToInt(val * (1f + GameDataManager.Instance.GetDamageBonus()));
             }

@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce8a275b9a15f824faf5cf77d20b79b5, type: 3}
+  m_Name: SlotIcon_Whitecoin
+  m_EditorClassIdentifier: Assembly-CSharp::SlotIconData
+  symbolType: 7
+  iconName: White Coin
+  iconSprite: {fileID: -1756584690, guid: c99081f0d1f3eb742ac76ed34bea2f49, type: 3}
+  skillDescription: random gain 4-8 coins
+  iconBonusDescription: Bonus x5
+  baseValue: 5
+  match3Multiplier: 5
+  isMultipleTargets: 0
+  baseWeightRandom: 1
+  baseUpgradePrice: 10
+  upgradeMultiplier: 50
+  upgradeDescription: Upgrade, get +50% coins

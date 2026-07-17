@@ -60,6 +60,7 @@ public class CombatManager : MonoBehaviour
         public int maxHP;
         public int currentHP;
         public float damageMultiplier = 1.0f;
+        public int stunTurns = 0;
 
         public EnemyInstance(ScriptableEnemy enemyData, int level)
         {
@@ -67,10 +68,17 @@ public class CombatManager : MonoBehaviour
             maxHP = enemyData.GetMaxHP(level);
             currentHP = maxHP;
             damageMultiplier = 1.0f;
+            stunTurns = 0;
         }
     }
 
     private int pendingSwordDamage = 0;
+    private int pendingStunChance = 0;
+
+    [Header("Player Status Buffs")]
+    public int strBuffTurns = 0;
+    public float strBuffMultiplier = 0f;
+    public int reflectPercent = 0;
 
     private void Awake()
     {
@@ -158,6 +166,39 @@ public class CombatManager : MonoBehaviour
                 AudioManager.Instance.PlayGetHitSound();
             }
             AnimateTurnText("Enemy Turn", $"{enemy.data.enemyName} Hit: -{dmgPerHit} HP");
+
+            // Reflect!
+            if (reflectPercent > 0 && enemy.currentHP > 0)
+            {
+                int reflectedDmg = Mathf.RoundToInt(dmgPerHit * reflectPercent / 100f);
+                if (reflectedDmg > 0)
+                {
+                    enemy.currentHP = Mathf.Max(0, enemy.currentHP - reflectedDmg);
+                    Debug.Log($"Reflected {reflectedDmg} damage to {enemy.data.enemyName}. HP is now {enemy.currentHP}");
+                    
+                    if (enemy.currentHP <= 0)
+                    {
+                        if (PlayerStats.Instance != null)
+                        {
+                            PlayerStats.Instance.coins += enemy.data.coin;
+                            PlayerStats.Instance.AddChance067(enemy.data.chance067);
+                        }
+                        if (display != null)
+                        {
+                            display.PlayDieAnimation();
+                        }
+                    }
+                    else
+                    {
+                        if (display != null)
+                        {
+                            display.PlaySwordHitAnimation();
+                            display.PlayImpactAnimation();
+                        }
+                    }
+                    UpdateAllDisplayVisuals();
+                }
+            }
         }
     }
 
@@ -209,6 +250,10 @@ public class CombatManager : MonoBehaviour
         upstat = false;
         nextlevel = false;
         pendingSwordDamage = 0;
+        pendingStunChance = 0;
+        strBuffTurns = 0;
+        strBuffMultiplier = 0f;
+        reflectPercent = 0;
 
         activeEnemies.Clear();
         foreach (var t in templates)
@@ -269,10 +314,18 @@ public class CombatManager : MonoBehaviour
         int swordCount = 0;
         int greatSwordCount = 0;
         int shieldCount = 0;
+        int axeCount = 0;
+        int hammerCount = 0;
+        int strPotionCount = 0;
+        int spikedShieldCount = 0;
 
         SlotIconData swordData = null;
         SlotIconData greatSwordData = null;
         SlotIconData shieldData = null;
+        SlotIconData axeData = null;
+        SlotIconData hammerData = null;
+        SlotIconData strPotionData = null;
+        SlotIconData spikedShieldData = null;
 
         foreach (var symbol in results)
         {
@@ -293,6 +346,26 @@ public class CombatManager : MonoBehaviour
                     shieldCount++;
                     shieldData = icon;
                 }
+                else if (icon.symbolType == SlotSymbol.Axe)
+                {
+                    axeCount++;
+                    axeData = icon;
+                }
+                else if (icon.symbolType == SlotSymbol.Hammer)
+                {
+                    hammerCount++;
+                    hammerData = icon;
+                }
+                else if (icon.symbolType == SlotSymbol.StrPotion)
+                {
+                    strPotionCount++;
+                    strPotionData = icon;
+                }
+                else if (icon.symbolType == SlotSymbol.SpikedShield)
+                {
+                    spikedShieldCount++;
+                    spikedShieldData = icon;
+                }
             }
         }
 
@@ -304,13 +377,35 @@ public class CombatManager : MonoBehaviour
             yield return new WaitForSeconds(0.2f);
         }
 
+        if (spikedShieldCount > 0 && spikedShieldData != null && PlayerStats.Instance != null)
+        {
+            int baseShield = spikedShieldData.GetCurrentValue();
+            int shieldVal = (spikedShieldCount == 3) ? (baseShield * spikedShieldData.match3Multiplier) : (spikedShieldCount * baseShield);
+            PlayerStats.Instance.currentShield += shieldVal;
+            reflectPercent = 30 + 5 * spikedShieldData.countUpgrade;
+            Debug.Log($"Spiked Shield rolled! Added {shieldVal} shield. Reflecting {reflectPercent}% damage.");
+            yield return new WaitForSeconds(0.2f);
+        }
+
+        if (strPotionCount > 0 && strPotionData != null)
+        {
+            strBuffTurns = 3;
+            float singleBuff = 0.2f + 0.1f * strPotionData.countUpgrade;
+            float totalBuff = (strPotionCount == 3) ? (singleBuff * strPotionData.match3Multiplier) : (strPotionCount * singleBuff);
+            strBuffMultiplier += totalBuff;
+            Debug.Log($"Str Potion rolled! Str Buff added: {totalBuff * 100}%. Total: {strBuffMultiplier * 100}%. Turns remaining: {strBuffTurns}");
+            yield return new WaitForSeconds(0.2f);
+        }
+
         if (greatSwordCount > 0 && greatSwordData != null)
         {
             int baseGreatSwordDmg = (greatSwordCount == 3) ? (greatSwordData.GetCurrentValue() * greatSwordData.match3Multiplier) : (greatSwordCount * greatSwordData.GetCurrentValue());
+            float totalMultiplier = 1f + strBuffMultiplier;
             if (GameDataManager.Instance != null)
             {
-                baseGreatSwordDmg = Mathf.RoundToInt(baseGreatSwordDmg * (1f + GameDataManager.Instance.GetDamageBonus()));
+                totalMultiplier += GameDataManager.Instance.GetDamageBonus();
             }
+            baseGreatSwordDmg = Mathf.RoundToInt(baseGreatSwordDmg * totalMultiplier);
 
             int finalGreatSwordDmg = baseGreatSwordDmg;
 
@@ -388,13 +483,49 @@ public class CombatManager : MonoBehaviour
 
         if (CheckVictoryCondition()) yield break;
 
+        int totalSingleDmg = 0;
+        int hammerChance = 0;
+
+        float singleTargetMultiplier = 1f + strBuffMultiplier;
+        if (GameDataManager.Instance != null)
+        {
+            singleTargetMultiplier += GameDataManager.Instance.GetDamageBonus();
+        }
+
         if (swordCount > 0 && swordData != null)
         {
-            pendingSwordDamage = (swordCount == 3) ? (swordData.GetCurrentValue() * swordData.match3Multiplier) : (swordCount * swordData.GetCurrentValue());
-            if (GameDataManager.Instance != null)
+            int baseSword = (swordCount == 3) ? (swordData.GetCurrentValue() * swordData.match3Multiplier) : (swordCount * swordData.GetCurrentValue());
+            totalSingleDmg += Mathf.RoundToInt(baseSword * singleTargetMultiplier);
+        }
+
+        if (axeCount > 0 && axeData != null)
+        {
+            int baseAxe = 0;
+            if (axeCount == 3)
             {
-                pendingSwordDamage = Mathf.RoundToInt(pendingSwordDamage * (1f + GameDataManager.Instance.GetDamageBonus()));
+                baseAxe = UnityEngine.Random.Range(10, 101) * axeData.match3Multiplier;
             }
+            else
+            {
+                for (int i = 0; i < axeCount; i++)
+                {
+                    baseAxe += UnityEngine.Random.Range(10, 101);
+                }
+            }
+            totalSingleDmg += Mathf.RoundToInt(baseAxe * singleTargetMultiplier);
+        }
+
+        if (hammerCount > 0 && hammerData != null)
+        {
+            int baseHammer = (hammerCount == 3) ? (hammerData.GetCurrentValue() * hammerData.match3Multiplier) : (hammerCount * hammerData.GetCurrentValue());
+            totalSingleDmg += Mathf.RoundToInt(baseHammer * singleTargetMultiplier);
+            hammerChance = (hammerData.countUpgrade > 0) ? 60 : 50;
+        }
+
+        if (totalSingleDmg > 0)
+        {
+            pendingSwordDamage = totalSingleDmg;
+            pendingStunChance = hammerChance;
 
             if (activeEnemies.Count == 1)
             {
@@ -405,7 +536,7 @@ public class CombatManager : MonoBehaviour
                 currentState = CombatState.TargetSelection;
                 AnimateTurnText("Player Turn", "Choose Target!");
                 UpdateAllDisplayVisuals();
-                Debug.Log($"Sword rolled! Pending {pendingSwordDamage} damage. Please click/select an enemy to target.");
+                Debug.Log($"Single target attack rolled! Pending {pendingSwordDamage} damage (stun chance: {pendingStunChance}%). Please select target.");
             }
         }
         else
@@ -474,7 +605,20 @@ public class CombatManager : MonoBehaviour
         yield return new WaitForSeconds(0.4f);
 
         yield return StartCoroutine(DamageEnemy(index, pendingSwordDamage));
+        
+        if (pendingStunChance > 0 && index < activeEnemies.Count && activeEnemies[index].currentHP > 0)
+        {
+            if (UnityEngine.Random.Range(0, 100) < pendingStunChance)
+            {
+                activeEnemies[index].stunTurns = 1;
+                Debug.Log($"{activeEnemies[index].data.enemyName} is STUNNED!");
+                AnimateTurnText("Player Turn", $"{activeEnemies[index].data.enemyName} STUNNED!");
+                yield return new WaitForSeconds(0.6f);
+            }
+        }
+
         pendingSwordDamage = 0;
+        pendingStunChance = 0;
 
         if (!CheckVictoryCondition())
         {
@@ -557,6 +701,16 @@ public class CombatManager : MonoBehaviour
         {
             EnemyInstance enemy = activeEnemies[i];
 
+            if (enemy.currentHP <= 0) continue;
+
+            if (enemy.stunTurns > 0)
+            {
+                enemy.stunTurns--;
+                AnimateTurnText("Enemy Turn", $"{enemy.data.enemyName} is STUNNED!");
+                yield return new WaitForSeconds(delayBetweenEnemies);
+                continue;
+            }
+
             if (PlayerStats.Instance != null && PlayerStats.Instance.currentHP <= 0)
             {
                 break;
@@ -589,6 +743,35 @@ public class CombatManager : MonoBehaviour
                 yield return new WaitForSeconds(delayBetweenEnemies);
             }
         }
+
+        // Clean up dead enemies (e.g. killed by reflection)
+        bool anyReflectDied = false;
+        for (int i = activeEnemies.Count - 1; i >= 0; i--)
+        {
+            if (activeEnemies[i].currentHP <= 0)
+            {
+                anyReflectDied = true;
+                activeEnemies.RemoveAt(i);
+            }
+        }
+        if (anyReflectDied)
+        {
+            RefreshEnemyDisplays();
+        }
+
+        if (CheckVictoryCondition()) yield break;
+
+        // Decrement buffs
+        if (strBuffTurns > 0)
+        {
+            strBuffTurns--;
+            if (strBuffTurns == 0)
+            {
+                strBuffMultiplier = 0f;
+                Debug.Log("Strength Buff expired.");
+            }
+        }
+        reflectPercent = 0;
 
         if (PlayerStats.Instance != null && PlayerStats.Instance.currentHP <= 0)
         {

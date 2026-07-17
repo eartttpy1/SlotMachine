@@ -499,6 +499,32 @@ public class SlotMachine : MonoBehaviour
                 PlayerStats.Instance.coins += totalCoinsAdded;
                 Debug.Log($"สุ่มได้ Coin {coinsRolled} ช่อง! ได้รับเหรียญทั้งหมด: {totalCoinsAdded} Coins (สะสมทั้งหมด: {PlayerStats.Instance.coins} Coins)");
             }
+
+            // เช็คสัญลักษณ์ WhiteCoin ในโหมด SlotIconData
+            int whiteCoinsRolled = 0;
+            SlotIconData whiteCoinIconData = null;
+            for (int i = 0; i < 3; i++)
+            {
+                if (finalResult[i] is SlotIconData iconData && iconData.symbolType == SlotSymbol.WhiteCoin)
+                {
+                    whiteCoinsRolled++;
+                    whiteCoinIconData = iconData;
+                }
+            }
+            if (whiteCoinsRolled > 0 && whiteCoinIconData != null)
+            {
+                int totalWhiteCoinsAdded = 0;
+                for (int i = 0; i < whiteCoinsRolled; i++)
+                {
+                    totalWhiteCoinsAdded += UnityEngine.Random.Range(4, 9);
+                }
+                if (whiteCoinsRolled == 3)
+                {
+                    totalWhiteCoinsAdded *= whiteCoinIconData.match3Multiplier;
+                }
+                PlayerStats.Instance.coins += totalWhiteCoinsAdded;
+                Debug.Log($"สุ่มได้ WhiteCoin {whiteCoinsRolled} ช่อง! ได้รับเหรียญทั้งหมด: {totalWhiteCoinsAdded} Coins (สะสมทั้งหมด: {PlayerStats.Instance.coins} Coins)");
+            }
         }
 
         // ประเมินและแจกรางวัลในโหมด GachaReward

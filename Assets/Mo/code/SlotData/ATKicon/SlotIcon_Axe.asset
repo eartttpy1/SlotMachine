@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce8a275b9a15f824faf5cf77d20b79b5, type: 3}
+  m_Name: SlotIcon_Axe
+  m_EditorClassIdentifier: Assembly-CSharp::SlotIconData
+  symbolType: 5
+  iconName: Axe
+  iconSprite: {fileID: -5825250732961213246, guid: 1be46d66fd571fb41a11bb466006dc64, type: 3}
+  skillDescription: random 10-100 damage to 1 target
+  iconBonusDescription: Bonus x5
+  baseValue: 10
+  match3Multiplier: 5
+  isMultipleTargets: 0
+  baseWeightRandom: 1
+  baseUpgradePrice: 10
+  upgradeMultiplier: 20
+  upgradeDescription: Upgrade, +20% damage

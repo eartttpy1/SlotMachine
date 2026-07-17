@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce8a275b9a15f824faf5cf77d20b79b5, type: 3}
+  m_Name: SlotIcon_STR-potion
+  m_EditorClassIdentifier: Assembly-CSharp::SlotIconData
+  symbolType: 8
+  iconName: Str Potion
+  iconSprite: {fileID: 21300000, guid: c952f65d1ca8acf418bd02815780bf3b, type: 3}
+  skillDescription: Increases own damage by 20% for 3 turns
+  iconBonusDescription: Bonus x5
+  baseValue: 20
+  match3Multiplier: 5
+  isMultipleTargets: 0
+  baseWeightRandom: 1
+  baseUpgradePrice: 10
+  upgradeMultiplier: 10
+  upgradeDescription: Upgrade, +10% damage
