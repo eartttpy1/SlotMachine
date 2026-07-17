@@ -80,6 +80,23 @@ public class CombatManager : MonoBehaviour
     public float strBuffMultiplier = 0f;
     public int reflectPercent = 0;
 
+    [Header("Player Status Buffs UI")]
+    public UnityEngine.UI.Image strBuffIconImage;
+    public TMPro.TextMeshProUGUI strBuffTurnsText;
+
+    public void UpdateBuffUI()
+    {
+        if (strBuffIconImage != null)
+        {
+            bool hasBuff = strBuffTurns > 0;
+            strBuffIconImage.gameObject.SetActive(hasBuff);
+            if (hasBuff && strBuffTurnsText != null)
+            {
+                strBuffTurnsText.text = strBuffTurns.ToString();
+            }
+        }
+    }
+
     private void Awake()
     {
         if (Instance == null)
@@ -273,6 +290,7 @@ public class CombatManager : MonoBehaviour
         currentState = CombatState.PlayerTurn;
         AnimateTurnText("Player Turn", "");
         RefreshEnemyDisplays();
+        UpdateBuffUI();
         Debug.Log($"Combat Started! Level {level}. {activeEnemies.Count} enemies spawned.");
     }
 
@@ -394,6 +412,7 @@ public class CombatManager : MonoBehaviour
             float totalBuff = (strPotionCount == 3) ? (singleBuff * strPotionData.match3Multiplier) : (strPotionCount * singleBuff);
             strBuffMultiplier += totalBuff;
             Debug.Log($"Str Potion rolled! Str Buff added: {totalBuff * 100}%. Total: {strBuffMultiplier * 100}%. Turns remaining: {strBuffTurns}");
+            UpdateBuffUI();
             yield return new WaitForSeconds(0.2f);
         }
 
@@ -772,6 +791,7 @@ public class CombatManager : MonoBehaviour
             }
         }
         reflectPercent = 0;
+        UpdateBuffUI();
 
         if (PlayerStats.Instance != null && PlayerStats.Instance.currentHP <= 0)
         {
