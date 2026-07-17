@@ -88,16 +88,29 @@ public class CombatManager : MonoBehaviour
     [Header("Player Status Buffs UI")]
     public UnityEngine.UI.Image strBuffIconImage;
     public TMPro.TextMeshProUGUI strBuffTurnsText;
+    public TMPro.TextMeshProUGUI strBuffValueText;
 
     public void UpdateBuffUI()
     {
+        bool hasBuff = strBuffTurns > 0;
         if (strBuffIconImage != null)
         {
-            bool hasBuff = strBuffTurns > 0;
             strBuffIconImage.gameObject.SetActive(hasBuff);
-            if (hasBuff && strBuffTurnsText != null)
+        }
+        if (strBuffTurnsText != null)
+        {
+            strBuffTurnsText.gameObject.SetActive(hasBuff);
+            if (hasBuff)
             {
                 strBuffTurnsText.text = strBuffTurns.ToString();
+            }
+        }
+        if (strBuffValueText != null)
+        {
+            strBuffValueText.gameObject.SetActive(hasBuff);
+            if (hasBuff)
+            {
+                strBuffValueText.text = $"+{Mathf.RoundToInt(strBuffMultiplier * 100)}%";
             }
         }
     }
@@ -123,7 +136,8 @@ public class CombatManager : MonoBehaviour
     }
 
     [Header("Parry System")]
-    public float parryWindowDuration = 0.4f;
+    [Tooltip("ระยะเวลา (วินาที) ที่สถานะ Parry จะยังคงอยู่หลังจากคลิกขวา (ผู้เล่นต้องกดคลิกขวาก่อนโดนโจมตีไม่เกินระยะเวลานี้)")]
+    public float parryBeforeHitWindow = 0.1f;
     public float parryCooldown = 0.1f;
     private bool isParrying = false;
     private float lastParryTime = -99f;
@@ -151,7 +165,7 @@ public class CombatManager : MonoBehaviour
             detailTurnText.text = "<color=#00FFFF>PARRY ACTIVE!</color>";
         }
 
-        yield return new WaitForSeconds(parryWindowDuration);
+        yield return new WaitForSeconds(parryBeforeHitWindow);
         isParrying = false;
         Debug.Log("Parry Ended.");
         if (detailTurnText != null && detailTurnText.text.Contains("PARRY ACTIVE"))
