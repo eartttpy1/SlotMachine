@@ -230,20 +230,12 @@ public class SlotItemDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExit
                     if (iconData.countUpgrade >= 3)
                     {
                         name = $"[MAX] {iconData.SymbolName}";
-                        int finalVal = iconData.GetCurrentValue();
-                        int finalValWithUpstat = iconData.GetValueWithUpstat(finalVal);
-                        desc = $"{iconData.upgradeDescription}\nValue: {finalValWithUpstat} (MAX)";
+                        desc = $"{iconData.upgradeDescription}\n{iconData.GetMaxUpgradeValueString()}";
                         price = "Price: MAX";
                     }
                     else
                     {
-                        int currentVal = iconData.GetCurrentValue();
-                        int nextVal = currentVal + iconData.GetUpgradeIncrement();
-
-                        int currentValWithUpstat = iconData.GetValueWithUpstat(currentVal);
-                        int nextValWithUpstat = iconData.GetValueWithUpstat(nextVal);
-
-                        desc = $"{iconData.upgradeDescription}\nValue: {currentValWithUpstat} -> {nextValWithUpstat}";
+                        desc = $"{iconData.upgradeDescription}\n{iconData.GetUpgradeValueString()}";
                         price = $"Price: {iconData.GetCurrentPrice()} Coins";
                     }
                 }
