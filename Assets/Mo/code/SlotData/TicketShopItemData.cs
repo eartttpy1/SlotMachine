@@ -12,6 +12,17 @@ public class TicketShopItemData : SlotSymbolData
     public override string SymbolName => itemName;
     public override Sprite SymbolSprite => itemSprite;
     public override int BaseWeight => 0;
-    public override string description => itemDescription;
+    public override string description
+    {
+        get
+        {
+            int multiplier = amountTicket67;
+            if (GameDataManager.Instance != null)
+            {
+                multiplier = Mathf.RoundToInt(GameDataManager.Instance.GetTicketMultiplier());
+            }
+            return $"Get {multiplier} ticket 67 for bet 067 mode after boss";
+        }
+    }
     public override string bonusDescription => "";
 }

@@ -48,6 +48,25 @@ public class ScriptableUpStats : ScriptableObject
         return string.Format(descriptionFormat, CurrentBaseValue);
     }
 
+    public float GetNextUpgradeIncrement()
+    {
+        if (CountLevel == 0)
+        {
+            float level0Value = name.Contains("Ticket") ? 1f : (name.ToLower().Contains("hp") ? 100f : 0f);
+            return baseValue - level0Value;
+        }
+        return increaseValue;
+    }
+
+    public string GetUpgradeDescription()
+    {
+        if (CountLevel >= maxLevel)
+        {
+            return string.Format(descriptionFormat, increaseValue);
+        }
+        return string.Format(descriptionFormat, GetNextUpgradeIncrement());
+    }
+
     public string GetNextValueDescription()
     {
         float nextVal = CountLevel == 0 ? baseValue : CurrentBaseValue + increaseValue;

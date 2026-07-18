@@ -16,6 +16,6 @@ MonoBehaviour:
   icon: {fileID: 4995752898797507947, guid: 24b8a4f894dd9f6419fee00a8a1e5ca1, type: 3}
   baseValue: 2
   increaseValue: 1
-  descriptionFormat: get ticket67 multiply by {0}
+  descriptionFormat: add {0} to ticket67 multiplier
   maxLevel: 10
   baseCost: 100

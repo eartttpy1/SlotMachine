@@ -90,6 +90,39 @@ public class CombatManager : MonoBehaviour
     public TMPro.TextMeshProUGUI strBuffTurnsText;
     public TMPro.TextMeshProUGUI strBuffValueText;
 
+    [Header("Enemy Turn Indicator")]
+    public UnityEngine.UI.Image enemyTurnIndicatorImage;
+    private Tweener enemyTurnBlinkTween;
+
+    private void StartEnemyTurnBlink()
+    {
+        if (enemyTurnIndicatorImage != null)
+        {
+            enemyTurnIndicatorImage.gameObject.SetActive(true);
+            enemyTurnBlinkTween?.Kill();
+            
+            Color c = enemyTurnIndicatorImage.color;
+            c.a = 1f;
+            enemyTurnIndicatorImage.color = c;
+
+            // Loop blink (fade to 0.2 alpha and back to 1.0)
+            enemyTurnBlinkTween = enemyTurnIndicatorImage.DOFade(0.2f, 0.6f)
+                .SetLoops(-1, LoopType.Yoyo)
+                .SetEase(Ease.InOutSine);
+        }
+    }
+
+    private void StopEnemyTurnBlink()
+    {
+        enemyTurnBlinkTween?.Kill();
+        if (enemyTurnIndicatorImage != null)
+        {
+            Color c = enemyTurnIndicatorImage.color;
+            c.a = 1f;
+            enemyTurnIndicatorImage.color = c;
+        }
+    }
+
     public void UpdateBuffUI()
     {
         bool hasBuff = strBuffTurns > 0;
@@ -120,6 +153,7 @@ public class CombatManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
+            StopEnemyTurnBlink();
         }
         else
         {
@@ -315,6 +349,7 @@ public class CombatManager : MonoBehaviour
         }
 
         currentState = CombatState.PlayerTurn;
+        StopEnemyTurnBlink();
         AnimateTurnText("Player Turn", "");
         RefreshEnemyDisplays();
         UpdateBuffUI();
@@ -780,6 +815,7 @@ public class CombatManager : MonoBehaviour
         if (activeEnemies.Count == 0)
         {
             currentState = CombatState.Victory;
+            StopEnemyTurnBlink();
             AnimateTurnText("Victory!", "");
             nextlevel = true;
             RefreshEnemyDisplays();
@@ -796,6 +832,7 @@ public class CombatManager : MonoBehaviour
     private IEnumerator EnemyTurnRoutine()
     {
         currentState = CombatState.EnemyTurn;
+        StartEnemyTurnBlink();
         AnimateTurnText("Enemy Turn", "Preparing to attack...");
 
         if (PlayerStats.Instance != null)
@@ -869,6 +906,8 @@ public class CombatManager : MonoBehaviour
         }
 
         if (CheckVictoryCondition()) yield break;
+
+        StopEnemyTurnBlink();
 
         // Decrement buffs
         if (strBuffTurns > 0)

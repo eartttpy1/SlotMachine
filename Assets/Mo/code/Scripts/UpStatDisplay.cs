@@ -130,7 +130,7 @@ public class UpStatDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         if (statData == null) return;
 
         if (nameText != null) nameText.text = statData.statName;
-        if (descriptionText != null) descriptionText.text = statData.GetDynamicDescription();
+        if (descriptionText != null) descriptionText.text = statData.GetUpgradeDescription();
         
         if (valueProgressText != null)
         {
@@ -138,7 +138,7 @@ public class UpStatDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
             if (statData.CountLevel >= statData.maxLevel)
             {
-                valueProgressText.text = $"{statData.CurrentBaseValue} (MAX)";
+                valueProgressText.text = $"Value: {statData.CurrentBaseValue} (MAX)";
             }
             else
             {
@@ -146,12 +146,12 @@ public class UpStatDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
                 {
                     float currentVal = statData.CountLevel == 0 ? 100f : statData.CurrentBaseValue;
                     float nextVal = statData.CountLevel == 0 ? statData.baseValue : statData.CurrentBaseValue + statData.increaseValue;
-                    valueProgressText.text = $"{currentVal} -> {nextVal}";
+                    valueProgressText.text = $"Value: {currentVal} -> {nextVal}";
                 }
                 else
                 {
                     float nextVal = statData.CountLevel == 0 ? statData.baseValue : statData.CurrentBaseValue + statData.increaseValue;
-                    valueProgressText.text = $"{statData.CurrentBaseValue} -> {nextVal}";
+                    valueProgressText.text = $"Value: {statData.CurrentBaseValue} -> {nextVal}";
                 }
             }
         }
