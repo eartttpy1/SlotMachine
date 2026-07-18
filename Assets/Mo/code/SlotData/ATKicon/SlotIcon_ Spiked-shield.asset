@@ -15,7 +15,7 @@ MonoBehaviour:
   symbolType: 9
   iconName: Spiked Shield
   iconSprite: {fileID: -1320354331097795712, guid: 99db0741fb2f6994498f1a4781e673e6, type: 3}
-  skillDescription: grants 15 shield and reflects 30% of damage back to the enemy
+  skillDescription: grants 15 shield and reflects 30% dmg back to attacker
   iconBonusDescription: Bonus x5
   baseValue: 15
   match3Multiplier: 5
@@ -23,5 +23,4 @@ MonoBehaviour:
   baseWeightRandom: 1
   baseUpgradePrice: 10
   upgradeMultiplier: 20
-  upgradeDescription: Upgrade, +20%  shield and reflects 35%of damage back to the
-    enemy
+  upgradeDescription: Upgrade, +20%  shield and reflects 35% dmg back to attacker
