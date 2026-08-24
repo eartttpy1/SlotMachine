@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SlotIconData
   symbolType: 2
   iconName: Healing Potion
-  iconSprite: {fileID: 21300000, guid: 63cfa868217bb904499c2eadbe579884, type: 3}
+  iconSprite: {fileID: 1170489728781347370, guid: 9588ed6a08f779e4eb41afc16a850584, type: 3}
   skillDescription: Heal 20 HP
   iconBonusDescription: Bonus x5
   baseValue: 10
@@ -22,6 +22,5 @@ MonoBehaviour:
   isMultipleTargets: 0
   baseWeightRandom: 1
   baseUpgradePrice: 10
-  countUpgrade: 0
   upgradeMultiplier: 20
   upgradeDescription: Upgrade, heal +20% potions
